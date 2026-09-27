@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DFL 1 | Galeria Oficial</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: #070707;
+      color: #fff;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    header {
+      padding: 28px 20px 22px;
+      text-align: center;
+      border-bottom: 1px solid #242424;
+      background: #0b0b0b;
+    }
+
+    .back {
+      display: inline-block;
+      margin-bottom: 22px;
+      color: #aaa;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .back:hover {
+      color: #fff;
+    }
+
+    h1 {
+      font-size: clamp(32px, 8vw, 62px);
+      font-weight: 900;
+      letter-spacing: 2px;
+    }
+
+    h1 span {
+      color: #d71920;
+    }
+
+    .subtitle {
+      color: #999;
+      margin-top: 8px;
+      font-size: 14px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .gallery {
+      max-width: 1400px;
+      margin: auto;
+      padding: 28px 14px 60px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .gallery img {
+      width: 100%;
+      height: 360px;
+      object-fit: cover;
+      display: block;
+      cursor: pointer;
+      background: #111;
+      transition: transform .25s ease, opacity .25s ease;
+    }
+
+    .gallery img:hover {
+      transform: scale(1.015);
+      opacity: .88;
+    }
+
+    footer {
+      text-align: center;
+      padding: 25px;
+      color: #666;
+      font-size: 12px;
+      border-top: 1px solid #181818;
+    }
+
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.96);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .lightbox img {
+      max-width: 96vw;
+      max-height: 92vh;
+      object-fit: contain;
+    }
+
+    .lightbox.active {
+      display: flex;
+    }
+
+    .close {
+      position: absolute;
+      top: 18px;
+      right: 25px;
+      color: white;
+      font-size: 40px;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    @media (max-width: 900px) {
+      .gallery {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .gallery img {
+        height: 300px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      header {
+        padding-top: 22px;
+      }
+
+      .gallery {
+        grid-template-columns: repeat(2, 1fr);
+        padding: 12px 6px 40px;
+        gap: 5px;
+      }
+
+      .gallery img {
+        height: 230px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <a class="back" href="index.html">← VOLTAR PARA FIGHT LIRA</a>
+
+  <h1>DFL <span>1</span></h1>
+  <div class="subtitle">Galeria oficial</div>
+</header>
+
+<main class="gallery">
+
+  <img loading="lazy" src="IMG_4366 (Personalizado).jpg">
+  <img loading="lazy" src="IMG_4371 (Personalizado).jpg">
+  <img loading="lazy" src="IMG_4386 (Personalizado).jpg">
+  <img loading="lazy" src="IMG_4396 (Personalizado).jpg">
+  <img loading="lazy" src="IMG_4406 (Personalizado).jpg">
+  <img loading="lazy" src="IMG_4411 (Personalizado).jpg">
+  <img loading="lazy" src="IMG_4463 (Personalizado).jpg">
+  <img loading="lazy" src="IMG_4584 (Personalizado).jpg">
+  <img loading="lazy" src="IMG_4716 (Personalizado).jpg">
+  <img loading="lazy" src="IMG_4777 (Personalizado).jpg">
+  <img loading="lazy" src="IMG_4816 (Personalizado).jpg">
+  <img loading="lazy" src="IMG_4821 (Personalizado).jpg">
+  <img loading="lazy" src="IMG_4843 (Personalizado).jpg">
+  <img loading="lazy" src="IMG_4851 (Personalizado).jpg">
+  <img loading="lazy" src="IMG_4872 (Personalizado).jpg">
+  <img loading="lazy" src="IMG_4887 (Personalizado).jpg">
+  <img loading="lazy" src="IMG_4900 (Personalizado).jpg">
+  <img loading="lazy" src="IMG_4906 (Personalizado).jpg">
+  <img loading="lazy" src="IMG_5208 (Personalizado).jpg">
+  <img loading="lazy" src="IMG_5712 (Personalizado).jpg">
+  <img loading="lazy" src="IMG_8940 (Personalizado).jpg">
+  <img loading="lazy" src="IMG_8985 (Personalizado).jpg">
+  <img loading="lazy" src="IMG_9054 (Personalizado).jpg">
+  <img loading="lazy" src="IMG_9065 (Personalizado).jpg">
+  <img loading="lazy" src="IMG_9260 (1) (Personalizado).jpg">
+  <img loading="lazy" src="IMG_9451 (Personalizado).jpg">
+  <img loading="lazy" src="IMG_9553 (Personalizado).jpg">
+  <img loading="lazy" src="IMG_9703 (Personalizado).jpg">
+  <img loading="lazy" src="IMG_9752 (Personalizado).jpg">
+
+</main>
+
+<footer>
+  DFL • FIGHT LIRA
+</footer>
+
+<div class="lightbox" id="lightbox">
+  <span class="close">&times;</span>
+  <img id="lightboxImg">
+</div>
+
+<script>
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightboxImg');
+
+  document.querySelectorAll('.gallery img').forEach(img => {
+    img.addEventListener('click', () => {
+      lightboxImg.src = img.src;
+      lightbox.classList.add('active');
+    });
+  });
+
+  lightbox.addEventListener('click', () => {
+    lightbox.classList.remove('active');
+  });
+</script>
+
+</body>
+</html>
