@@ -24,6 +24,131 @@ footer{border-top:1px solid rgba(242,239,236,.1);padding:clamp(64px,8vw,120px) c
 .reveal{opacity:0;transform:translateY(42px);transition:opacity .8s,transform .8s}.reveal.show{opacity:1;transform:none}
 @media(max-width:900px){nav{display:none}.cta{display:none}.hero-logo{opacity:.48;top:110px;right:-40px;width:280px}.hero{padding-top:120px}.arena-grid{grid-auto-rows:220px}.tile.wide,.event-gallery .main{grid-column:span 1}}
 @keyframes floatLogo{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-10px) scale(1.015)}}
+/* BOTÃO DFL PREMIUM */
+.dfl-premium{
+  /* PADRÃO PREMIUM PARA ELEMENTOS CLICÁVEIS */
+.premium-click{
+    position:relative;
+    border-radius:999px;
+    border:1px solid rgba(255,255,255,.10);
+
+    background:linear-gradient(
+        180deg,
+        rgba(42,42,42,.92) 0%,
+        rgba(22,22,22,.96) 55%,
+        rgba(12,12,12,.98) 100%
+    );
+
+    color:#fff;
+    text-decoration:none;
+
+    box-shadow:
+        0 6px 14px rgba(0,0,0,.34),
+        inset 0 1px 0 rgba(255,255,255,.13),
+        inset 0 -1px 3px rgba(0,0,0,.40);
+
+    transition:
+        transform .16s ease,
+        box-shadow .16s ease,
+        background .16s ease,
+        border-color .16s ease;
+
+    -webkit-tap-highlight-color:transparent;
+}
+
+.premium-click:hover{
+    transform:translateY(-2px);
+    border-color:rgba(190,0,0,.48);
+
+    box-shadow:
+        0 9px 19px rgba(0,0,0,.42),
+        0 0 12px rgba(170,0,0,.08),
+        inset 0 1px 0 rgba(255,255,255,.16);
+}
+
+.premium-click:active,
+.premium-click.active{
+    transform:translateY(2px);
+
+    background:linear-gradient(
+        180deg,
+        #8a0000 0%,
+        #600000 55%,
+        #420000 100%
+    );
+
+    border-color:rgba(220,30,30,.50);
+
+    box-shadow:
+        0 2px 5px rgba(0,0,0,.48),
+        inset 0 3px 7px rgba(0,0,0,.42);
+}
+
+.nav .premium-click{
+    padding:9px 15px;
+}
+
+.belt.premium-click,
+.event-tab.premium-click{
+    padding:10px 16px;
+}
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-width:150px;
+    height:58px;
+    padding:0 34px;
+
+    border-radius:999px;
+    border:1px solid rgba(255,255,255,.12);
+
+    background:linear-gradient(
+        180deg,
+        #292929 0%,
+        #181818 48%,
+        #0b0b0b 100%
+    );
+
+    color:#fff;
+    text-decoration:none;
+    font-weight:700;
+    letter-spacing:2px;
+
+    box-shadow:
+        0 10px 22px rgba(0,0,0,.48),
+        inset 0 1px 0 rgba(255,255,255,.16),
+        inset 0 -2px 4px rgba(0,0,0,.45);
+
+    transition:
+        transform .16s ease,
+        box-shadow .16s ease,
+        background .16s ease,
+        border-color .16s ease;
+}
+
+.dfl-premium:hover{
+    transform:translateY(-2px);
+    border-color:rgba(180,0,0,.55);
+
+    box-shadow:
+        0 14px 28px rgba(0,0,0,.52),
+        0 0 16px rgba(180,0,0,.10),
+        inset 0 1px 0 rgba(255,255,255,.18);
+}
+
+.dfl-premium:active{
+    transform:translateY(3px);
+
+    background:linear-gradient(
+        180deg,
+        #8b0000 0%,
+        #550000 100%
+    );
+
+    box-shadow:
+        0 3px 7px rgba(0,0,0,.55),
+        inset 0 4px 8px rgba(0,0,0,.45);
+}
 </style>
 </head>
 <body>
@@ -64,6 +189,38 @@ const io=new IntersectionObserver(es=>es.forEach(e=>{
 document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 document.querySelectorAll('.hero-inner>*').forEach((el,i)=>{
   el.animate([{opacity:0,transform:'translateY(40px)',filter:'blur(6px)'},{opacity:1,transform:'none',filter:'blur(0)'}],{duration:900,delay:120+i*100,easing:'cubic-bezier(.2,.7,.1,1)',fill:'backwards'});
+});
+document.querySelectorAll('#eventos button').forEach(function(botao) {
+    if (botao.textContent.replace(/\s+/g, ' ').trim() === 'DFL 1') {
+        botao.classList.add('dfl-premium');
+
+        botao.addEventListener('click', function(evento) {
+            evento.preventDefault();
+            evento.stopPropagation();
+            window.location.href = 'dfl1.html';
+        });
+    }
+});
+document.addEventListener('DOMContentLoaded', function () {
+
+    const clicaveis = document.querySelectorAll(
+        'a, button, .belt, .event-tab, [role="button"]'
+    );
+
+    clicaveis.forEach(function (item) {
+
+        // Não mexe na logo
+        if (item.classList.contains('brand')) return;
+
+        // DFLs já possuem o botão premium maior
+        if (item.classList.contains('dfl-premium')) return;
+
+        // Só aplica em elementos que tenham texto visível
+        if (!item.textContent.trim()) return;
+
+        item.classList.add('premium-click');
+    });
+
 });
 </script>
 </body></html>
