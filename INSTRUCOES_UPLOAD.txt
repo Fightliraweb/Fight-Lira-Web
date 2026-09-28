@@ -1,0 +1,7 @@
+FIGHT LIRA — PACOTE PRONTO PARA GITHUB
+
+1. Este pacote substitui a estrutura principal do site.
+2. NÃO apague os arquivos já existentes dfl1.html nem as fotos da galeria DFL 1 do repositório.
+3. Envie para a raiz do repositório todos os arquivos HTML deste pacote e a pasta assets completa.
+4. O arquivo index.html deve substituir o index.html atual.
+5. Depois do commit/deploy, testar: Home, Jiu-Jitsu, Muay Thai, Professores, DFL, Seminários e Projeto Social.
