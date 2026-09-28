@@ -255,3 +255,17 @@ document.querySelectorAll('[data-room]').forEach(btn=>btn.addEventListener('clic
     }
   });
 })();
+
+
+/* Fight Lira 9.9.6 — troca para logos transparentes */
+(function applyTransparentPartnerLogos996(){
+  const swaps = [
+    ['.sponsor-pdk img','assets/img/partners/pdk-personal-doktor.png'],
+    ['.sponsor-pagpouco img','assets/img/partners/pag-pouco.png'],
+    ['.sponsor-caipiovs img','assets/img/partners/caipiovs.png']
+  ];
+  swaps.forEach(([selector,src])=>{
+    const img=document.querySelector(selector);
+    if(img) img.setAttribute('src',src);
+  });
+})();
