@@ -1,0 +1,68 @@
+/* Fight Lira Home Refresh — revisão Nacci Labs */
+.home-refresh .nav{padding-top:12px;padding-bottom:12px}
+.home-refresh .nav-links{gap:4px}
+.home-refresh .nav-links a{padding:10px 12px}
+.home-refresh .nav-cta{margin-left:8px;white-space:nowrap;padding:11px 18px}
+.home-refresh .mobile-panel{overflow-y:auto}
+.home-refresh .mobile-panel .mobile-wa{margin-top:18px;min-height:56px;display:flex;align-items:center;justify-content:center;padding:14px 18px;border:0;border-radius:999px;background:linear-gradient(180deg,#f12f36,#a70006);font-family:Archivo,Arial,sans-serif;font-size:13px!important;font-weight:900;letter-spacing:.1em;text-transform:uppercase;text-align:center}
+.home-refresh .hero{min-height:100svh;padding-top:120px;padding-bottom:clamp(40px,6vw,64px)}
+.home-refresh .hero-bottom{gap:24px 40px}
+.home-refresh .hero-bottom>p{max-width:640px;font-size:clamp(19px,2vw,28px);line-height:1.28}
+.home-refresh .hero-actions{max-width:500px;width:100%}
+.home-refresh .hero-actions .buttons{margin-top:0;width:100%;gap:10px}
+.home-refresh .hero-actions .btn{min-height:52px;flex:1 1 190px;white-space:nowrap}
+.home-refresh .section-copy{text-wrap:pretty}
+.home-refresh .category-card{min-height:clamp(340px,40vw,440px)}
+.home-refresh .card-body{left:24px;right:24px;bottom:24px}
+
+.home-refresh .partner-feature-refresh{padding:clamp(56px,7vw,96px) 0;background:linear-gradient(180deg,#0b0b0b,#080808);overflow:hidden}
+.home-refresh .partner-feature-refresh .partner-feature-inner{padding:0 clamp(18px,4vw,56px)}
+.home-refresh .partner-feature-refresh .partner-feature-head{display:block;margin-bottom:28px}
+.home-refresh .partner-feature-refresh .partner-feature-title{margin:6px 0 0;font-size:clamp(40px,5.4vw,78px);line-height:.9}
+.partner-marquee-window{overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.partner-marquee-track{display:flex;width:max-content;animation:partnerFlow 34s linear infinite;will-change:transform}
+.partner-marquee-group{display:flex;gap:12px;padding-right:12px}
+.partner-marquee-card{flex:0 0 200px;width:200px;height:116px;border-radius:18px;border:1px solid rgba(255,255,255,.08);background:radial-gradient(circle at 50% 45%,rgba(255,255,255,.035),transparent 62%),#0e0e0e;display:flex;align-items:center;justify-content:center;padding:14px;overflow:hidden}
+.partner-marquee-card img{width:auto;height:auto;max-width:86%;max-height:84px;object-fit:contain;filter:drop-shadow(0 7px 13px rgba(0,0,0,.32))}
+.partner-marquee-card.naccilabs img{max-width:88%;max-height:90px;border-radius:12px}
+@keyframes partnerFlow{to{transform:translateX(-50%)}}
+
+.team-home{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.team-home-visual{min-height:clamp(300px,36vw,440px);border-radius:26px;overflow:hidden;border:1px solid var(--line);position:relative}
+.team-home-visual img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+.team-home-visual:after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,rgba(0,0,0,.78))}
+.team-home-copy{border:1px solid var(--line);border-radius:26px;background:linear-gradient(145deg,#161616,#0b0b0b);padding:clamp(26px,4vw,52px);display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:18px}
+.team-home-copy .display{margin:0;font-size:clamp(46px,6vw,90px)}
+.team-home-copy .belt-row{margin:0}
+.home-refresh .contact-primary{border-color:rgba(227,38,43,.5);background:linear-gradient(145deg,#1c0e0e,#0f0f0f)}
+.home-refresh .contact-card strong{font-size:19px}
+
+.mobile-sticky-cta{display:none}
+
+@media(max-width:980px){
+  .home-refresh .hero-logo{right:-40px;top:96px;width:200px;opacity:.35}
+  .home-refresh .hero-copy{justify-self:start}
+  .team-home{grid-template-columns:1fr}
+}
+
+@media(max-width:640px){
+  .home-refresh .hero{min-height:100svh;padding:118px 18px 42px}
+  .home-refresh .hero h1{font-size:clamp(76px,24vw,118px)}
+  .home-refresh .hero-actions .btn{flex:1 1 100%;width:100%}
+  .home-refresh .category-card{min-height:340px}
+  .home-refresh .partner-feature-refresh{padding:50px 0 58px}
+  .home-refresh .partner-feature-refresh .partner-feature-inner{padding:0 18px}
+  .partner-marquee-window{-webkit-mask-image:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent);mask-image:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent)}
+  .partner-marquee-card{flex-basis:170px;width:170px;height:104px;padding:12px}
+  .partner-marquee-card img{max-height:78px}
+  .home-refresh .slide-caption{bottom:82px}
+  .home-refresh .slide-caption span{display:block;font-size:13px;line-height:1.45;margin-top:6px;max-width:80%}
+  .home-refresh .carousel-controls{bottom:12px;right:12px}
+  .home-refresh .dots{top:14px;right:14px}
+  .team-home-visual{min-height:330px}
+  .home-refresh .footer{padding-bottom:96px}
+  .mobile-sticky-cta{position:fixed;left:12px;right:12px;bottom:12px;z-index:90;min-height:54px;border-radius:999px;background:linear-gradient(180deg,#f12f36,#a70006);box-shadow:0 12px 30px rgba(0,0,0,.5);align-items:center;justify-content:center;padding:12px 18px;font-size:13px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;text-align:center;opacity:0;transform:translateY(18px);pointer-events:none;transition:opacity .2s,transform .2s}
+  .mobile-sticky-cta.is-visible{display:flex;opacity:1;transform:none;pointer-events:auto}
+}
+
+@media(prefers-reduced-motion:reduce){.partner-marquee-track{animation:none!important}.mobile-sticky-cta{transition:none}}
