@@ -1,0 +1,21 @@
+FIGHT LIRA — AJUSTE PARCEIROS 9.9.3
+
+Este pacote altera somente a seção Parceiros da home.
+
+ARQUIVOS PARA ENVIAR AO GITHUB:
+1. index.html
+2. assets/css/site.css
+3. assets/img/partners/pdk-personal-doktor.jpg
+4. assets/img/partners/pag-pouco.png
+5. assets/img/partners/caipiovs.jpg
+
+NÃO apagar nem substituir dfl1.html, galeria DFL, outras páginas ou demais imagens.
+
+Resultado esperado:
+- 3 logos reais em cards premium e equilibrados.
+- PDK Personal Doktor
+- Pag Pouco Supermercado
+- CaipiOvs
+- Parceiros permanecem abaixo de Escolha sua modalidade e antes de Fight Lira na Arena.
+- Desktop: 3 logos lado a lado.
+- Celular: faixa horizontal com swipe manual.
