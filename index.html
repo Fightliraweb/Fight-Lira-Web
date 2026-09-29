@@ -82,6 +82,37 @@
         animation-duration:38s !important;
       }
     }
+
+    /* Eventos e projetos — capas premium */
+    .event-cover-grid{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:16px;
+    }
+    .event-cover-grid .category-card{
+      aspect-ratio:561/701;
+      min-height:0;
+      background:#090909;
+    }
+    .event-cover-grid .category-card img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      transform:none;
+    }
+    .event-cover-grid .category-card:hover img{
+      transform:scale(1.02);
+    }
+    .event-cover-grid .category-card:after{
+      background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,.08));
+    }
+    @media(max-width:980px){
+      .event-cover-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+    }
+    @media(max-width:640px){
+      .event-cover-grid{grid-template-columns:1fr}
+      .event-cover-grid .category-card{aspect-ratio:561/701}
+    }
   </style>
 </head>
 <body class="home-refresh">
@@ -216,10 +247,16 @@
         <div><div class="kicker reveal">05 / EVENTOS E PROJETOS</div><h2 class="display reveal">Além do<br/><span class="red">tatame</span></h2></div>
         <p class="section-copy reveal">Competição, formação técnica e impacto social na comunidade de Alpinópolis.</p>
       </div>
-      <div class="three-grid">
-        <a class="mini-card red-edge reveal" href="dfl.html"><img alt="" class="watermark" src="assets/img/logo.webp"/><span class="num">01 / COMPETIÇÃO</span><strong class="card-title">DFL →</strong><span class="card-copy">DFL 1, DFL 2, DFL 3, Valquírias e próximas edições.</span></a>
-        <a class="mini-card yellow-edge reveal" href="seminarios.html"><img alt="" class="watermark" src="assets/img/logo.webp"/><span class="num">02 / FORMAÇÃO</span><strong class="card-title">Seminários →</strong><span class="card-copy">Acervo de seminários e formação técnica, sem misturar com as salas de treino.</span></a>
-        <a class="mini-card red-edge reveal" href="projeto-social.html"><img alt="" class="watermark" src="assets/img/logo.webp"/><span class="num">03 / IMPACTO</span><strong class="card-title">Projeto Social →</strong><span class="card-copy">Ações do DFL, cestas básicas, arrecadações e futuros projetos.</span></a>
+      <div class="event-cover-grid">
+        <a class="category-card modality-poster reveal" href="dfl.html" aria-label="Abrir DFL">
+          <img alt="DFL — Desafio de Muay Thai — aperte aqui" src="assets/img/home-dfl.png.png"/>
+        </a>
+        <a class="category-card modality-poster reveal" href="projeto-social.html" aria-label="Abrir Projeto Social">
+          <img alt="Projeto Social DFL Fight Lira — aperte aqui" src="assets/img/home-projeto-social.png.png"/>
+        </a>
+        <a class="category-card modality-poster reveal" href="seminarios.html" aria-label="Abrir Seminários Fight Lira">
+          <img alt="Seminários Fight Lira — aperte aqui" src="assets/img/home-seminarios.png.png"/>
+        </a>
       </div>
     </div>
   </section>
