@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#070707">
+
+  <title>DFL 3 — Edição Norte de Minas | Galeria Oficial</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: #070707;
+      color: #fff;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    header {
+      padding: 28px 20px 24px;
+      text-align: center;
+      border-bottom: 1px solid #242424;
+      background: #0b0b0b;
+    }
+
+    .back {
+      display: inline-block;
+      margin-bottom: 20px;
+      color: #aaa;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .back:hover {
+      color: #fff;
+    }
+
+    h1 {
+      font-size: clamp(38px, 8vw, 68px);
+      font-weight: 900;
+      letter-spacing: 2px;
+    }
+
+    h1 span {
+      color: #d71920;
+    }
+
+    .subtitle {
+      color: #aaa;
+      margin-top: 8px;
+      font-size: 13px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .meta {
+      margin-top: 16px;
+      color: #666;
+      font-size: 12px;
+      letter-spacing: 1px;
+    }
+
+    .gallery {
+      max-width: 1500px;
+      margin: auto;
+      padding: 22px 12px 24px;
+
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    .gallery button {
+      display: block;
+      border: 0;
+      padding: 0;
+      background: #111;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .gallery img {
+      width: 100%;
+      height: 320px;
+      object-fit: cover;
+      display: block;
+      background: #111;
+
+      transition:
+        transform .25s ease,
+        opacity .25s ease;
+    }
+
+    .gallery button:hover img {
+      transform: scale(1.018);
+      opacity: .9;
+    }
+
+    .loading {
+      max-width: 1500px;
+      margin: 0 auto 24px;
+      padding: 0 14px;
+
+      text-align: center;
+      color: #777;
+      font-size: 12px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .sentinel {
+      height: 1px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 26px;
+
+      color: #666;
+      font-size: 12px;
+
+      border-top: 1px solid #181818;
+    }
+
+    .lightbox {
+      display: none;
+
+      position: fixed;
+      inset: 0;
+
+      background: rgba(0,0,0,.97);
+
+      z-index: 9999;
+
+      align-items: center;
+      justify-content: center;
+
+      padding: 20px;
+    }
+
+    .lightbox.active {
+      display: flex;
+    }
+
+    .lightbox img {
+      max-width: 96vw;
+      max-height: 90vh;
+      object-fit: contain;
+    }
+
+    .close,
+    .navbtn {
+      position: absolute;
+
+      border: 0;
+
+      background: rgba(0,0,0,.25);
+
+      color: #fff;
+
+      cursor: pointer;
+
+      z-index: 2;
+    }
+
+    .close {
+      top: 14px;
+      right: 20px;
+
+      font-size: 42px;
+
+      line-height: 1;
+
+      padding: 5px 10px;
+    }
+
+    .navbtn {
+      top: 50%;
+
+      transform: translateY(-50%);
+
+      font-size: 42px;
+
+      padding: 12px 16px;
+    }
+
+    .prev {
+      left: 8px;
+    }
+
+    .next {
+      right: 8px;
+    }
+
+    .counter {
+      position: absolute;
+
+      bottom: 12px;
+
+      left: 50%;
+
+      transform: translateX(-50%);
+
+      color: #aaa;
+
+      font-size: 12px;
+
+      letter-spacing: 1px;
+    }
+
+    @media (max-width: 1050px) {
+
+      .gallery {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .gallery img {
+        height: 300px;
+      }
+
+    }
+
+    @media (max-width: 760px) {
+
+      .gallery {
+        grid-template-columns: repeat(2, 1fr);
+
+        padding: 8px 5px 18px;
+
+        gap: 5px;
+      }
+
+      .gallery img {
+        height: 235px;
+      }
+
+      .navbtn {
+        font-size: 32px;
+
+        padding: 10px;
+      }
+
+    }
+
+    @media (max-width: 390px) {
+
+      .gallery img {
+        height: 205px;
+      }
+
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+
+  <a class="back" href="dfl.html">
+    ← VOLTAR PARA O ARQUIVO DFL
+  </a>
+
+  <h1>
+    DFL <span>3</span>
+  </h1>
+
+  <div class="subtitle">
+    Edição Norte de Minas • Galeria Oficial
+  </div>
+
+  <div class="meta">
+    1.309 fotos disponíveis
+  </div>
+
+</header>
+
+
+<main
+  class="gallery"
+  id="gallery">
+</main>
+
+
+<div
+  class="loading"
+  id="loading">
+
+  Carregando galeria...
+
+</div>
+
+
+<div
+  class="sentinel"
+  id="sentinel">
+</div>
+
+
+<footer>
+  DFL • FIGHT LIRA
+</footer>
+
+
+<div
+  class="lightbox"
+  id="lightbox">
+
+  <button
+    class="close"
+    id="close">
+    &times;
+  </button>
+
+  <button
+    class="navbtn prev"
+    id="prev">
+    ‹
+  </button>
+
+  <img
+    id="lightboxImg"
+    alt="Foto ampliada DFL 3">
+
+  <button
+    class="navbtn next"
+    id="next">
+    ›
+  </button>
+
+  <div
+    class="counter"
+    id="counter">
+  </div>
+
+</div>
+
+
+<script>
+
+const ranges = [
+
+  [1,18],
+
+  [191,272],
+
+  [283,492],
+
+  [593,1591]
+
+];
+
+
+const photos = [];
+
+
+for (const [start,end] of ranges) {
+
+  for (let n = start; n <= end; n++) {
+
+    photos.push(
+      `001-${n}.JPG`
+    );
+
+  }
+
+}
+
+
+const gallery =
+document.getElementById('gallery');
+
+
+const loading =
+document.getElementById('loading');
+
+
+const sentinel =
+document.getElementById('sentinel');
+
+
+const lightbox =
+document.getElementById('lightbox');
+
+
+const lightboxImg =
+document.getElementById('lightboxImg');
+
+
+const counter =
+document.getElementById('counter');
+
+
+let rendered = 0;
+
+let current = 0;
+
+const batch = 48;
+
+
+
+function renderMore() {
+
+  const end =
+  Math.min(
+    rendered + batch,
+    photos.length
+  );
+
+
+  const fragment =
+  document.createDocumentFragment();
+
+
+  for (
+    let i = rendered;
+    i < end;
+    i++
+  ) {
+
+    const button =
+    document.createElement('button');
+
+
+    button.type = 'button';
+
+
+    const img =
+    document.createElement('img');
+
+
+    img.loading = 'lazy';
+
+    img.decoding = 'async';
+
+    img.src = photos[i];
+
+    img.alt =
+    `DFL 3 — Foto ${i + 1}`;
+
+
+    img.addEventListener(
+      'click',
+      () => openLightbox(i)
+    );
+
+
+    button.appendChild(img);
+
+    fragment.appendChild(button);
+
+  }
+
+
+  gallery.appendChild(fragment);
+
+
+  rendered = end;
+
+
+  if (rendered < photos.length) {
+
+    loading.textContent =
+    `${rendered.toLocaleString('pt-BR')} de ${photos.length.toLocaleString('pt-BR')} fotos carregadas`;
+
+  }
+
+  else {
+
+    loading.textContent =
+    `${photos.length.toLocaleString('pt-BR')} fotos • galeria completa`;
+
+  }
+
+}
+
+
+
+function openLightbox(index) {
+
+  current = index;
+
+  lightboxImg.src =
+  photos[current];
+
+
+  counter.textContent =
+  `${current + 1} / ${photos.length}`;
+
+
+  lightbox.classList.add('active');
+
+
+  document.body.style.overflow =
+  'hidden';
+
+}
+
+
+
+function closeLightbox() {
+
+  lightbox.classList.remove('active');
+
+
+  document.body.style.overflow =
+  '';
+
+}
+
+
+
+function move(step) {
+
+  current =
+  (
+    current +
+    step +
+    photos.length
+  ) % photos.length;
+
+
+  lightboxImg.src =
+  photos[current];
+
+
+  counter.textContent =
+  `${current + 1} / ${photos.length}`;
+
+}
+
+
+
+document
+.getElementById('close')
+.addEventListener(
+  'click',
+  closeLightbox
+);
+
+
+
+document
+.getElementById('prev')
+.addEventListener(
+  'click',
+  function(event) {
+
+    event.stopPropagation();
+
+    move(-1);
+
+  }
+);
+
+
+
+document
+.getElementById('next')
+.addEventListener(
+  'click',
+  function(event) {
+
+    event.stopPropagation();
+
+    move(1);
+
+  }
+);
+
+
+
+lightbox.addEventListener(
+  'click',
+  function(event) {
+
+    if (
+      event.target === lightbox
+    ) {
+
+      closeLightbox();
+
+    }
+
+  }
+);
+
+
+
+document.addEventListener(
+  'keydown',
+  function(event) {
+
+    if (
+      !lightbox.classList.contains('active')
+    ) {
+
+      return;
+
+    }
+
+
+    if (
+      event.key === 'Escape'
+    ) {
+
+      closeLightbox();
+
+    }
+
+
+    if (
+      event.key === 'ArrowLeft'
+    ) {
+
+      move(-1);
+
+    }
+
+
+    if (
+      event.key === 'ArrowRight'
+    ) {
+
+      move(1);
+
+    }
+
+  }
+);
+
+
+
+const observer =
+new IntersectionObserver(
+
+  function(entries) {
+
+    if (
+      entries[0].isIntersecting &&
+      rendered < photos.length
+    ) {
+
+      renderMore();
+
+    }
+
+  },
+
+  {
+    rootMargin: '900px'
+  }
+
+);
+
+
+
+renderMore();
+
+observer.observe(sentinel);
+
+</script>
+
+</body>
+</html>
