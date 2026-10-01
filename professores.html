@@ -1,3 +1,46 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <title>Professores e Instrutores | Fight Lira</title>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <meta name="theme-color" content="#080808"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@500;600;700;800&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="assets/css/site.css"/>
+  <style>
+    .team-block{margin-top:34px}
+    .team-block:first-of-type{margin-top:0}
+    .team-title{display:flex;align-items:end;justify-content:space-between;gap:20px;margin-bottom:18px}
+    .team-title h2{margin:0}
+    .team-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+    .team-card{border:1px solid var(--line);border-radius:26px;background:linear-gradient(145deg,#171717,#0b0b0b);overflow:hidden;min-height:500px;display:flex;flex-direction:column}
+    .team-photo{height:360px;position:relative;display:grid;place-items:end center;overflow:hidden;background:radial-gradient(circle at 50% 72%,rgba(227,38,43,.13),transparent 45%),#0d0d0d}
+    .team-photo img{width:100%;height:100%;object-fit:contain;object-position:center bottom;padding:12px 12px 0;filter:drop-shadow(0 22px 24px rgba(0,0,0,.5))}
+    .team-photo.placeholder::after{content:"FOTO EM BREVE";font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.18em;color:#5d5d5d;position:absolute;inset:0;display:grid;place-items:center}
+    .belt-line{position:absolute;left:0;right:0;bottom:0;height:7px;background:var(--belt,#333)}
+    .team-body{padding:24px;display:grid;gap:8px}
+    .team-role{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--yellow)}
+    .team-body strong{font-family:Anton,sans-serif;font-size:34px;line-height:1;text-transform:uppercase}
+    .team-rank{color:var(--muted);font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+    .graduados-link{margin-top:30px;display:flex;justify-content:flex-end}
+    @media(max-width:760px){.team-grid{grid-template-columns:1fr}.team-photo{height:390px}.team-card{min-height:0}.team-title{align-items:start;flex-direction:column}}
+  </style>
+</head>
+<body>
+<header class="nav">
+  <a class="brand" href="index.html"><img src="assets/img/logo.webp" alt="Brasão Fight Lira"/><span>FIGHT <b>LIRA</b></span></a>
+  <nav class="nav-links">
+    <a href="index.html">Início</a><a href="jiujitsu.html">Jiu-Jitsu</a><a href="muaythai.html">Muay Thai</a><a href="professores.html">Professores</a><a href="graduados.html">Graduados</a><a href="dfl.html">DFL</a><a href="seminarios.html">Seminários</a><a href="projeto-social.html">Projeto Social</a><a class="nav-cta" href="index.html#contato">Contato</a>
+  </nav>
+  <button class="menu-btn" aria-label="Abrir menu">☰</button>
+</header>
+<div class="mobile-panel">
+  <button class="mobile-close" aria-label="Fechar menu">×</button>
+  <a href="index.html">Início</a><a href="jiujitsu.html">Jiu-Jitsu</a><a href="muaythai.html">Muay Thai</a><a href="professores.html">Professores</a><a href="graduados.html">Graduados</a><a href="dfl.html">DFL</a><a href="seminarios.html">Seminários</a><a href="projeto-social.html">Projeto Social</a><a href="index.html#contato">Contato</a>
+</div>
+
 <section class="subhero">
 
   <div class="bg">
@@ -5,16 +48,13 @@
   </div>
 
   <div class="inner">
-
     <div class="breadcrumbs">
       <a href="index.html">Início</a>
       <span>›</span>
       <span>Professores e Instrutores</span>
     </div>
 
-    <div class="kicker">
-      EQUIPE FIGHT LIRA
-    </div>
+    <div class="kicker">EQUIPE FIGHT LIRA</div>
 
     <h1 class="display">
       Professores<br/>
@@ -24,7 +64,74 @@
     <p class="section-copy">
       Função e graduação apresentadas separadamente, respeitando a estrutura técnica da Fight Lira.
     </p>
-
   </div>
 
 </section>
+
+<main class="section">
+  <section class="team-block">
+    <div class="team-title">
+      <div><div class="kicker">PROFESSORES</div><h2 class="display">Responsáveis pela formação</h2></div>
+    </div>
+    <div class="team-grid">
+      <article class="team-card reveal">
+        <div class="team-photo">
+  <img src="assets/img/david-lira.webp" alt="David Lira"/>
+  <span class="belt-line" style="--belt:#222"></span>
+</div>
+        <div class="team-body">
+          <span class="team-role">Professor</span>
+          <strong>David Lira</strong>
+          <span class="team-rank">Faixa Preta • 1º Grau</span>
+        </div>
+      </article>
+
+      <article class="team-card reveal">
+        <div class="team-photo">
+        <img src="assets/img/fernando-silva.png" alt="Fernando Silva"/>
+          <span class="belt-line" style="--belt:#222"></span>
+        </div>
+        <div class="team-body">
+          <span class="team-role">Professor</span>
+       <strong>Fernando Silva</strong>
+          <span class="team-rank">Faixa Preta</span>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="team-block">
+    <div class="team-title">
+      <div><div class="kicker">INSTRUTORES</div><h2 class="display">Equipe de instrução</h2></div>
+    </div>
+    <div class="team-grid">
+      <article class="team-card reveal">
+        <div class="team-photo placeholder"><span class="belt-line" style="--belt:#765039"></span></div>
+        <div class="team-body">
+          <span class="team-role">Instrutor</span>
+          <strong>Igor Gabriel</strong>
+          <span class="team-rank">Faixa Marrom</span>
+        </div>
+      </article>
+
+      <article class="team-card reveal">
+        <div class="team-photo">
+         <img src="assets/img/henrique-togo.png" alt="Henrique Togo"/>
+          <span class="belt-line" style="--belt:#8151a2"></span>
+        </div>
+        <div class="team-body">
+          <span class="team-role">Instrutor</span>
+         <strong>Henrique Togo</strong>
+          <span class="team-rank">Faixa Roxa</span>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <div class="graduados-link"><a class="btn yellow" href="graduados.html">Conhecer os graduados →</a></div>
+</main>
+
+<footer class="footer"><div class="footer-inner"><div class="footer-big reveal">Fazer parte<br/>de um <span class="red">padrão.</span></div><div class="footer-meta"><span style="display:flex;align-items:center;gap:10px"><img src="assets/img/logo.webp" alt="Brasão Fight Lira"/>FIGHT LIRA © 2026</span><span>DISCIPLINA • MÉTODO • PADRÃO • EVOLUÇÃO</span><span>ALPINÓPOLIS — MG</span></div></div></footer>
+<script src="assets/js/site.js"></script>
+</body>
+</html>
