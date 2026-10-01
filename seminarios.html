@@ -1,4 +1,6 @@
-<!doctype html>
+from pathlib import Path
+
+html = """<!doctype html>
 <html lang="pt-BR">
 <head>
   <title>Seminários | Fight Lira</title>
@@ -10,6 +12,64 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@500;600;700;800&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="assets/css/site.css"/>
+
+  <style>
+    /* Seminários — cards em formato de flyer, sem cortar o rosto */
+    .seminarios-rail{
+      align-items:stretch;
+      gap:22px;
+    }
+
+    .seminarios-rail .rail-card{
+      flex:0 0 min(400px,84vw);
+      aspect-ratio:4/5;
+      min-height:0;
+      padding:24px;
+      overflow:hidden;
+      border-radius:24px;
+      background-position:center top!important;
+      background-size:cover!important;
+      background-repeat:no-repeat!important;
+    }
+
+    .seminarios-rail .rail-card .status{
+      top:18px;
+      left:20px;
+      padding:7px 10px;
+      border-radius:999px;
+      background:rgba(5,5,5,.68);
+      border:1px solid rgba(255,255,255,.12);
+      backdrop-filter:blur(7px);
+    }
+
+    .seminarios-rail .rail-card .big{
+      font-size:clamp(34px,3.5vw,50px);
+      line-height:.92;
+      max-width:92%;
+      text-shadow:0 3px 20px rgba(0,0,0,.92);
+    }
+
+    .seminarios-rail .rail-card .small{
+      max-width:88%;
+      margin-top:10px;
+      font-size:15px;
+      line-height:1.35;
+      color:#ededed;
+      text-shadow:0 2px 12px rgba(0,0,0,.95);
+    }
+
+    @media(max-width:640px){
+      .seminarios-rail .rail-card{
+        flex-basis:88vw;
+        aspect-ratio:4/5.2;
+        padding:20px;
+      }
+
+      .seminarios-rail .rail-card .big{
+        font-size:clamp(34px,10vw,46px);
+      }
+    }
+  </style>
 </head>
 
 <body>
@@ -74,12 +134,12 @@
     <a class="btn" href="index.html">← Voltar para a home</a>
   </div>
 
-  <div class="rail">
+  <div class="rail seminarios-rail">
 
     <article class="rail-card"
       style="background:
-      linear-gradient(180deg,rgba(0,0,0,.06),rgba(0,0,0,.84)),
-      url('assets/img/seminario-henrique-the-soldier (1).png') center/cover no-repeat;">
+      linear-gradient(180deg,rgba(0,0,0,.02) 0%,rgba(0,0,0,.08) 46%,rgba(0,0,0,.88) 100%),
+      url('assets/img/seminario-henrique-the-soldier (1).png') center top/cover no-repeat;">
       <span class="status">MUAY THAI</span>
       <strong class="big">Henrique The Soldier</strong>
       <span class="small">Seminário especial de Muay Thai.</span>
@@ -87,8 +147,8 @@
 
     <article class="rail-card"
       style="background:
-      linear-gradient(180deg,rgba(0,0,0,.06),rgba(0,0,0,.84)),
-     url('assets/img/exame-graduacao-aliandro-camilo.png') center/cover no-repeat;">
+      linear-gradient(180deg,rgba(0,0,0,.02) 0%,rgba(0,0,0,.08) 46%,rgba(0,0,0,.88) 100%),
+      url('assets/img/exame-graduacao-aliandro-camilo.png') center top/cover no-repeat;">
       <span class="status">JIU-JITSU</span>
       <strong class="big">Aliandro Camilo</strong>
       <span class="small">Exame de graduação de Jiu-Jitsu.</span>
@@ -128,3 +188,8 @@
 
 </body>
 </html>
+"""
+
+path = Path("/mnt/data/seminarios.html")
+path.write_text(html, encoding="utf-8")
+print(path)
