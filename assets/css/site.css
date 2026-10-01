@@ -36,3 +36,61 @@ body:before{content:'';position:fixed;inset:0;z-index:999;pointer-events:none;op
 .carousel{position:relative}.carousel:after{content:'';position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--red);z-index:5;pointer-events:none;transform:scaleX(0);transform-origin:left}.carousel.running:after{animation:carouselProgress 3.8s linear forwards}@keyframes carouselProgress{from{transform:scaleX(0)}to{transform:scaleX(1)}}
 @media(max-width:640px){.partner-feature .partner-strip{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:8px}.partner-feature .partner{flex:0 0 68vw;scroll-snap-align:start;min-height:96px}.partner-feature{padding-top:28px;padding-bottom:30px}}
 \n/* Ajuste 9.9.2 — parceiros no início + contatos com ícones */\n.partner-feature{padding-top:46px;padding-bottom:48px;background:linear-gradient(180deg,#0b0b0b,#090909)}\n.partner-feature-head{align-items:end}\n.partner-feature-copy{margin:0;max-width:480px;color:var(--muted);font-size:14px;line-height:1.55;font-weight:600}\n.partner-feature .partner{min-height:132px;padding:20px 24px;border-radius:22px}\n.partner-feature .partner strong{font-size:clamp(25px,2.5vw,38px);letter-spacing:.01em}\n.partner-feature .partner img{max-width:108px;max-height:76px}\n.contact-card{gap:20px}\n.contact-top{display:flex;align-items:center;gap:12px}\n.contact-top>span:last-child{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.16em;color:var(--yellow);text-transform:uppercase}\n.contact-icon{width:38px;height:38px;flex:0 0 38px;display:grid;place-items:center;border-radius:12px;border:1px solid rgba(240,200,63,.26);background:rgba(240,200,63,.06);color:var(--yellow);transition:.2s}\n.contact-icon svg{width:22px;height:22px;display:block}\n.contact-card:hover .contact-icon{color:#fff;background:rgba(227,38,43,.16);border-color:rgba(227,38,43,.48)}\n@media(max-width:640px){.partner-feature .partner{min-height:112px}.partner-feature-copy{font-size:13px}.contact-icon{width:36px;height:36px;flex-basis:36px}}\n
+
+/* PADRÃO DOS BANNERS INTERNOS — FIGHT LIRA */
+
+.subhero{
+  min-height:clamp(360px,44vh,480px);
+  padding:120px clamp(20px,4vw,56px) 38px;
+}
+
+.subhero .inner{
+  position:relative;
+  z-index:2;
+}
+
+.subhero .display{
+  margin:8px 0 14px;
+  font-size:clamp(54px,7vw,108px);
+  line-height:.9;
+  text-shadow:0 4px 28px rgba(0,0,0,.95);
+}
+
+.subhero .section-copy{
+  max-width:680px;
+  text-shadow:0 2px 14px rgba(0,0,0,.95);
+}
+
+.subhero:after{
+  background:
+    linear-gradient(180deg,rgba(8,8,8,.28),rgba(8,8,8,.82)),
+    linear-gradient(90deg,rgba(8,8,8,.88),rgba(8,8,8,.28) 72%,rgba(8,8,8,.12));
+}
+
+.breadcrumbs a{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:8px 12px;
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:999px;
+  background:rgba(8,8,8,.60);
+  color:#fff;
+  backdrop-filter:blur(8px);
+}
+
+.breadcrumbs a:before{
+  content:"←";
+  color:var(--yellow);
+}
+
+@media(max-width:640px){
+  .subhero{
+    min-height:48vh;
+    padding:110px 20px 34px;
+  }
+
+  .subhero .display{
+    font-size:clamp(54px,17vw,86px);
+  }
+}
