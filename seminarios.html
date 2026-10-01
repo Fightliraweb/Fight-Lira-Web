@@ -1,6 +1,6 @@
-from pathlib import Path
+<!doctype html>
 
-html = """<!doctype html>
+
 <html lang="pt-BR">
 <head>
   <title>Seminários | Fight Lira</title>
@@ -134,14 +134,14 @@ html = """<!doctype html>
     </div>
     <a class="btn" href="index.html">← Voltar para a home</a>
   </div>
-
+<a class="rail-card" href="seminario-the-soldier.html"
   <div class="rail seminarios-rail">
 
     <article class="rail-card"
       style="background:
       linear-gradient(180deg,rgba(0,0,0,.02) 0%,rgba(0,0,0,.08) 46%,rgba(0,0,0,.88) 100%),
       url('assets/img/seminario-henrique-the-soldier (1).png') center top/cover no-repeat;">
-      <span class="status">MUAY THAI</span>
+      </a>
       <strong class="big">Henrique The Soldier</strong>
       <span class="small">Seminário especial de Muay Thai.</span>
     </article>
@@ -186,11 +186,6 @@ html = """<!doctype html>
 </footer>
 
 <script src="assets/js/site.js"></script>
-
-</body>
 </html>
-"""
-
-path = Path("/mnt/data/seminarios.html")
 path.write_text(html, encoding="utf-8")
 print(path)
