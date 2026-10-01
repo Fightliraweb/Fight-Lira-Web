@@ -1,3 +1,37 @@
+/* MENU GLOBAL FIGHT LIRA */
+
+const desktopMenu = document.querySelector('.nav-links');
+
+if (desktopMenu) {
+  desktopMenu.innerHTML = `
+    <a href="index.html">Início</a>
+    <a href="jiujitsu.html">Jiu-Jitsu</a>
+    <a href="muaythai.html">Muay Thai</a>
+    <a href="professores.html">Professores</a>
+    <a href="graduados.html">Graduados</a>
+    <a href="dfl.html">DFL</a>
+    <a href="seminarios.html">Seminários</a>
+    <a href="projeto-social.html">Projeto Social</a>
+    <a class="nav-cta" href="index.html#contato">Contato</a>
+  `;
+}
+
+const mobileMenu = document.querySelector('.mobile-panel');
+
+if (mobileMenu) {
+  mobileMenu.innerHTML = `
+    <button class="mobile-close" aria-label="Fechar menu">×</button>
+    <a href="index.html">Início</a>
+    <a href="jiujitsu.html">Jiu-Jitsu</a>
+    <a href="muaythai.html">Muay Thai</a>
+    <a href="professores.html">Professores</a>
+    <a href="graduados.html">Graduados</a>
+    <a href="dfl.html">DFL</a>
+    <a href="seminarios.html">Seminários</a>
+    <a href="projeto-social.html">Projeto Social</a>
+    <a href="index.html#contato">Contato</a>
+  `;
+}
 const nav=document.querySelector('.nav');if(nav){addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>35),{passive:true});}
 const mb=document.querySelector('.menu-btn'),mp=document.querySelector('.mobile-panel'),mc=document.querySelector('.mobile-close');
 if(mb&&mp){mb.addEventListener('click',()=>mp.classList.add('open'));mc?.addEventListener('click',()=>mp.classList.remove('open'));mp.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>mp.classList.remove('open')))}
