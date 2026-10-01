@@ -12,6 +12,78 @@
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@500;600;700;800&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet"/>
 
   <link rel="stylesheet" href="assets/css/site.css"/>
+
+<style>
+  .rail-shell{position:relative}
+  .rail-mobile-hint,.rail-next{display:none}
+
+  @media (max-width:640px){
+    .rail-shell{padding-top:34px}
+    .rail-mobile-hint{
+      display:flex;
+      align-items:center;
+      justify-content:flex-end;
+      gap:8px;
+      position:absolute;
+      top:0;
+      right:4px;
+      color:#bdbdbd;
+      font-family:'JetBrains Mono',monospace;
+      font-size:10px;
+      font-weight:700;
+      letter-spacing:.11em;
+      text-transform:uppercase;
+      pointer-events:none;
+    }
+    .rail-mobile-hint .hint-arrow{
+      color:#e3262b;
+      font-size:18px;
+      line-height:1;
+      animation:dflHint 1.15s ease-in-out infinite alternate;
+    }
+    .rail-next{
+      display:grid;
+      place-items:center;
+      position:absolute;
+      right:8px;
+      top:50%;
+      transform:translateY(-35%);
+      width:48px;
+      height:48px;
+      border:1px solid rgba(255,255,255,.2);
+      border-radius:50%;
+      background:rgba(8,8,8,.88);
+      color:#fff;
+      font-size:30px;
+      line-height:1;
+      z-index:8;
+      box-shadow:0 8px 28px rgba(0,0,0,.42);
+      backdrop-filter:blur(6px);
+      cursor:pointer;
+      transition:opacity .2s ease,transform .2s ease;
+    }
+    .rail-next:active{transform:translateY(-35%) scale(.94)}
+    .rail-next.is-hidden{opacity:0;pointer-events:none}
+    .rail-shell::after{
+      content:"";
+      position:absolute;
+      right:0;
+      top:34px;
+      bottom:14px;
+      width:34px;
+      background:linear-gradient(90deg,transparent,rgba(8,8,8,.58));
+      pointer-events:none;
+      z-index:5;
+    }
+    .rail{scrollbar-width:none}
+    .rail::-webkit-scrollbar{display:none}
+  }
+
+  @keyframes dflHint{
+    from{transform:translateX(0)}
+    to{transform:translateX(6px)}
+  }
+</style>
 </head>
 
 <body>
@@ -113,7 +185,14 @@
   </div>
 
 
-  <div class="rail">
+  <div class="rail-shell">
+    <div class="rail-mobile-hint" aria-hidden="true">
+      DESLIZE PARA VER MAIS <span class="hint-arrow">→</span>
+    </div>
+
+    <button class="rail-next" type="button" aria-label="Ver próximo DFL">›</button>
+
+    <div class="rail">
 
     <a class="rail-card" href="dfl1.html"
        style="background:
@@ -177,6 +256,7 @@
 
     </a>
 
+    </div>
   </div>
 
 
@@ -244,6 +324,30 @@
 
 
 <script src="assets/js/site.js"></script>
+
+<script>
+(function(){
+  const rail=document.querySelector('.rail-shell .rail');
+  const next=document.querySelector('.rail-next');
+  if(!rail||!next)return;
+
+  function updateArrow(){
+    const atEnd=rail.scrollLeft+rail.clientWidth>=rail.scrollWidth-12;
+    next.classList.toggle('is-hidden',atEnd);
+  }
+
+  next.addEventListener('click',function(){
+    const card=rail.querySelector('.rail-card');
+    const gap=14;
+    const step=card ? card.getBoundingClientRect().width+gap : rail.clientWidth*.82;
+    rail.scrollBy({left:step,behavior:'smooth'});
+  });
+
+  rail.addEventListener('scroll',updateArrow,{passive:true});
+  window.addEventListener('resize',updateArrow);
+  updateArrow();
+})();
+</script>
 
 </body>
 </html>
