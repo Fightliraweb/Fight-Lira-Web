@@ -1,0 +1,605 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#070707">
+
+<title>Henrique The Soldier | Seminário Fight Lira</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+body{
+  background:#070707;
+  color:#fff;
+  font-family:Arial,Helvetica,sans-serif;
+}
+
+header{
+  padding:28px 20px 24px;
+  text-align:center;
+  background:#0b0b0b;
+  border-bottom:1px solid #242424;
+}
+
+.back{
+  display:inline-block;
+  margin-bottom:18px;
+  color:#aaa;
+  text-decoration:none;
+  font-size:14px;
+}
+
+.back:hover{
+  color:#fff;
+}
+
+.kicker{
+  color:#d71920;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:2px;
+  margin-bottom:8px;
+}
+
+h1{
+  font-size:clamp(34px,7vw,64px);
+  font-weight:900;
+  line-height:.98;
+}
+
+h1 span{
+  color:#d71920;
+}
+
+.subtitle{
+  color:#aaa;
+  margin-top:10px;
+  font-size:13px;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+}
+
+.meta{
+  margin-top:14px;
+  color:#666;
+  font-size:12px;
+}
+
+.gallery{
+  max-width:1500px;
+  margin:auto;
+  padding:22px 12px;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:8px;
+}
+
+.gallery button{
+  border:0;
+  padding:0;
+  background:#111;
+  cursor:pointer;
+  overflow:hidden;
+  aspect-ratio:4/5;
+}
+
+.gallery img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+  transition:.25s;
+}
+
+.gallery button:hover img{
+  transform:scale(1.02);
+  opacity:.9;
+}
+
+.loading{
+  text-align:center;
+  padding:20px;
+  color:#777;
+  font-size:12px;
+  letter-spacing:1px;
+}
+
+footer{
+  text-align:center;
+  padding:28px;
+  color:#666;
+  border-top:1px solid #181818;
+  font-size:12px;
+}
+
+.lightbox{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.97);
+  z-index:9999;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+
+.lightbox.active{
+  display:flex;
+}
+
+.lightbox img{
+  max-width:96vw;
+  max-height:90vh;
+  object-fit:contain;
+}
+
+.close,
+.navbtn{
+  position:absolute;
+  border:0;
+  background:rgba(0,0,0,.35);
+  color:#fff;
+  cursor:pointer;
+}
+
+.close{
+  top:14px;
+  right:20px;
+  font-size:42px;
+  padding:5px 10px;
+}
+
+.navbtn{
+  top:50%;
+  transform:translateY(-50%);
+  font-size:42px;
+  padding:12px 16px;
+}
+
+.prev{
+  left:8px;
+}
+
+.next{
+  right:8px;
+}
+
+.counter{
+  position:absolute;
+  bottom:12px;
+  left:50%;
+  transform:translateX(-50%);
+  color:#aaa;
+  font-size:12px;
+}
+
+@media(max-width:1050px){
+  .gallery{
+    grid-template-columns:repeat(3,1fr);
+  }
+}
+
+@media(max-width:760px){
+  .gallery{
+    grid-template-columns:repeat(2,1fr);
+    padding:8px 5px 18px;
+    gap:5px;
+  }
+
+  .navbtn{
+    font-size:32px;
+    padding:10px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+<a
+class="back"
+href="seminarios.html">
+← VOLTAR PARA SEMINÁRIOS
+</a>
+
+<div class="kicker">
+MUAY THAI • ACERVO FIGHT LIRA
+</div>
+
+<h1>
+HENRIQUE
+<span>THE SOLDIER</span>
+</h1>
+
+<div class="subtitle">
+Seminário especial de Muay Thai
+</div>
+
+<div
+class="meta"
+id="meta">
+Carregando fotos...
+</div>
+
+</header>
+
+<main
+class="gallery"
+id="gallery">
+</main>
+
+<div
+class="loading"
+id="loading">
+Carregando galeria...
+</div>
+
+<footer>
+FIGHT LIRA • SEMINÁRIOS
+</footer>
+
+<div
+class="lightbox"
+id="lightbox">
+
+<button
+class="close"
+id="close">
+×
+</button>
+
+<button
+class="navbtn prev"
+id="prev">
+‹
+</button>
+
+<img
+id="lightboxImg"
+alt="Foto ampliada">
+
+<button
+class="navbtn next"
+id="next">
+›
+</button>
+
+<div
+class="counter"
+id="counter">
+</div>
+
+</div>
+
+<script>
+
+const commits = [
+
+'e663e59ec17e4448cc6ae9bf817fb0e80a17ec05',
+
+'8503b7dae85618751f50cb0897203a88887707c7',
+
+'82603f70f20fef6045322752eb1554e2f7947d79',
+
+'23d3811ab941040314058cc0506d1535ee0df895'
+
+];
+
+
+const repo =
+'Fightliraweb/Fight-Lira-Web';
+
+
+const photos = [];
+
+
+const gallery =
+document.getElementById('gallery');
+
+
+const loading =
+document.getElementById('loading');
+
+
+const meta =
+document.getElementById('meta');
+
+
+const lightbox =
+document.getElementById('lightbox');
+
+
+const lightboxImg =
+document.getElementById('lightboxImg');
+
+
+const counter =
+document.getElementById('counter');
+
+
+let current = 0;
+
+
+async function loadPhotos(){
+
+try{
+
+for(
+const commit of commits
+){
+
+const response =
+await fetch(
+`https://api.github.com/repos/${repo}/commits/${commit}`
+);
+
+
+if(!response.ok){
+throw new Error('Falha ao carregar fotos');
+}
+
+
+const data =
+await response.json();
+
+
+for(
+const file of data.files || []
+){
+
+if(
+/\.(jpg|jpeg)$/i.test(file.filename)
+){
+
+photos.push(
+file.filename
+);
+
+}
+
+}
+
+}
+
+
+meta.textContent =
+`${photos.length} fotos disponíveis`;
+
+
+renderGallery();
+
+}
+
+catch(error){
+
+loading.textContent =
+'Não foi possível carregar a galeria.';
+
+console.error(error);
+
+}
+
+}
+
+
+function renderGallery(){
+
+gallery.innerHTML = '';
+
+
+photos.forEach(
+(photo,index)=>{
+
+const button =
+document.createElement('button');
+
+
+const img =
+document.createElement('img');
+
+
+img.src = photo;
+
+img.loading = 'lazy';
+
+img.decoding = 'async';
+
+img.alt =
+`Seminário Henrique The Soldier — Foto ${index + 1}`;
+
+
+button.onclick =
+()=> openLightbox(index);
+
+
+button.appendChild(img);
+
+gallery.appendChild(button);
+
+}
+);
+
+
+loading.textContent =
+`${photos.length} fotos • galeria completa`;
+
+}
+
+
+function openLightbox(index){
+
+current = index;
+
+
+lightboxImg.src =
+photos[current];
+
+
+counter.textContent =
+`${current + 1} / ${photos.length}`;
+
+
+lightbox.classList.add(
+'active'
+);
+
+
+document.body.style.overflow =
+'hidden';
+
+}
+
+
+function closeLightbox(){
+
+lightbox.classList.remove(
+'active'
+);
+
+
+document.body.style.overflow =
+'';
+
+}
+
+
+function move(step){
+
+current =
+(
+current +
+step +
+photos.length
+)
+%
+photos.length;
+
+
+lightboxImg.src =
+photos[current];
+
+
+counter.textContent =
+`${current + 1} / ${photos.length}`;
+
+}
+
+
+document
+.getElementById('close')
+.onclick =
+closeLightbox;
+
+
+document
+.getElementById('prev')
+.onclick =
+()=> move(-1);
+
+
+document
+.getElementById('next')
+.onclick =
+()=> move(1);
+
+
+lightbox.onclick =
+(event)=>{
+
+if(
+event.target === lightbox
+){
+
+closeLightbox();
+
+}
+
+};
+
+
+document.addEventListener(
+'keydown',
+(event)=>{
+
+if(
+!lightbox.classList.contains(
+'active'
+)
+){
+return;
+}
+
+
+if(event.key === 'Escape'){
+closeLightbox();
+}
+
+
+if(event.key === 'ArrowLeft'){
+move(-1);
+}
+
+
+if(event.key === 'ArrowRight'){
+move(1);
+}
+
+}
+);
+
+
+let touchStart = 0;
+
+
+lightbox.addEventListener(
+'touchstart',
+event=>{
+
+touchStart =
+event.changedTouches[0].screenX;
+
+},
+{passive:true}
+);
+
+
+lightbox.addEventListener(
+'touchend',
+event=>{
+
+const difference =
+event.changedTouches[0].screenX -
+touchStart;
+
+
+if(
+Math.abs(difference) > 45
+){
+
+move(
+difference > 0
+? -1
+: 1
+);
+
+}
+
+},
+{passive:true}
+);
+
+
+loadPhotos();
+
+</script>
+
+</body>
+</html>
