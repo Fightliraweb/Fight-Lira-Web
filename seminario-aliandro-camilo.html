@@ -156,7 +156,28 @@
       color:#c8c8c8;
       line-height:1.7;
     }
+.seminar-profile{
+  display:grid;
+  grid-template-columns:180px 1fr;
+  gap:22px;
+  align-items:center;
+}
 
+.seminar-profile img{
+  width:100%;
+  border-radius:18px;
+  display:block;
+}
+
+@media(max-width:760px){
+  .seminar-profile{
+    grid-template-columns:1fr;
+  }
+
+  .seminar-profile img{
+    max-width:260px;
+  }
+}
     .event-info{
       display:grid;
       gap:16px;
