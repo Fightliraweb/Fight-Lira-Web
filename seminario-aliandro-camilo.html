@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <title>Aliandro Camilo | Seminário Técnico de Jiu-Jitsu</title>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <meta name="theme-color" content="#080808"/>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@500;600;700;800&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="assets/css/site.css"/>
+
+  <style>
+    .event-hero{
+      min-height:88vh;
+      position:relative;
+      display:flex;
+      align-items:flex-end;
+      overflow:hidden;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      background:#050505;
+    }
+
+    .event-hero-bg{
+      position:absolute;
+      inset:0;
+    }
+
+    .event-hero-bg img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      object-position:center top;
+      display:block;
+    }
+
+    .event-hero-bg:after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        linear-gradient(180deg,rgba(0,0,0,.10) 0%,rgba(0,0,0,.28) 45%,rgba(0,0,0,.96) 100%);
+    }
+
+    .event-hero-content{
+      position:relative;
+      z-index:2;
+      width:min(1180px,calc(100% - 40px));
+      margin:0 auto;
+      padding:160px 0 64px;
+    }
+
+    .event-status{
+      display:inline-block;
+      padding:8px 12px;
+      margin-bottom:18px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.16);
+      background:rgba(0,0,0,.65);
+      font-family:"JetBrains Mono",monospace;
+      font-size:10px;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color:#fff;
+    }
+
+    .event-title{
+      margin:0;
+      font-family:Anton,sans-serif;
+      font-size:clamp(58px,10vw,130px);
+      line-height:.86;
+      text-transform:uppercase;
+    }
+
+    .event-title span{
+      color:#e3262b;
+    }
+
+    .event-subtitle{
+      margin-top:20px;
+      max-width:720px;
+      font-size:clamp(18px,2vw,26px);
+      font-weight:700;
+      line-height:1.3;
+    }
+
+    .event-date{
+      margin-top:12px;
+      font-family:"JetBrains Mono",monospace;
+      font-size:14px;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      color:#cfcfcf;
+    }
+
+    .event-actions{
+      margin-top:28px;
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .event-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:50px;
+      padding:0 22px;
+      border-radius:999px;
+      text-decoration:none;
+      font-weight:800;
+      background:#e3262b;
+      color:#fff;
+      transition:.2s;
+    }
+
+    .event-btn:hover{
+      transform:translateY(-2px);
+    }
+
+    .event-btn.secondary{
+      background:#111;
+      border:1px solid rgba(255,255,255,.14);
+    }
+
+    .event-section{
+      max-width:1180px;
+      margin:auto;
+      padding:70px 20px;
+    }
+
+    .event-grid{
+      display:grid;
+      grid-template-columns:1.2fr .8fr;
+      gap:28px;
+    }
+
+    .event-box{
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:24px;
+      padding:28px;
+      background:linear-gradient(145deg,#141414,#0b0b0b);
+    }
+
+    .event-box h2{
+      margin:0 0 12px;
+      font-family:Anton,sans-serif;
+      font-size:clamp(36px,5vw,62px);
+      text-transform:uppercase;
+      line-height:.95;
+    }
+
+    .event-box p{
+      margin:0;
+      color:#c8c8c8;
+      line-height:1.7;
+    }
+
+    .event-info{
+      display:grid;
+      gap:16px;
+    }
+
+    .event-info-item{
+      padding-bottom:16px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+
+    .event-info-item:last-child{
+      border-bottom:0;
+      padding-bottom:0;
+    }
+
+    .event-info-label{
+      display:block;
+      margin-bottom:5px;
+      font-family:"JetBrains Mono",monospace;
+      font-size:10px;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color:#e3262b;
+    }
+
+    .event-info-value{
+      font-weight:800;
+      font-size:18px;
+    }
+
+    @media(max-width:760px){
+      .event-hero{
+        min-height:78vh;
+      }
+
+      .event-hero-content{
+        padding-bottom:38px;
+      }
+
+      .event-grid{
+        grid-template-columns:1fr;
+      }
+
+      .event-title{
+        font-size:clamp(54px,18vw,86px);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header class="nav">
+  <a class="brand" href="index.html">
+    <img src="assets/img/logo.webp" alt="Brasão Fight Lira"/>
+    <span>FIGHT <b>LIRA</b></span>
+  </a>
+
+  <nav class="nav-links">
+    <a href="index.html">Início</a>
+    <a href="jiujitsu.html">Jiu-Jitsu</a>
+    <a href="muaythai.html">Muay Thai</a>
+    <a href="professores.html">Professores</a>
+    <a href="dfl.html">DFL</a>
+    <a href="seminarios.html">Seminários</a>
+    <a href="inscricoes.html">Inscrições</a>
+    <a href="projeto-social.html">Projeto Social</a>
+    <a class="nav-cta" href="index.html#contato">Contato</a>
+  </nav>
+
+  <button class="menu-btn" aria-label="Abrir menu">☰</button>
+</header>
+
+<div class="mobile-panel">
+  <button class="mobile-close" aria-label="Fechar menu">×</button>
+  <a href="index.html">Início</a>
+  <a href="jiujitsu.html">Jiu-Jitsu</a>
+  <a href="muaythai.html">Muay Thai</a>
+  <a href="professores.html">Professores</a>
+  <a href="dfl.html">DFL</a>
+  <a href="seminarios.html">Seminários</a>
+  <a href="inscricoes.html">Inscrições</a>
+  <a href="projeto-social.html">Projeto Social</a>
+  <a href="index.html#contato">Contato</a>
+</div>
+
+<section class="event-hero">
+
+  <div class="event-hero-bg">
+    <img
+      src="assets/img/seminario-aliandro-camilo-15-novembro.png.png"
+      alt="Seminário Técnico de Jiu-Jitsu com Aliandro Camilo"
+    />
+  </div>
+
+  <div class="event-hero-content">
+
+    <span class="event-status">
+      INSCRIÇÕES ABERTAS
+    </span>
+
+    <h1 class="event-title">
+      ALIANDRO
+      <span>CAMILO</span>
+    </h1>
+
+    <div class="event-subtitle">
+      Seminário Técnico de Jiu-Jitsu
+    </div>
+
+    <div class="event-date">
+      15 DE NOVEMBRO DE 2026
+    </div>
+
+    <div class="event-actions">
+      <a class="event-btn" href="#inscricao">
+        GARANTIR MINHA VAGA
+      </a>
+
+      <a class="event-btn secondary" href="inscricoes.html">
+        ← VOLTAR
+      </a>
+    </div>
+
+  </div>
+
+</section>
+
+<section class="event-section">
+
+  <div class="event-grid">
+
+    <div class="event-box">
+      <h2>O seminário</h2>
+
+      <p>
+        Seminário técnico de Jiu-Jitsu com o professor Aliandro Camilo,
+        realizado pela Fight Lira. Um encontro voltado ao aprofundamento
+        técnico, troca de conhecimento e desenvolvimento dentro da modalidade.
+      </p>
+    </div>
+
+    <div class="event-box">
+
+      <div class="event-info">
+
+        <div class="event-info-item">
+          <span class="event-info-label">DATA</span>
+          <div class="event-info-value">15 de novembro de 2026</div>
+        </div>
+
+        <div class="event-info-item">
+          <span class="event-info-label">MODALIDADE</span>
+          <div class="event-info-value">Jiu-Jitsu</div>
+        </div>
+
+        <div class="event-info-item">
+          <span class="event-info-label">HORÁRIO</span>
+          <div class="event-info-value">Em definição</div>
+        </div>
+
+        <div class="event-info-item">
+          <span class="event-info-label">LOCAL</span>
+          <div class="event-info-value">Em definição</div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<section
+  id="inscricao"
+  class="event-section"
+  style="padding-top:10px;"
+>
+
+  <div class="event-box">
+
+    <span class="event-info-label">
+      INSCRIÇÃO
+    </span>
+
+    <h2>
+      Garanta sua vaga
+    </h2>
+
+    <p>
+      O formulário de inscrição será inserido nesta etapa.
+    </p>
+
+  </div>
+
+</section>
+
+<footer class="footer">
+  <div class="footer-inner">
+
+    <div class="footer-big reveal">
+      Fazer parte<br/>
+      de um
+      <span class="red">padrão.</span>
+    </div>
+
+    <div class="footer-meta">
+      <span style="display:flex;align-items:center;gap:10px">
+        <img src="assets/img/logo.webp" alt="Brasão Fight Lira"/>
+        FIGHT LIRA © 2026
+      </span>
+
+      <span>
+        DISCIPLINA • MÉTODO • PADRÃO • EVOLUÇÃO
+      </span>
+
+      <span>
+        ALPINÓPOLIS — MG
+      </span>
+    </div>
+
+  </div>
+</footer>
+
+<script src="assets/js/site.js"></script>
+
+</body>
+</html>
