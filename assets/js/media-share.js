@@ -8,7 +8,7 @@
   if (window.__fightLiraMediaShareLoaded) return;
   window.__fightLiraMediaShareLoaded = true;
 
-  const GA_ID = 'G-XXXXXXXXXX';
+const GA_ID = 'G-549G0VHR49';
 
   function analyticsConfigured() {
     return /^G-[A-Z0-9]+$/i.test(GA_ID) && GA_ID !== 'G-XXXXXXXXXX';
