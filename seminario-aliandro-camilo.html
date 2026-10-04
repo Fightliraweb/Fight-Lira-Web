@@ -370,6 +370,61 @@ style="padding:18px 20px 26px;display:flex;align-items:center;justify-content:sp
   </div>
 
 </section>
+  <section class="event-section" style="padding-top:10px;padding-bottom:30px;">
+
+  <div class="event-box">
+
+    <span class="event-info-label">
+      VAGAS DO SEMINÁRIO
+    </span>
+
+    <h2 style="margin-bottom:24px;">
+      Participantes
+    </h2>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:24px;">
+
+      <div style="padding:20px;border:1px solid rgba(255,255,255,.10);border-radius:16px;background:#101010;">
+        <span class="event-info-label">TOTAL</span>
+        <div style="font-size:32px;font-weight:900;margin-top:6px;">
+          20
+        </div>
+      </div>
+
+      <div style="padding:20px;border:1px solid rgba(255,255,255,.10);border-radius:16px;background:#101010;">
+        <span class="event-info-label">CONFIRMADOS</span>
+        <div id="confirmedCount" style="font-size:32px;font-weight:900;margin-top:6px;">
+          0
+        </div>
+      </div>
+
+      <div style="padding:20px;border:1px solid rgba(255,255,255,.10);border-radius:16px;background:#101010;">
+        <span class="event-info-label">DISPONÍVEIS</span>
+        <div id="availableCount" style="font-size:32px;font-weight:900;margin-top:6px;">
+          20
+        </div>
+      </div>
+
+    </div>
+
+    <button
+      type="button"
+      id="participantsToggle"
+      style="width:100%;padding:16px 20px;border:1px solid rgba(255,255,255,.12);border-radius:14px;background:#151515;color:#fff;font-weight:800;cursor:pointer;text-align:left;"
+    >
+      VER PARTICIPANTES CONFIRMADOS
+    </button>
+
+    <div
+      id="participantsPanel"
+      style="display:none;margin-top:14px;"
+    >
+      <div id="participantsList"></div>
+    </div>
+
+  </div>
+
+</section>
 
 <section
   id="inscricao"
