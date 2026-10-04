@@ -1,19 +1,27 @@
 <!doctype html>
 <html lang="pt-BR">
+
 <head>
   <title>Alliandro Camilo | Seminário Técnico de Jiu-Jitsu</title>
+
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <meta name="theme-color" content="#080808"/>
 
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@500;600;700;800&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet"/>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@500;600;700;800&family=JetBrains+Mono:wght@600;700&display=swap"
+    rel="stylesheet"
+  />
+
   <link rel="stylesheet" href="assets/css/site.css"/>
 
   <style>
+
     .event-hero{
-     min-height:68vh;
+      min-height:68vh;
       position:relative;
       display:flex;
       align-items:flex-end;
@@ -40,21 +48,32 @@
       position:absolute;
       inset:0;
       background:
-       linear-gradient(180deg,rgba(0,0,0,.04) 0%,rgba(0,0,0,.10) 50%,rgba(0,0,0,.55) 100%);
+        linear-gradient(
+          180deg,
+          rgba(0,0,0,.04) 0%,
+          rgba(0,0,0,.10) 50%,
+          rgba(0,0,0,.55) 100%
+        );
     }
 
     .event-hero-content{
       position:relative;
       z-index:2;
-      width:min(1180px,calc(100% - 40px));
-      margin:0 auto;
-      padding:160px 0 64px;
+      width:100%;
+      padding:18px 20px 26px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      flex-wrap:wrap;
+      background:#0b0b0b;
+      border-top:1px solid rgba(255,255,255,.06);
+      border-bottom:1px solid rgba(255,255,255,.08);
     }
 
     .event-status{
       display:inline-block;
       padding:8px 12px;
-      margin-bottom:18px;
       border-radius:999px;
       border:1px solid rgba(255,255,255,.16);
       background:rgba(0,0,0,.65);
@@ -65,37 +84,7 @@
       color:#fff;
     }
 
-    .event-title{
-      margin:0;
-      font-family:Anton,sans-serif;
-      font-size:clamp(58px,10vw,130px);
-      line-height:.86;
-      text-transform:uppercase;
-    }
-
-    .event-title span{
-      color:#e3262b;
-    }
-
-    .event-subtitle{
-      margin-top:20px;
-      max-width:720px;
-      font-size:clamp(18px,2vw,26px);
-      font-weight:700;
-      line-height:1.3;
-    }
-
-    .event-date{
-      margin-top:12px;
-      font-family:"JetBrains Mono",monospace;
-      font-size:14px;
-      letter-spacing:.08em;
-      text-transform:uppercase;
-      color:#cfcfcf;
-    }
-
     .event-actions{
-      margin-top:28px;
       display:flex;
       gap:12px;
       flex-wrap:wrap;
@@ -156,28 +145,20 @@
       color:#c8c8c8;
       line-height:1.7;
     }
-.seminar-profile{
-  display:grid;
-  grid-template-columns:180px 1fr;
-  gap:22px;
-  align-items:center;
-}
 
-.seminar-profile img{
-  width:100%;
-  border-radius:18px;
-  display:block;
-}
+    .seminar-profile{
+      display:grid;
+      grid-template-columns:180px 1fr;
+      gap:22px;
+      align-items:center;
+    }
 
-@media(max-width:760px){
-  .seminar-profile{
-    grid-template-columns:1fr;
-  }
+    .seminar-profile img{
+      width:100%;
+      border-radius:18px;
+      display:block;
+    }
 
-  .seminar-profile img{
-    max-width:260px;
-  }
-}
     .event-info{
       display:grid;
       gap:16px;
@@ -208,29 +189,153 @@
       font-size:18px;
     }
 
-    @media(max-width:760px){
-      .event-hero{
-      min-height:58vh;
-      }
+    .spots-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:12px;
+      margin-bottom:24px;
+    }
 
-      .event-hero-content{
-        padding-bottom:38px;
+    .spot-card{
+      padding:20px;
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:16px;
+      background:#101010;
+    }
+
+    .spot-number{
+      font-size:32px;
+      font-weight:900;
+      margin-top:6px;
+    }
+
+    .participants-toggle{
+      width:100%;
+      padding:16px 20px;
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:14px;
+      background:#151515;
+      color:#fff;
+      font-weight:800;
+      cursor:pointer;
+      text-align:left;
+    }
+
+    .participant-row{
+      display:grid;
+      grid-template-columns:50px 1.4fr 1fr 1fr;
+      gap:12px;
+      align-items:center;
+      padding:16px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+
+    .participant-empty{
+      padding:18px;
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:14px;
+      background:#101010;
+      color:#aaa;
+    }
+
+    .registration-steps{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:12px;
+      margin:0 0 28px;
+    }
+
+    .registration-step{
+      padding:18px;
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:16px;
+      background:#101010;
+    }
+
+    .registration-step strong{
+      display:block;
+      font-size:18px;
+      margin-top:6px;
+    }
+
+    .registration-step p{
+      margin-top:8px;
+      font-size:14px;
+    }
+
+    .privacy-note{
+      margin:0 0 18px !important;
+      color:#aaa !important;
+      font-size:13px;
+      line-height:1.6 !important;
+    }
+
+    .payment-note{
+      margin-top:8px !important;
+      font-size:13px;
+      color:#aaa !important;
+    }
+
+    .sold-out{
+      display:none;
+      padding:24px;
+      border:1px solid rgba(227,38,43,.45);
+      border-radius:16px;
+      background:rgba(227,38,43,.08);
+      text-align:center;
+      margin-top:20px;
+    }
+
+    .sold-out strong{
+      display:block;
+      font-family:Anton,sans-serif;
+      font-size:34px;
+      text-transform:uppercase;
+      color:#e3262b;
+    }
+
+    @media(max-width:760px){
+
+      .event-hero{
+        min-height:58vh;
       }
 
       .event-grid{
         grid-template-columns:1fr;
       }
 
-      .event-title{
-        font-size:clamp(54px,18vw,86px);
+      .seminar-profile{
+        grid-template-columns:1fr;
+      }
+
+      .seminar-profile img{
+        max-width:260px;
+      }
+
+      .spots-grid{
+        grid-template-columns:1fr;
+      }
+
+      .participant-row{
+        grid-template-columns:36px 1fr;
+      }
+
+      .participant-row span{
+        grid-column:2;
+      }
+
+      .event-hero-content{
+        align-items:flex-start;
       }
     }
+
   </style>
 </head>
 
 <body>
 
 <header class="nav">
+
   <a class="brand" href="index.html">
     <img src="assets/img/logo.webp" alt="Brasão Fight Lira"/>
     <span>FIGHT <b>LIRA</b></span>
@@ -243,86 +348,112 @@
     <a href="professores.html">Professores</a>
     <a href="dfl.html">DFL</a>
     <a href="seminarios.html">Seminários</a>
-<a href="inscricoes.html">Próximos Eventos</a>
+    <a href="inscricoes.html">Próximos Eventos</a>
     <a href="projeto-social.html">Projeto Social</a>
     <a class="nav-cta" href="index.html#contato">Contato</a>
   </nav>
 
   <button class="menu-btn" aria-label="Abrir menu">☰</button>
+
 </header>
 
+
 <div class="mobile-panel">
+
   <button class="mobile-close" aria-label="Fechar menu">×</button>
+
   <a href="index.html">Início</a>
   <a href="jiujitsu.html">Jiu-Jitsu</a>
   <a href="muaythai.html">Muay Thai</a>
   <a href="professores.html">Professores</a>
   <a href="dfl.html">DFL</a>
   <a href="seminarios.html">Seminários</a>
- <a href="inscricoes.html">Próximos Eventos</a>
+  <a href="inscricoes.html">Próximos Eventos</a>
   <a href="projeto-social.html">Projeto Social</a>
   <a href="index.html#contato">Contato</a>
+
 </div>
+
+
+<!-- HERO -->
 
 <section class="event-hero">
 
   <div class="event-hero-bg">
-  <img
-    src="assets/img/banner-seminario-aliandro-camilo.png.png"
-    alt="Seminário Técnico de Jiu-Jitsu com Alliandro Camilo"
-  />
-</div>
+
+    <img
+      src="assets/img/banner-seminario-aliandro-camilo.png.png"
+      alt="Seminário Técnico de Jiu-Jitsu com Alliandro Camilo"
+    />
+
+  </div>
 
 </section>
 
-<div
-  class="event-hero-content"
-style="padding:18px 20px 26px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;background:#0b0b0b;border-top:1px solid rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.08);">
 
-  <span class="event-status" style="margin-bottom:0;">
+<div class="event-hero-content">
+
+  <span class="event-status" id="eventStatus">
     INSCRIÇÕES ABERTAS
   </span>
 
-  <div class="event-actions" style="margin-top:0;">
-    <a class="event-btn" href="#inscricao">
+  <div class="event-actions">
+
+    <a
+      class="event-btn"
+      id="registrationButton"
+      href="#inscricao"
+    >
       GARANTIR MINHA VAGA
     </a>
 
-    <a class="event-btn secondary" href="inscricoes.html">
+    <a
+      class="event-btn secondary"
+      href="inscricoes.html"
+    >
       ← VOLTAR
     </a>
+
   </div>
 
 </div>
+
+
+<!-- INFORMAÇÕES -->
 
 <section class="event-section">
 
   <div class="event-grid">
 
-  <div class="event-box">
+    <div class="event-box">
 
-  <div class="seminar-profile">
+      <div class="seminar-profile">
 
-    <img
-     src="assets/img/seminario-aliandro-camilo-15-novembro.png.png.png"
-      alt="Seminário Técnico de Jiu-Jitsu com Alliandro Camilo"
-    />
+        <img
+          src="assets/img/seminario-aliandro-camilo-15-novembro.png.png.png"
+          alt="Seminário Técnico de Jiu-Jitsu com Alliandro Camilo"
+        />
 
-    <div>
-      <span class="event-info-label">
-        SEMINÁRIO TÉCNICO DE JIU-JITSU
-      </span>
+        <div>
 
-    <h2>Alliandro Camilo</h2>
-<p>
-  Seminário técnico de Jiu-Jitsu com o professor Alliandro Camilo,
-  realizado pela Fight Lira. Um encontro voltado ao aprofundamento
-  técnico, troca de conhecimento e desenvolvimento dentro da modalidade.
-</p>
+          <span class="event-info-label">
+            SEMINÁRIO TÉCNICO DE JIU-JITSU
+          </span>
 
-  </div>
+          <h2>Alliandro Camilo</h2>
 
-</div>
+          <p>
+            Seminário técnico de Jiu-Jitsu com o professor Alliandro Camilo,
+            realizado pela Fight Lira. Um encontro voltado ao aprofundamento
+            técnico, troca de conhecimento e desenvolvimento dentro da modalidade.
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
 
     <div class="event-box">
 
@@ -330,38 +461,52 @@ style="padding:18px 20px 26px;display:flex;align-items:center;justify-content:sp
 
         <div class="event-info-item">
           <span class="event-info-label">DATA</span>
-          <div class="event-info-value">15 de novembro de 2026</div>
+          <div class="event-info-value">
+            15 de novembro de 2026
+          </div>
         </div>
 
         <div class="event-info-item">
           <span class="event-info-label">MODALIDADE</span>
-          <div class="event-info-value">Jiu-Jitsu</div>
+          <div class="event-info-value">
+            Jiu-Jitsu
+          </div>
         </div>
 
         <div class="event-info-item">
           <span class="event-info-label">HORÁRIO</span>
-          <div class="event-info-value">09:00</div>
+          <div class="event-info-value">
+            09:00
+          </div>
         </div>
 
-  <div class="event-info-item">
-  <span class="event-info-label">LOCAL</span>
-  <div class="event-info-value">C.T. Fight Lira</div>
-</div>
+        <div class="event-info-item">
+          <span class="event-info-label">LOCAL</span>
+          <div class="event-info-value">
+            C.T. Fight Lira
+          </div>
+        </div>
 
-<div class="event-info-item">
-  <span class="event-info-label">VALOR</span>
-  <div class="event-info-value">R$ 100,00</div>
-</div>
+        <div class="event-info-item">
+          <span class="event-info-label">VALOR</span>
+          <div class="event-info-value">
+            R$ 100,00
+          </div>
+        </div>
 
-<div class="event-info-item">
-  <span class="event-info-label">VAGAS</span>
-  <div class="event-info-value">20 vagas</div>
-</div>
+        <div class="event-info-item">
+          <span class="event-info-label">VAGAS</span>
+          <div class="event-info-value">
+            20 vagas
+          </div>
+        </div>
 
-<div class="event-info-item">
-  <span class="event-info-label">INSCRIÇÕES ATÉ</span>
-  <div class="event-info-value">12 de novembro de 2026</div>
-</div>
+        <div class="event-info-item">
+          <span class="event-info-label">INSCRIÇÕES ATÉ</span>
+          <div class="event-info-value">
+            12 de novembro de 2026
+          </div>
+        </div>
 
       </div>
 
@@ -370,7 +515,14 @@ style="padding:18px 20px 26px;display:flex;align-items:center;justify-content:sp
   </div>
 
 </section>
-  <section class="event-section" style="padding-top:10px;padding-bottom:30px;">
+
+
+<!-- VAGAS -->
+
+<section
+  class="event-section"
+  style="padding-top:10px;padding-bottom:30px;"
+>
 
   <div class="event-box">
 
@@ -382,49 +534,80 @@ style="padding:18px 20px 26px;display:flex;align-items:center;justify-content:sp
       Participantes
     </h2>
 
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:24px;">
 
-      <div style="padding:20px;border:1px solid rgba(255,255,255,.10);border-radius:16px;background:#101010;">
-        <span class="event-info-label">TOTAL</span>
-        <div style="font-size:32px;font-weight:900;margin-top:6px;">
+    <div class="spots-grid">
+
+      <div class="spot-card">
+
+        <span class="event-info-label">
+          TOTAL
+        </span>
+
+        <div class="spot-number">
           20
         </div>
+
       </div>
 
-      <div style="padding:20px;border:1px solid rgba(255,255,255,.10);border-radius:16px;background:#101010;">
-        <span class="event-info-label">CONFIRMADOS</span>
-        <div id="confirmedCount" style="font-size:32px;font-weight:900;margin-top:6px;">
+
+      <div class="spot-card">
+
+        <span class="event-info-label">
+          CONFIRMADOS
+        </span>
+
+        <div
+          id="confirmedCount"
+          class="spot-number"
+        >
           0
         </div>
+
       </div>
 
-      <div style="padding:20px;border:1px solid rgba(255,255,255,.10);border-radius:16px;background:#101010;">
-        <span class="event-info-label">DISPONÍVEIS</span>
-        <div id="availableCount" style="font-size:32px;font-weight:900;margin-top:6px;">
+
+      <div class="spot-card">
+
+        <span class="event-info-label">
+          DISPONÍVEIS
+        </span>
+
+        <div
+          id="availableCount"
+          class="spot-number"
+        >
           20
         </div>
+
       </div>
 
     </div>
 
+
     <button
       type="button"
       id="participantsToggle"
-      style="width:100%;padding:16px 20px;border:1px solid rgba(255,255,255,.12);border-radius:14px;background:#151515;color:#fff;font-weight:800;cursor:pointer;text-align:left;"
+      class="participants-toggle"
     >
       VER PARTICIPANTES CONFIRMADOS
     </button>
+
 
     <div
       id="participantsPanel"
       style="display:none;margin-top:14px;"
     >
+
       <div id="participantsList"></div>
+
     </div>
 
   </div>
 
 </section>
+
+
+<!-- INSCRIÇÃO -->
 
 <section
   id="inscricao"
@@ -441,49 +624,118 @@ style="padding:18px 20px 26px;display:flex;align-items:center;justify-content:sp
     <h2>
       Garanta sua vaga
     </h2>
-<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:0 0 28px;">
 
-  <div style="padding:18px;border:1px solid rgba(255,255,255,.10);border-radius:16px;background:#101010;">
-    <span class="event-info-label">PASSO 01</span>
-    <strong style="display:block;font-size:18px;margin-top:6px;">Preencha seus dados</strong>
-    <p style="margin-top:8px;font-size:14px;">Complete o formulário abaixo para registrar sua inscrição.</p>
+
+    <div class="registration-steps">
+
+      <div class="registration-step">
+
+        <span class="event-info-label">
+          PASSO 01
+        </span>
+
+        <strong>
+          Preencha seus dados
+        </strong>
+
+        <p>
+          Complete o formulário abaixo para registrar sua inscrição.
+        </p>
+
+      </div>
+
+
+      <div class="registration-step">
+
+        <span class="event-info-label">
+          PASSO 02
+        </span>
+
+        <strong>
+          Faça o pagamento
+        </strong>
+
+        <p>
+          Após recebermos sua inscrição, a Fight Lira enviará a cobrança
+          pelo WhatsApp informado no formulário.
+        </p>
+
+        <p class="payment-note">
+          O pagamento deverá ser realizado em até 24 horas.
+        </p>
+
+      </div>
+
+
+      <div class="registration-step">
+
+        <span class="event-info-label">
+          PASSO 03
+        </span>
+
+        <strong>
+          Confirme sua vaga
+        </strong>
+
+        <p>
+          Após a confirmação do pagamento, sua vaga será oficialmente garantida.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <p class="privacy-note">
+      Ao realizar a inscrição, o participante fica ciente de que nome,
+      graduação e equipe poderão constar na lista pública de participantes
+      confirmados do seminário.
+    </p>
+
+
+    <div id="registrationForm">
+
+      <iframe
+        src="https://docs.google.com/forms/d/e/1FAIpQLSczxaplK_aRbx8aIOBPs1abLWCs3oBumeYLPkvSVjxGTCv-RQ/viewform?embedded=true"
+        width="100%"
+        height="1495"
+        frameborder="0"
+        marginheight="0"
+        marginwidth="0"
+        style="border:0;border-radius:16px;background:#fff;"
+        title="Formulário de inscrição do seminário"
+      >
+        Carregando…
+      </iframe>
+
+    </div>
+
+
+    <div
+      id="soldOutMessage"
+      class="sold-out"
+    >
+
+      <strong>
+        VAGAS ESGOTADAS
+      </strong>
+
+      <p>
+        As 20 vagas deste seminário já foram preenchidas.
+      </p>
+
+    </div>
+
   </div>
-
-  <div style="padding:18px;border:1px solid rgba(255,255,255,.10);border-radius:16px;background:#101010;">
-    <span class="event-info-label">PASSO 02</span>
-    <strong style="display:block;font-size:18px;margin-top:6px;">Faça o pagamento</strong>
-   <p style="margin-top:8px;font-size:14px;">Após recebermos sua inscrição, a Fight Lira enviará a cobrança pelo WhatsApp informado no formulário.</p>
-  </div>
-
-  <div style="padding:18px;border:1px solid rgba(255,255,255,.10);border-radius:16px;background:#101010;">
-    <span class="event-info-label">PASSO 03</span>
-    <strong style="display:block;font-size:18px;margin-top:6px;">Confirme sua vaga</strong>
-  <p style="margin-top:8px;font-size:14px;">Após a confirmação do pagamento, sua vaga será oficialmente garantida.</p>
-  </div>
-
-</div>
-    <p style="margin:0 0 18px;color:#aaa;font-size:13px;line-height:1.6;">
-  Ao realizar a inscrição, o participante fica ciente de que nome,
-  graduação e equipe poderão constar na lista pública de participantes
-  confirmados do seminário.
-</p>
-   <iframe
-  src="https://docs.google.com/forms/d/e/1FAIpQLSczxaplK_aRbx8aIOBPs1abLWCs3oBumeYLPkvSVjxGTCv-RQ/viewform?embedded=true"
-  width="100%"
-  height="1495"
-  frameborder="0"
-  marginheight="0"
-  marginwidth="0"
-  style="border:0; border-radius:16px; background:#fff;">
-  Carregando…
-</iframe>
-
-  </div>
-
 
 </section>
 
- <footer class="footer"><div class="footer-inner">
+
+<!-- FOOTER -->
+
+<footer class="footer">
+
+  <div class="footer-inner">
 
     <div class="footer-big reveal">
       Fazer parte<br/>
@@ -491,26 +743,235 @@ style="padding:18px 20px 26px;display:flex;align-items:center;justify-content:sp
       <span class="red">padrão.</span>
     </div>
 
+
     <div class="footer-meta">
+
       <span style="display:flex;align-items:center;gap:10px">
-        <img src="assets/img/logo.webp" alt="Brasão Fight Lira"/>
+
+        <img
+          src="assets/img/logo.webp"
+          alt="Brasão Fight Lira"
+        />
+
         FIGHT LIRA © 2026
+
       </span>
+
 
       <span>
         DISCIPLINA • MÉTODO • PADRÃO • EVOLUÇÃO
       </span>
 
+
       <span>
         ALPINÓPOLIS — MG
       </span>
+
     </div>
 
   </div>
+
 </footer>
 
-</html>
 
+<!-- SISTEMA DE VAGAS -->
+
+<script>
+
+  const totalVagas = 20;
+
+
+  /*
+    ==================================================
+    PARTICIPANTES COM PAGAMENTO CONFIRMADO
+    ==================================================
+
+    ADICIONE SOMENTE QUEM JÁ PAGOU.
+
+    EXEMPLO:
+
+    {
+      nome: "João Silva",
+      graduacao: "Faixa Azul",
+      equipe: "Equipe X"
+    },
+
+    NÃO coloque telefone, e-mail, WhatsApp
+    ou qualquer dado de pagamento aqui.
+  */
+
+
+  const participantesConfirmados = [
+
+  ];
+
+
+  const confirmedCount =
+    document.getElementById("confirmedCount");
+
+  const availableCount =
+    document.getElementById("availableCount");
+
+  const participantsList =
+    document.getElementById("participantsList");
+
+  const participantsToggle =
+    document.getElementById("participantsToggle");
+
+  const participantsPanel =
+    document.getElementById("participantsPanel");
+
+  const registrationForm =
+    document.getElementById("registrationForm");
+
+  const soldOutMessage =
+    document.getElementById("soldOutMessage");
+
+  const registrationButton =
+    document.getElementById("registrationButton");
+
+  const eventStatus =
+    document.getElementById("eventStatus");
+
+
+  const confirmados =
+    participantesConfirmados.length;
+
+
+  const disponiveis =
+    Math.max(totalVagas - confirmados,0);
+
+
+  confirmedCount.textContent =
+    confirmados;
+
+
+  availableCount.textContent =
+    disponiveis;
+
+
+
+  function renderParticipantes(){
+
+    if(confirmados === 0){
+
+      participantsList.innerHTML = `
+        <div class="participant-empty">
+          Nenhum participante confirmado até o momento.
+        </div>
+      `;
+
+      return;
+
+    }
+
+
+    participantsList.innerHTML =
+      participantesConfirmados
+      .map((participante,index)=>`
+
+        <div class="participant-row">
+
+          <strong>
+            ${String(index + 1).padStart(2,"0")}
+          </strong>
+
+          <strong>
+            ${participante.nome}
+          </strong>
+
+          <span>
+            ${participante.graduacao}
+          </span>
+
+          <span>
+            ${participante.equipe}
+          </span>
+
+        </div>
+
+      `)
+      .join("");
+
+  }
+
+
+
+  renderParticipantes();
+
+
+
+  participantsToggle.addEventListener(
+    "click",
+    function(){
+
+      const aberto =
+        participantsPanel.style.display === "block";
+
+
+      participantsPanel.style.display =
+        aberto ? "none" : "block";
+
+
+      participantsToggle.textContent =
+        aberto
+        ? "VER PARTICIPANTES CONFIRMADOS"
+        : "OCULTAR PARTICIPANTES";
+
+    }
+  );
+
+
+
+  /*
+    ESGOTAMENTO AUTOMÁTICO
+
+    Quando os 20 participantes estiverem
+    na lista acima:
+
+    - disponíveis vira 0
+    - formulário desaparece
+    - botão de inscrição é desativado
+    - status muda para VAGAS ESGOTADAS
+  */
+
+
+  if(disponiveis === 0){
+
+    registrationForm.style.display =
+      "none";
+
+
+    soldOutMessage.style.display =
+      "block";
+
+
+    eventStatus.textContent =
+      "VAGAS ESGOTADAS";
+
+
+    registrationButton.textContent =
+      "VAGAS ESGOTADAS";
+
+
+    registrationButton.removeAttribute(
+      "href"
+    );
+
+
+    registrationButton.style.opacity =
+      ".55";
+
+
+    registrationButton.style.cursor =
+      "default";
+
+  }
+
+</script>
+
+
+<script src="assets/js/site.js"></script>
 
 </body>
 </html>
