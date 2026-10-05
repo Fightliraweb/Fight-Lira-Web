@@ -832,6 +832,37 @@
     disponiveis;
 
 const URL_VAGAS = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQsuFTspAb6OU-oAHsKiAaG0A4RPG7d0ySMXzlGj3nq8faTFUxvatTPtrzrT1EpIi8ie8lhgn2LujyP/pub?gid=949509876&single=true&output=csv";
+  async function atualizarVagasDaPlanilha(){
+
+  try {
+
+    const resposta = await fetch(URL_VAGAS + "&t=" + Date.now());
+    const csv = await resposta.text();
+
+    const linhas = csv.trim().split(/\r?\n/);
+
+    const linhaVagas = linhas.find(linha =>
+      linha.toLowerCase().includes("vagas_disponiveis")
+    );
+
+    if(!linhaVagas) return;
+
+    const valor = linhaVagas.split(",")[1];
+    const vagasDisponiveis = parseInt(valor, 10);
+
+    if(Number.isNaN(vagasDisponiveis)) return;
+
+    availableCount.textContent = vagasDisponiveis;
+
+  } catch(erro) {
+
+    console.error("Erro ao ler vagas da planilha:", erro);
+
+  }
+
+}
+
+atualizarVagasDaPlanilha();
 
   function renderParticipantes(){
 
