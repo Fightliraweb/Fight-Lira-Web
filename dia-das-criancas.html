@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#080808">
+<title>Dia das Crianças | Fight Lira Kids</title>
+<meta name="description" content="Confira as fotos da comemoração do Dia das Crianças na Fight Lira.">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#080808;color:#fff;font-family:Arial,Helvetica,sans-serif}
+header{padding:40px 20px;text-align:center;border-bottom:1px solid #252525}
+.back{color:#bbb;text-decoration:none;font-size:14px}
+.kicker{margin:30px 0 12px;color:#ed2839;font-size:12px;font-weight:800;letter-spacing:3px}
+h1{margin:0;font-size:clamp(36px,8vw,76px);line-height:1;font-weight:900}
+h1 span{color:#ed2839}
+.description{max-width:560px;margin:20px auto;color:#bbb;line-height:1.6}
+.count{color:#999;font-size:13px}
+.gallery{max-width:1400px;margin:auto;padding:24px 12px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.photo{padding:0;border:0;border-radius:6px;overflow:hidden;background:#181818;cursor:pointer;aspect-ratio:4/5}
+.photo img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .2s}
+.photo:hover img{transform:scale(1.04)}
+button:focus-visible,a:focus-visible{outline:3px solid #ed2839;outline-offset:4px}
+footer{padding:30px;text-align:center;color:#888;border-top:1px solid #252525;font-size:12px;letter-spacing:2px}
+dialog{position:fixed;inset:0;width:100%;height:100%;max-width:none;max-height:none;margin:0;padding:0;border:0;background:#080808;color:white}
+dialog::backdrop{background:#080808}
+.viewer{height:100%;display:flex;align-items:center;justify-content:center;padding:65px 55px 80px}
+.viewer img{max-width:100%;max-height:100%;object-fit:contain}
+.control{position:absolute;border:1px solid #444;background:#151515;color:white;cursor:pointer;border-radius:50%;width:44px;height:44px;font-size:30px}
+.close{right:16px;top:16px}
+.prev{left:8px;top:calc(50% - 22px)}
+.next{right:8px;top:calc(50% - 22px)}
+.counter{position:absolute;bottom:28px;left:0;width:100%;text-align:center;color:#bbb}
+@media(max-width:950px){.gallery{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:600px){
+header{padding:28px 16px}
+.gallery{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;padding:12px 6px}
+.viewer{padding:70px 8px 85px}
+.control{background:#080808cc}
+}
+@media(prefers-reduced-motion:reduce){.photo img{transition:none}}
+</style>
+</head>
+<body>
+<header>
+<a class="back" href="index.html">← VOLTAR PARA FIGHT LIRA</a>
+<p class="kicker">FIGHT LIRA KIDS • 2026</p>
+<h1>DIA DAS<br><span>CRIANÇAS</span></h1>
+<p class="description">Um dia de diversão, convivência e celebração com nossos alunos e suas famílias.</p>
+<p class="count" id="total"></p>
+</header>
+
+<main class="gallery" id="gallery" aria-label="Fotos do Dia das Crianças"></main>
+
+<footer>FIGHT LIRA • ALPINÓPOLIS — MG</footer>
+
+<dialog id="viewer" aria-label="Foto ampliada">
+<div class="viewer">
+<img id="largePhoto" alt="">
+</div>
+<button class="control close" id="close" aria-label="Fechar foto">×</button>
+<button class="control prev" id="prev" aria-label="Foto anterior">‹</button>
+<button class="control next" id="next" aria-label="Próxima foto">›</button>
+<div class="counter" id="counter" aria-live="polite"></div>
+</dialog>
+
+<script>
+const numbers = [
+348,349,350,351,352,353,354,355,356,357,
+358,359,360,361,362,363,364,365,366,367,
+368,369,370,371,372,373,374,375,376,377,
+378,379,380,381,382,383,384,385,386,387,
+388,389,390,391,393,394,395,396,397,
+400,402,404,406,408,410,412,414,416,418,420
+];
+
+const photos = numbers.map(number =>
+  `IMG-20261010-WA${String(number).padStart(4,'0')}.jpg`
+);
+
+const gallery = document.getElementById('gallery');
+const viewer = document.getElementById('viewer');
+const largePhoto = document.getElementById('largePhoto');
+const counter = document.getElementById('counter');
+let current = 0;
+let lastFocus;
+
+document.getElementById('total').textContent =
+  `${photos.length} fotos • Toque para ampliar`;
+
+function showPhoto(index) {
+  current = (index + photos.length) % photos.length;
+  largePhoto.src = photos[current];
+  largePhoto.alt = `Dia das Crianças Fight Lira — Foto ${current + 1}`;
+  counter.textContent = `${current + 1} / ${photos.length}`;
+}
+
+function openPhoto(index) {
+  lastFocus = document.activeElement;
+  showPhoto(index);
+  viewer.showModal();
+  document.body.style.overflow = 'hidden';
+  document.getElementById('close').focus();
+}
+
+photos.forEach((photo,index) => {
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = 'photo';
+  button.setAttribute('aria-label', `Ampliar foto ${index + 1}`);
+
+  const img = document.createElement('img');
+  img.src = photo;
+  img.alt = `Dia das Crianças Fight Lira — Foto ${index + 1}`;
+  img.loading = index < 4 ? 'eager' : 'lazy';
+  img.decoding = 'async';
+
+  button.appendChild(img);
+  button.addEventListener('click', () => openPhoto(index));
+  gallery.appendChild(button);
+});
+
+document.getElementById('close').onclick = () => viewer.close();
+document.getElementById('prev').onclick = () => showPhoto(current - 1);
+document.getElementById('next').onclick = () => showPhoto(current + 1);
+
+viewer.addEventListener('close', () => {
+  document.body.style.overflow = '';
+  lastFocus?.focus();
+});
+
+viewer.addEventListener('keydown', event => {
+  if(event.key === 'ArrowLeft') {
+    event.preventDefault();
+    showPhoto(current - 1);
+  }
+  if(event.key === 'ArrowRight') {
+    event.preventDefault();
+    showPhoto(current + 1);
+  }
+});
+
+let touchStartX = 0;
+let touchStartY = 0;
+
+largePhoto.addEventListener('touchstart', event => {
+  touchStartX = event.changedTouches[0].screenX;
+  touchStartY = event.changedTouches[0].screenY;
+}, {passive:true});
+
+largePhoto.addEventListener('touchend', event => {
+  const dx = event.changedTouches[0].screenX - touchStartX;
+  const dy = event.changedTouches[0].screenY - touchStartY;
+  if(Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
+    showPhoto(current + (dx < 0 ? 1 : -1));
+  }
+}, {passive:true});
+</script>
+</body>
+</html>
