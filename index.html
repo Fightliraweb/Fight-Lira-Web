@@ -125,17 +125,43 @@
       .event-cover-grid .category-card{aspect-ratio:561/701}
     }
   </style>
+<style id="rascunho-home">
+html{overflow-x:clip}
+.hz-grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.hz-card{position:relative;padding:26px 24px 24px;border-radius:var(--radius);border:1px solid var(--line);background:linear-gradient(160deg,#171717,#0b0b0b);box-shadow:var(--shadow);overflow:hidden}
+.hz-card:before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,var(--red),var(--red-dark))}
+.hz-card.kids:before{background:linear-gradient(180deg,var(--yellow),#8a6c0c)}
+.hz-tag{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--yellow)}
+.hz-card h3{font-family:Anton,sans-serif;font-weight:400;text-transform:uppercase;font-size:40px;line-height:.95;margin:8px 0 6px}
+.hz-card p{margin:0 0 16px;color:var(--muted);font-weight:600;line-height:1.5}
+.hz-card ul{list-style:none;margin:0 0 20px;padding:0;display:grid;gap:8px}
+.hz-card li{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 14px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid var(--line);font-weight:800}
+.hz-card li b{font-family:Anton,sans-serif;font-weight:400;font-size:24px;color:#fff;letter-spacing:.02em;white-space:nowrap}
+.hz-card .btn{width:100%}
+.pf-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;max-width:820px}
+.pf-card{border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);background:#0d0d0d}
+.pf-card img{width:100%;aspect-ratio:3/4;object-fit:cover;object-position:top}
+.pf-card div{padding:14px 16px 16px;display:grid;gap:4px}
+.pf-card strong{font-family:Anton,sans-serif;font-weight:400;text-transform:uppercase;font-size:26px;line-height:1}
+.pf-card small{color:var(--muted);font-weight:800;letter-spacing:.06em;text-transform:uppercase;font-size:11px}
+.dfl-strip{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:0;border-radius:var(--radius);overflow:hidden;border:1px solid rgba(227,38,43,.35);background:#0b0b0b;max-width:980px}
+.dfl-strip img{width:100%;height:100%;object-fit:cover}
+.dfl-strip>div{padding:24px;display:grid;gap:10px;align-content:center}
+.dfl-strip strong{font-family:Anton,sans-serif;font-weight:400;text-transform:uppercase;font-size:clamp(28px,4vw,44px);line-height:.95}
+.dfl-strip p{margin:0;color:var(--muted);font-weight:600;line-height:1.5}.dfl-strip p b{color:#fff}
+.dfl-strip .btn{justify-self:start}
+@media(max-width:640px){.dfl-strip{grid-template-columns:1fr}.dfl-strip img{max-height:300px;object-position:center 22%}.hz-card h3{font-size:36px}}
+</style>
 </head>
 <body class="home-refresh">
   <header class="nav">
     <a class="brand" href="#top"><img alt="Brasão Fight Lira" src="assets/img/logo-opt.webp"/><span>FIGHT <b>LIRA</b></span></a>
     <nav class="nav-links" aria-label="Navegação principal">
-      <a href="#treinamento">Modalidades</a>
-      <a href="#parceiros">Parceiros</a>
-      <a href="#arena">Arena</a>
-      <a href="professores.html">Professores</a>
+      <a href="#horarios">Horários</a>
+      <a href="#professores">Professores</a>
+      <a href="#kids">Kids</a>
       <a href="#eventos">Eventos</a>
-     <a href="inscricoes.html">Próximos Eventos</a>
+      <a href="dfl.html">DFL</a>
       <a class="nav-cta" href="https://wa.me/553599101762" target="_blank" rel="noopener">Aula experimental</a>
     </nav>
     <button aria-label="Abrir menu" class="menu-btn">☰</button>
@@ -143,13 +169,13 @@
 
   <div class="mobile-panel">
     <button aria-label="Fechar menu" class="mobile-close">×</button>
-    <a href="#treinamento">Modalidades</a>
-    <a href="#parceiros">Parceiros</a>
+    <a href="#horarios">Horários</a>
+    <a href="#professores">Professores</a>
+    <a href="#kids">Kids</a>
     <a href="#arena">Arena</a>
-    <a href="professores.html">Professores</a>
-   <a href="inscricoes.html">Próximos Eventos</a>
     <a href="#eventos">Eventos</a>
     <a href="#contato">Contato</a>
+    <a href="dfl.html">DFL</a>
     <a class="mobile-wa" href="https://wa.me/553599101762" target="_blank" rel="noopener">Agendar aula experimental</a>
   </div>
 
@@ -165,7 +191,7 @@
         <div class="hero-copy hero-actions">
           <div class="buttons">
             <a class="btn primary" href="https://wa.me/553599101762" target="_blank" rel="noopener">Agendar aula experimental</a>
-            <a class="btn" href="#treinamento">Ver modalidades ↓</a>
+            <a class="btn" href="#horarios">Ver horários ↓</a>
           </div>
         </div>
       </div>
@@ -182,51 +208,47 @@
   <section class="section" id="treinamento">
     <div class="section-head">
       <div><div class="kicker reveal">01 / TREINAMENTO</div><h2 class="display reveal">Escolha sua<br/><span class="red">modalidade</span></h2></div>
-      <p class="section-copy reveal">Turmas organizadas por faixa e por nível. Você começa no ponto certo e evolui com acompanhamento.</p>
+      <p class="section-copy reveal">Do primeiro treino à competição. Adulto, kids e infantil, com acompanhamento de perto. A aula experimental é gratuita.</p>
     </div>
     <div class="netflix-grid">
-      <a class="category-card modality-poster reveal" href="jiujitsu.html" aria-label="Abrir Jiu-Jitsu Fight Lira">
+      <a class="category-card modality-poster reveal" href="#horarios" aria-label="Abrir Jiu-Jitsu Fight Lira">
         <img alt="Jiu-Jitsu Fight Lira — aperte aqui" src="assets/img/home-jiujitsu.webp"/>
       </a>
-      <a class="category-card modality-poster reveal" href="muaythai.html" aria-label="Abrir Muay Thai Fight Lira">
+      <a class="category-card modality-poster reveal" href="#horarios" aria-label="Abrir Muay Thai Fight Lira">
         <img alt="Muay Thai Fight Lira — aperte aqui" src="assets/img/home-muaythai.webp"/>
       </a>
     </div>
   </section>
 
-  <section class="partner-feature partner-feature-refresh" id="parceiros">
-    <div class="partner-feature-inner">
-      <div class="partner-feature-head">
-        <div class="kicker reveal">02 / PARCEIROS</div>
-        <h2 class="partner-feature-title reveal">PARCEIROS <span class="red">FIGHT LIRA</span></h2>
-      <p class="section-copy reveal">Presença de marca integrada à academia, aos conteúdos, aos eventos e ao DFL.</p></div>
+  <section class="section" id="horarios">
+    <div class="section-head">
+      <div><div class="kicker reveal">02 / HORÁRIOS</div><h2 class="display reveal">Escolha sua<br/><span class="red">turma</span></h2></div>
+      <p class="section-copy reveal">Aula experimental <b style="color:#fff">gratuita</b>. Chame no WhatsApp, escolha o dia e venha treinar.</p>
     </div>
-    <div class="partner-marquee-window" aria-label="Parceiros Fight Lira">
-      <div class="partner-marquee-track">
-        <div class="partner-marquee-group">
-          <div class="partner-marquee-card"><img alt="PDK Personal Doktor" src="assets/img/partners/pdk-personal-doktor.webp"/></div>
-          <div class="partner-marquee-card"><img alt="Pag Pouco Supermercado" src="assets/img/partners/pag-pouco.webp"/></div>
-          <div class="partner-marquee-card"><img alt="CaipiOvs" src="assets/img/partners/caipiovs.webp"/></div>
-          <div class="partner-marquee-card"><img alt="Cardoso Assessoria Contábil" src="assets/img/partners/cardoso-assessoria-contabil.webp"/></div>
-          <div class="partner-marquee-card"><img alt="RMA Assessoria Contábil" src="assets/img/partners/rma-assessoria-contabil.webp"/></div>
-          <div class="partner-marquee-card naccilabs"><img alt="Nacci Labs Soluções Digitais" src="assets/img/partners/naccilabs.webp"/></div>
-        </div>
-        <div class="partner-marquee-group" aria-hidden="true">
-          <div class="partner-marquee-card"><img alt="" src="assets/img/partners/pdk-personal-doktor.webp"/></div>
-          <div class="partner-marquee-card"><img alt="" src="assets/img/partners/pag-pouco.webp"/></div>
-          <div class="partner-marquee-card"><img alt="" src="assets/img/partners/caipiovs.webp"/></div>
-          <div class="partner-marquee-card"><img alt="" src="assets/img/partners/cardoso-assessoria-contabil.webp"/></div>
-          <div class="partner-marquee-card"><img alt="" src="assets/img/partners/rma-assessoria-contabil.webp"/></div>
-          <div class="partner-marquee-card naccilabs"><img alt="" src="assets/img/partners/naccilabs.webp"/></div>
-        </div>
-      </div>
+    <div class="hz-grid">
+      <article class="hz-card"><div class="hz-tag">Adulto</div><h3>Muay Thai</h3><p>Do primeiro treino ao nível de competição.</p><ul><li><span>Seg • Ter • Qua • Qui</span><b>19h</b></li></ul><a class="btn primary" href="https://wa.me/553599101762?text=Ol%C3%A1%21%20Quero%20agendar%20minha%20aula%20experimental%20gratuita%20de%20Muay%20Thai." target="_blank" rel="noopener">Agendar aula grátis</a></article>
+      <article class="hz-card"><div class="hz-tag">Adulto</div><h3>Jiu-Jitsu</h3><p>Com kimono (Gi) e sem kimono (No-Gi).</p><ul><li><span>Ter • Qui</span><b>19h</b></li><li><span>Sex • No-Gi</span><b>18h</b></li></ul><a class="btn primary" href="https://wa.me/553599101762?text=Ol%C3%A1%21%20Quero%20agendar%20minha%20aula%20experimental%20gratuita%20de%20Jiu-Jitsu." target="_blank" rel="noopener">Agendar aula grátis</a></article>
+      <article class="hz-card kids"><div class="hz-tag">4 a 9 anos</div><h3>Jiu-Jitsu Kids</h3><p>Disciplina, coordenação e confiança, com segurança.</p><ul><li><span>Seg • Qua • Sex</span><b>10h</b></li></ul><a class="btn primary" href="https://wa.me/553599101762?text=Ol%C3%A1%21%20Quero%20agendar%20uma%20aula%20experimental%20gratuita%20de%20Jiu-Jitsu%20Kids%20para%20meu%20filho%28a%29." target="_blank" rel="noopener">Agendar aula grátis</a></article>
+      <article class="hz-card kids"><div class="hz-tag">10 a 13 anos</div><h3>Jiu-Jitsu Infantil</h3><p>Base técnica e foco para a pré-adolescência.</p><ul><li><span>Dias e horário</span><b>A CONFIRMAR</b></li></ul><a class="btn primary" href="https://wa.me/553599101762?text=Ol%C3%A1%21%20Quero%20agendar%20uma%20aula%20experimental%20gratuita%20de%20Jiu-Jitsu%20Infantil." target="_blank" rel="noopener">Agendar aula grátis</a></article>
+      <article class="hz-card"><div class="hz-tag">Individual</div><h3>Personal Fight</h3><p>Treino individual de luta, no seu ritmo e objetivo.</p><ul><li><span>Horários</span><b>A combinar</b></li></ul><a class="btn primary" href="https://wa.me/553599101762?text=Ol%C3%A1%21%20Quero%20saber%20sobre%20o%20Personal%20Fight." target="_blank" rel="noopener">Falar no WhatsApp</a></article>
     </div>
   </section>
-
-  <section class="section alt" id="arena">
+<section class="section team-home-section" id="professores">
+    <div class="section-head">
+      <div><div class="kicker reveal">03 / EQUIPE</div><h2 class="display reveal">Quem vai<br/><span class="red">te treinar</span></h2></div>
+      <p class="section-copy reveal">Mais de 15 anos formando atletas em Alpinópolis.</p>
+    </div>
+    <div class="pf-grid">
+      <a class="pf-card reveal" href="professores.html"><img src="assets/img/david-lira.webp" alt="Professor David Lira" loading="lazy"/><div><span class="kicker">Professor</span><strong>David Lira</strong><small>Faixa preta • 1º grau</small></div></a>
+      <a class="pf-card reveal" href="professores.html"><img src="assets/img/fernando-silva.webp" alt="Professor Fernando Silva" loading="lazy"/><div><span class="kicker">Professor</span><strong>Fernando Silva</strong><small>Faixa preta</small></div></a>
+    </div>
+    <div class="belt-row" style="margin-top:22px"><span class="belt-pill brown">Instrutor Igor Gabriel • Marrom</span><span class="belt-pill purple">Instrutor Henrique Togo • Roxa</span></div>
+    <a class="btn yellow" style="margin-top:22px" href="professores.html">Ver equipe completa →</a>
+  </section>
+<section class="section alt" id="arena">
     <div class="inner">
       <div class="section-head">
-        <div><div class="kicker reveal">03 / PRESENÇA REAL</div><h2 class="display reveal">Fight Lira<br/><span class="red">na Arena</span></h2></div>
+        <div><div class="kicker reveal">04 / PRESENÇA REAL</div><h2 class="display reveal">Fight Lira<br/><span class="red">na Arena</span></h2></div>
         <p class="section-copy reveal">Equipe, atletas e bastidores. A Fight Lira presente onde o treino vira resultado.</p>
       </div>
       <div class="carousel reveal">
@@ -242,23 +264,24 @@
     </div>
   </section>
 
-  <section class="section team-home-section">
-    <div class="team-home">
-      <div class="team-home-visual reveal"><img alt="Equipe de professores Fight Lira" src="assets/img/arena-coach.webp"/></div>
-      <div class="team-home-copy reveal">
-        <div class="kicker">04 / EQUIPE</div>
-        <h2 class="display">Conheça<br/>os <span class="red">professores</span></h2>
-        <div class="belt-row"><span class="belt-pill black">2 Faixas Pretas</span><span class="belt-pill brown">1 Faixa Marrom</span><span class="belt-pill purple">1 Faixa Roxa</span></div>
-        <a class="btn yellow" href="professores.html">Ver professores →</a>
-      </div>
-    </div>
-  </section>
-
+  <section class="section" id="kids">
+  <div class="section-head">
+    <div><div class="kicker reveal">05 / FIGHT LIRA KIDS</div><h2 class="display reveal">Jiu-Jitsu<br/><span class="red">para crianças</span></h2></div>
+    <p class="section-copy reveal">Turmas de 4 a 9 anos e de 10 a 13 anos. Disciplina, respeito e confiança dentro e fora do tatame.</p>
+  </div>
+  <a href="dia-das-criancas.html" style="display:block;max-width:720px">
+    <img src="IMG-20261010-WA0348.jpg" alt="Aluno do Fight Lira Kids" loading="lazy" style="display:block;width:100%;max-height:480px;object-fit:cover;border-radius:16px">
+  </a>
+  <div class="buttons" style="margin-top:20px">
+    <a class="btn primary" href="https://wa.me/553599101762?text=Ol%C3%A1%21%20Quero%20agendar%20uma%20aula%20experimental%20gratuita%20de%20Jiu-Jitsu%20Kids%20para%20meu%20filho%28a%29." target="_blank" rel="noopener">Agendar aula grátis</a>
+    <a class="btn" href="dia-das-criancas.html">Ver fotos do Dia das Crianças →</a>
+  </div>
+</section>
  <section class="section" id="proximos-eventos">
 
   <div class="section-head">
     <div>
-      <div class="kicker reveal">EVENTOS</div>
+      <div class="kicker reveal">06 / EVENTOS</div>
       <h2 class="display reveal">
         Último <span class="red">evento</span>
       </h2>
@@ -284,7 +307,7 @@
     </a>
 
     <div style="margin-top:18px;">
-      <div class="kicker">REALIZADO</div>
+      <div class="kicker">ENCERRADO</div>
 
       <h3 style="font-size:28px;margin:6px 0 8px;">
       Alliandro Camilo
@@ -309,15 +332,11 @@
     <section class="section alt" id="eventos">
   <div class="inner">
     <div class="section-head">
-      <div><div class="kicker reveal">05 / EVENTOS E PROJETOS</div><h2 class="display reveal">Além do<br/><span class="red">tatame</span></h2></div>
-      <p class="section-copy reveal">Competição, formação técnica e impacto social na comunidade de Alpinópolis.</p>
+      <div><div class="kicker reveal">FIGHT LIRA</div><h2 class="display reveal">Além do<br/><span class="red">tatame</span></h2></div>
+      <p class="section-copy reveal">Seminários técnicos e projetos sociais com a comunidade de Alpinópolis.</p>
     </div>
 
     <div class="event-cover-grid">
-      <a class="category-card modality-poster reveal" href="dfl.html" aria-label="Abrir DFL">
-        <img alt="DFL — Desafio de Muay Thai — aperte aqui" src="assets/img/home-dfl.webp"/>
-      </a>
-
       <a class="category-card modality-poster reveal" href="projeto-social.html" aria-label="Abrir Projeto Social">
         <img alt="Projeto Social DFL Fight Lira — aperte aqui" src="assets/img/home-projeto-social.webp"/>
       </a>
@@ -328,47 +347,51 @@
     </div>
   </section>
 
- <section class="section" id="dia-das-criancas">
-  <div class="section-head">
-    <div>
-      <div class="kicker">FIGHT LIRA KIDS</div>
-      <h2 class="display">
-        Dia das<br>
-        <span class="red">Crianças</span>
-      </h2>
-    </div>
-    <p class="section-copy">
-      Diversão, convivência e momentos especiais com nossos
-      alunos e suas famílias. Confira as fotos da comemoração.
-    </p>
-  </div>
-
-  <a href="dia-das-criancas.html"
-     style="display:block;max-width:720px">
-    <img
-      src="IMG-20261010-WA0348.jpg"
-      alt="Dia das Crianças na Fight Lira"
-      loading="lazy"
-      style="display:block;width:100%;max-height:480px;object-fit:cover;border-radius:16px">
-  </a>
-
-  <a class="btn primary"
-     href="dia-das-criancas.html"
-     style="margin-top:20px">
-    VER AS 60 FOTOS →
-  </a>
-</section>
 <section class="section" id="contato">
-    <div class="section-head"><div><div class="kicker reveal">06 / CONTATO</div><h2 class="display reveal">Venha <span class="red">treinar</span></h2></div></div>
+    <div class="section-head"><div><div class="kicker reveal">07 / CONTATO</div><h2 class="display reveal">Venha <span class="red">treinar</span></h2></div></div>
     <div class="contact-grid">
-      <a class="contact-card reveal contact-primary" href="https://wa.me/553599101762" rel="noopener" target="_blank"><div class="contact-top"><span class="contact-icon"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M20.5 11.7a8.4 8.4 0 0 1-12.4 7.4L3.5 20.5l1.4-4.4A8.4 8.4 0 1 1 20.5 11.7Z" fill="none" stroke="currentColor" stroke-width="1.8"></path></svg></span><span>WhatsApp</span></div><strong>(35) 9910-1762</strong></a>
+      <a class="contact-card reveal contact-primary" href="https://wa.me/553599101762?text=Ol%C3%A1%21%20Quero%20agendar%20minha%20aula%20experimental%20gratuita." rel="noopener" target="_blank"><div class="contact-top"><span class="contact-icon"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M20.5 11.7a8.4 8.4 0 0 1-12.4 7.4L3.5 20.5l1.4-4.4A8.4 8.4 0 1 1 20.5 11.7Z" fill="none" stroke="currentColor" stroke-width="1.8"></path></svg></span><span>WhatsApp</span></div><strong>(35) 9910-1762</strong></a>
       <a class="contact-card reveal" href="https://instagram.com/lira_personal7" rel="noopener" target="_blank"><div class="contact-top"><span class="contact-icon"><svg aria-hidden="true" viewBox="0 0 24 24"><rect fill="none" height="17" rx="5" stroke="currentColor" stroke-width="1.8" width="17" x="3.5" y="3.5"></rect><circle cx="12" cy="12" fill="none" r="4" stroke="currentColor" stroke-width="1.8"></circle></svg></span><span>Instagram</span></div><strong>@lira_personal7</strong></a>
-      <a class="contact-card reveal" href="https://instagram.com/d.f.l.etapas" rel="noopener" target="_blank"><div class="contact-top"><span class="contact-icon"><svg aria-hidden="true" viewBox="0 0 24 24"><rect fill="none" height="17" rx="5" stroke="currentColor" stroke-width="1.8" width="17" x="3.5" y="3.5"></rect><circle cx="12" cy="12" fill="none" r="4" stroke="currentColor" stroke-width="1.8"></circle></svg></span><span>Instagram — DFL</span></div><strong>@d.f.l.etapas</strong></a>
       <a class="contact-card reveal" href="https://www.google.com/maps/search/?api=1&amp;query=Rua+Jos%C3%A9+Paulino+150+Alto+Pinhal+Alpin%C3%B3polis+MG" rel="noopener" target="_blank"><div class="contact-top"><span class="contact-icon"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="10" r="5.5" fill="none" stroke="currentColor" stroke-width="1.8"></circle><circle cx="12" cy="10" fill="currentColor" r="2"></circle></svg></span><span>Como chegar</span></div><strong>Rua José Paulino, 150<br/>Alto Pinhal • Alpinópolis — MG</strong></a>
     </div>
   </section>
 
-  <footer class="footer">
+<section class="section" id="dfl">
+  <a class="dfl-strip reveal" href="dfl.html">
+    <img src="assets/img/home-dfl.webp" alt="DFL — Desafio de Muay Thai" loading="lazy"/>
+    <div><span class="kicker">Evento • DFL</span><strong>DFL — Desafio de Muay Thai</strong><p>Inscrições abertas: <b>DFL Valkírias 2</b>. Edições, galerias e inscrições de atletas.</p><span class="btn primary">Ver DFL →</span></div>
+  </a>
+</section>
+<section class="partner-feature partner-feature-refresh" id="parceiros">
+    <div class="partner-feature-inner">
+      <div class="partner-feature-head">
+        <div class="kicker reveal">PARCEIROS</div>
+        <h2 class="partner-feature-title reveal">PARCEIROS <span class="red">FIGHT LIRA</span></h2>
+      <p class="section-copy reveal">Presença de marca integrada à academia, aos conteúdos, aos eventos e ao DFL.</p></div>
+    </div>
+    <div class="partner-marquee-window" aria-label="Parceiros Fight Lira">
+      <div class="partner-marquee-track">
+        <div class="partner-marquee-group">
+          <div class="partner-marquee-card"><img alt="PDK Personal Doktor" src="assets/img/partners/pdk-personal-doktor.webp"/></div>
+          <div class="partner-marquee-card"><img alt="Pag Pouco Supermercado" src="assets/img/partners/pag-pouco.webp"/></div>
+          <div class="partner-marquee-card"><img alt="CaipiOvs" src="assets/img/partners/caipiovs.webp"/></div>
+          <div class="partner-marquee-card"><img alt="Cardoso Assessoria Contábil" src="assets/img/partners/cardoso-assessoria-contabil.webp"/></div>
+          <div class="partner-marquee-card"><img alt="RMA Assessoria Contábil" src="assets/img/partners/rma-assessoria-contabil.webp"/></div>
+          <div class="partner-marquee-card naccilabs"><img alt="Nacci Labs Soluções Digitais" src="assets/img/partners/naccilabs.webp"/></div>
+        </div>
+        <div class="partner-marquee-group" aria-hidden="true">
+          <div class="partner-marquee-card"><img alt="" src="assets/img/partners/pdk-personal-doktor.webp"/></div>
+          <div class="partner-marquee-card"><img alt="" src="assets/img/partners/pag-pouco.webp"/></div>
+          <div class="partner-marquee-card"><img alt="" src="assets/img/partners/caipiovs.webp"/></div>
+          <div class="partner-marquee-card"><img alt="" src="assets/img/partners/cardoso-assessoria-contabil.webp"/></div>
+          <div class="partner-marquee-card"><img alt="" src="assets/img/partners/rma-assessoria-contabil.webp"/></div>
+          <div class="partner-marquee-card naccilabs"><img alt="" src="assets/img/partners/naccilabs.webp"/></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+    <footer class="footer">
     <div class="footer-inner">
       <div class="footer-big reveal">Fazer parte<br/>de um <span class="red">padrão.</span></div>
       <div class="footer-meta"><span style="display:flex;align-items:center;gap:10px"><img alt="Brasão Fight Lira" src="assets/img/logo-opt.webp"/>FIGHT LIRA © 2026</span><span>ALPINÓPOLIS — MG</span></div>
