@@ -21,7 +21,7 @@
     radial-gradient(120% 60% at 50% -10%, rgba(255,48,59,.16), transparent 60%),
     repeating-linear-gradient(0deg, rgba(255,255,255,.018) 0 1px, transparent 1px 4px),
     var(--black)}
-  .wrap{max-width:560px;margin:0 auto;padding:22px 18px 120px}
+  .wrap{max-width:560px;margin:0 auto;padding:22px 18px 40px}
 
   /* HERO */
   .hero{padding:18px 0 22px;border-bottom:1px solid var(--line);margin-bottom:22px;position:relative}
@@ -53,8 +53,10 @@
   .plabel b{color:var(--white)}
 
   /* FORM */
-  .step{display:none;animation:in .35s ease}
-  .step.active{display:block}
+  .step{display:block;padding-top:6px}
+  .step+.step{margin-top:34px;padding-top:28px;border-top:1px solid var(--line)}
+  .bloco{display:flex;align-items:center;gap:10px;font:700 11px var(--mono);letter-spacing:.2em;color:var(--red);margin-bottom:10px}
+  .bloco i{font-style:normal;display:grid;place-items:center;width:24px;height:24px;border:1px solid var(--red);color:#fff;background:rgba(255,48,59,.14)}
   @keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
   h2{font-family:var(--mono);font-size:20px;margin-bottom:4px}
   .hint{color:var(--gray);font-size:14px;line-height:1.5;margin-bottom:18px}
@@ -119,7 +121,9 @@
   .check.bad{color:var(--red)}
 
   /* NAV */
-  .nav{position:fixed;left:0;right:0;bottom:0;z-index:6;background:linear-gradient(180deg,transparent,var(--black) 30%);padding:22px 18px calc(16px + env(safe-area-inset-bottom))}
+  .nav{margin-top:26px}
+  .nav .aviso{font-size:12px;color:var(--gray);text-align:center;margin-top:10px;line-height:1.45}
+  .nav .aviso.bad{color:var(--red)}
   .nav .in{max-width:560px;margin:0 auto;display:flex;gap:10px}
   .btn{flex:1;height:56px;border:0;font:700 14px var(--mono);letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:.15s}
   .btn.pri{background:var(--red);color:#fff;box-shadow:0 8px 30px rgba(255,48,59,.35)}
@@ -157,18 +161,15 @@
     <div class="window" id="janela">INSCRIÇÕES ABERTAS ATÉ 01/02 · REPESCAGEM ATÉ 10/02</div>
   </header>
 
-  <div class="progress" id="progress">
-    <div class="steps"><i></i><i></i><i></i><i></i></div>
-    <div class="plabel"><span>ETAPA <b id="pn">1</b>/4</span><span id="pt">ATLETA</span></div>
-  </div>
 
   <form id="f" novalidate autocomplete="on">
     <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off">
 
     <!-- 1 ATLETA -->
     <section class="step active" data-title="ATLETA">
+      <div class="bloco"><i>1</i>DE 4 · ATLETA</div>
       <h2>Dados da atleta</h2>
-      <p class="hint">Leva cerca de 2 minutos. Tenha à mão: <b style="color:#fff">2 fotos</b> (de frente e de perfil) e o <b style="color:#fff">comprovante do Pix</b>.</p>
+      <p class="hint">Tudo numa página só: preencha de cima a baixo e toque em <b style="color:#fff">ENVIAR</b> no final. Leva cerca de 2 minutos. Tenha à mão: <b style="color:#fff">2 fotos</b> (de frente e de perfil) e o <b style="color:#fff">comprovante do Pix</b>.</p>
       <div class="field"><label class="l">Nome completo <em>*</em></label><input type="text" name="nome" autocomplete="name" required><div class="msg">Informe o nome completo.</div></div>
       <div class="field"><label class="l">Data de nascimento <em>*</em></label><input type="text" name="nascimento" inputmode="numeric" placeholder="DD/MM/AAAA" maxlength="10" required><div class="msg">Data inválida (use DD/MM/AAAA) ou abaixo da idade mínima de 10 anos.</div></div>
       <div class="div-badge" id="divbadge"></div>
@@ -191,6 +192,7 @@
 
     <!-- 2 EQUIPE & LUTA -->
     <section class="step" data-title="EQUIPE E FICHA">
+      <div class="bloco"><i>2</i>DE 4 · EQUIPE E FICHA</div>
       <h2>Equipe e ficha técnica</h2>
       <p class="hint">Essas informações definem o casamento das lutas. Seja precisa.</p>
       <div class="field"><label class="l">Modalidade <em>*</em></label><div class="chips" id="mods" style="grid-template-columns:1fr!important"></div></div>
@@ -239,6 +241,7 @@
 
     <!-- 3 FOTOS -->
     <section class="step" data-title="FOTOS E PAGAMENTO">
+      <div class="bloco"><i>3</i>DE 4 · FOTOS E PAGAMENTO</div>
       <h2>Fotos oficiais</h2>
       <p class="hint">Usadas nos cards de luta e na divulgação. Fundo liso, boa luz, corpo inteiro ou da cintura para cima, sem filtro.</p>
       <div class="photos">
@@ -285,14 +288,18 @@
 
     <!-- 5 TERMO -->
     <section class="step" data-title="CONFERIR E ENVIAR">
+      <div class="bloco"><i>4</i>DE 4 · CONFERIR E ENVIAR</div>
       <div class="field cartel" id="resumo" style="margin-bottom:22px"></div>
       <h2>Termo de responsabilidade</h2>
       <p class="hint">Leia até o final. Seu aceite fica registrado com data e hora.</p>
       <div class="termo" id="termo"></div>
       <div style="margin-top:8px" id="checks"></div>
-      <div class="field" style="margin-top:16px"><label class="l">Assinatura: digite seu nome completo <em>*</em></label><input type="text" name="assinatura" required><div class="msg">Digite o mesmo nome informado na etapa 1.</div></div>
+      <div class="field" style="margin-top:16px"><label class="l">Assinatura: digite seu nome completo <em>*</em></label><input type="text" name="assinatura" required><div class="msg">Digite o mesmo nome completo informado lá no início.</div></div>
       <div class="field" id="assresp" style="display:none"><label class="l">Assinatura do responsável legal <em>*</em></label><input type="text" name="assinatura_resp"><div class="msg">O responsável deve digitar o nome completo.</div></div>
     </section>
+    <nav class="nav" id="nav"><div class="in">
+      <button type="button" class="btn pri" id="next">ENVIAR INSCRIÇÃO</button>
+    </div><p class="aviso" id="aviso">Confira tudo acima antes de enviar.</p></nav>
   </form>
 
   <section class="done" id="done" style="display:none">
@@ -309,10 +316,6 @@
   <footer>DFL · ORGANIZAÇÃO OFICIAL · ALPINÓPOLIS–MG</footer>
 </div>
 
-<nav class="nav" id="nav"><div class="in">
-  <button type="button" class="btn sec" id="back" style="display:none">VOLTAR</button>
-  <button type="button" class="btn pri" id="next">CONTINUAR</button>
-</div></nav>
 
 <div class="overlay" id="ov"><div class="spin"></div><div id="ovt">ENVIANDO INSCRIÇÃO…</div></div>
 
@@ -381,7 +384,7 @@ const CHECKS = [
 ];
 
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
-const f=$("#f"), steps=$$(".step"); let cur=0; const files={};
+const f=$("#f"), steps=$$(".step"); const files={};
 
 // montar
 $("#termo").innerHTML=termoHTML;
@@ -406,7 +409,7 @@ f.nascimento.addEventListener('change',()=>{const m=menor();["#menor","#menor2",
 // equipes
 $("#equipe").innerHTML='<option value="">Selecione</option>'+EQUIPES.map(e=>`<option>${e.n}</option>`).join('')+'<option value="__outra">Outra equipe</option>';
 $("#equipe").addEventListener('change',e=>{const v=e.target.value;$("#novaeq").style.display=v==="__outra"?"block":"none";const q=EQUIPES.find(x=>x.n===v);if(q){f.treinador.value=q.t;f.cidade.value=q.c;f.uf.value=q.uf}
-  const k=!!q;$("#treinofld").style.display=k?"none":"block";$("#cidrow").style.display=k?"none":"";const r=$("#eqresumo");r.style.display=k?"block":"none";if(k)r.innerHTML=`✓ Treinador(a) <b style="color:#fff">${q.t}</b> · ${q.c}/${q.uf}`});
+  const k=!!q;if(k)[f.treinador,f.cidade,f.uf].forEach(x=>{x.classList.remove('err');x.closest('.field').classList.remove('bad')});$("#treinofld").style.display=k?"none":"block";$("#cidrow").style.display=k?"none":"";const r=$("#eqresumo");r.style.display=k?"block":"none";if(k)r.innerHTML=`✓ Treinador(a) <b style="color:#fff">${q.t}</b> · ${q.c}/${q.uf}`});
 if(MODALIDADES.length===1)$("#mods").closest('.field').style.display='none';
 
 // peso -> sugere categoria
@@ -448,21 +451,24 @@ function validate(i){let ok=true;const s=steps[i];
     const norm=s=>s.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/\s+/g,' ').trim();
     ok=mark(f.assinatura,norm(f.assinatura.value)===norm(f.nome.value)&&!!f.nome.value)&&ok;
     if(menor())ok=mark(f.assinatura_resp,f.assinatura_resp.value.trim().split(' ').length>=2)&&ok;}
-  if(!ok){const b=s.querySelector('.bad,.err');b&&b.scrollIntoView({behavior:'smooth',block:'center'})}
+  return ok}
+function validarTudo(){let ok=true;for(let i=0;i<steps.length;i++)ok=validate(i)&&ok;
+  const av=$("#aviso");
+  if(!ok){const b=f.querySelector('.bad,.err');b&&b.scrollIntoView({behavior:'smooth',block:'center'});const n=[...f.querySelectorAll('.field.bad,.check.bad')].filter(e=>e.offsetParent!==null).length;av.textContent='Falta'+(n>1?'m '+n+' itens':' 1 item')+' (marcados em vermelho). Corrija e toque em ENVIAR de novo.';av.classList.add('bad')}
+  else{av.textContent='Confira tudo acima antes de enviar.';av.classList.remove('bad')}
   return ok}
 
-function resumo(){const c=f.querySelector('input[name=categoria]:checked'),i=idade(),L=+f.lutas.value;
+function resumo(){ficha();const c=f.querySelector('input[name=categoria]:checked'),i=idade(),L=f.lutas.value===''?null:+f.lutas.value;const eq=f.equipe.value==='__outra'?f.equipe_nova.value:f.equipe.value;
   const ln=(k,v)=>`<div style="display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-bottom:1px solid var(--line2)"><span style="color:var(--gray)">${k}</span><b style="color:#fff;text-align:right">${v}</b></div>`;
-  $("#resumo").innerHTML='<div class="cartel-h">SUA FICHA</div>'+ln('Atleta',f.nome.value)+ln('Idade',i==null?'—':`${i} anos · ${divisao(i)}`)+ln('Equipe',f.equipe.value==='__outra'?f.equipe_nova.value:f.equipe.value)
-   +ln('Peso de luta',`${String(f.peso.value).replace('.',',')} kg${c?' · cat. '+c.value:''}`)+ln('Altura',`${f.altura.value} cm`)+ln('Cartel',L===0?'Estreante':`${L} lutas · ${f.vitorias.value}V ${f.derrotas.value}D`)
-   +ln('Instagram',f.ig_atleta.value?'@'+f.ig_atleta.value:'—')+'<p class="cs" style="margin-top:10px">Algo errado? Toque em VOLTAR e corrija.</p>'}
-function go(i){if(i===steps.length-1)resumo();steps[cur].classList.remove('active');cur=i;steps[cur].classList.add('active');
-  $$(".steps i").forEach((b,k)=>b.classList.toggle('on',k<=cur));$("#pn").textContent=cur+1;$("#pt").textContent=steps[cur].dataset.title;
-  $("#back").style.display=cur?"block":"none";$("#next").textContent=cur===steps.length-1?"ENVIAR INSCRIÇÃO":"CONTINUAR";
-  window.scrollTo({top:$("#progress").offsetTop-2,behavior:'smooth'})}
-$("#back").onclick=()=>go(cur-1);
-$("#next").onclick=()=>{if(!validate(cur))return;if(cur<steps.length-1)go(cur+1);else enviar()};
-go(0);
+  $("#resumo").innerHTML='<div class="cartel-h">SUA FICHA</div>'+ln('Atleta',f.nome.value||'—')+ln('Idade',i==null?'—':`${i} anos · ${divisao(i)}`)+ln('Equipe',eq||'—')
+   +ln('Peso de luta',f.peso.value?`${String(f.peso.value).replace('.',',')} kg${c?' · cat. '+c.value:''}`:'—')+ln('Altura',f.altura.value?`${f.altura.value} cm`:'—')+ln('Cartel',L===null?'—':L===0?'Estreante':`${L} lutas · ${f.vitorias.value}V ${f.derrotas.value}D`)
+   +ln('Instagram',f.ig_atleta.value?'@'+f.ig_atleta.value:'—')+'<p class="cs" style="margin-top:10px">Algo errado? Corrija lá em cima; este resumo atualiza sozinho.</p>'}
+$("#next").onclick=()=>{resumo();if(!validarTudo())return;enviar()};
+resumo();f.addEventListener('input',()=>setTimeout(resumo,0));f.addEventListener('change',()=>setTimeout(resumo,0));
+// tira o vermelho do campo assim que a pessoa corrige
+function avisoAtual(){const av=$("#aviso");if(!av.classList.contains('bad'))return;const n=[...f.querySelectorAll('.field.bad,.check.bad')].filter(e=>e.offsetParent!==null).length;if(!n){av.textContent='Tudo certo. Toque em ENVIAR INSCRIÇÃO.';av.classList.remove('bad')}else av.textContent='Falta'+(n>1?'m '+n+' itens':' 1 item')+' (marcados em vermelho).'}
+f.addEventListener('input',e=>{const fl=e.target.closest('.field');if(fl&&fl.classList.contains('bad')){fl.classList.remove('bad');e.target.classList.remove('err')}setTimeout(avisoAtual,0)});
+f.addEventListener('change',e=>{if(e.target.type==='checkbox'&&e.target.checked)e.target.closest('.check')?.classList.remove('bad');if(e.target.type==='file'||e.target.name==='categoria'){if(files.foto_frente&&files.foto_perfil)$("#fotomsg").classList.remove('bad');if(f.querySelector('input[name=categoria]:checked'))$("#cats").closest('.field').classList.remove('bad')}setTimeout(avisoAtual,0)});
 // rascunho: se fechar o navegador, os dados digitados voltam
 const DRAFT='dfl_vk2_rascunho';
 try{const r=JSON.parse(localStorage.getItem(DRAFT)||'{}');for(const k in r){const el=f.elements[k];if(!el)continue;if(el.length&&el[0]&&el[0].type==='radio'){const x=f.querySelector(`input[name="${k}"][value="${r[k]}"]`);if(x)x.checked=true}else if(el.type!=='file'&&el.type!=='checkbox')el.value=r[k]}
@@ -473,10 +479,10 @@ f.addEventListener('change',()=>f.dispatchEvent(new Event('input')));
 (function(){const now=new Date(),teste=/teste=1/.test(location.search);
   if(teste){$("#janela").textContent="MODO TESTE · INSCRIÇÕES ABERTAS ATÉ 01/02 · REPESCAGEM ATÉ 10/02";return}
   if(now>new Date(CONFIG.FIM_GERAL)&&now<=new Date(CONFIG.FECHA)){$("#janela").innerHTML="REPESCAGEM ATÉ 10/02 · SÓ PARA VAGAS ABERTAS<br><span style='font-weight:500;letter-spacing:.06em'>Confira as vagas no Instagram @d.f.l.etapas antes de se inscrever</span>";}
-  if(now>new Date(CONFIG.FECHA)){f.style.display='none';$("#progress").style.display='none';$("#nav").style.display='none';
+  if(now>new Date(CONFIG.FECHA)){f.style.display='none';
     const d=$("#done");d.style.display='block';d.querySelector('h2').textContent='INSCRIÇÕES ENCERRADAS';$("#proto").textContent='10/02/2027';
     d.querySelectorAll('p')[0].textContent='O prazo de inscrição do DFL Valkírias 2 terminou. Fale com a organização pelo WhatsApp.';d.querySelectorAll('p')[1].textContent='';d.querySelector('.badge').style.display='none';return}
-  if(now<new Date(CONFIG.ABRE)){$("#janela").textContent="INSCRIÇÕES ABREM EM 01/12/2026";const n=$("#next");n.disabled=true;n.textContent="ABRE EM 01/12";$("#back").style.display="none";
+  if(now<new Date(CONFIG.ABRE)){$("#janela").textContent="INSCRIÇÕES ABREM EM 01/12/2026";const n=$("#next");n.disabled=true;n.textContent="ABRE EM 01/12";
     f.querySelectorAll('input,select,textarea').forEach(x=>x.disabled=true);}
 })();
 
@@ -494,7 +500,7 @@ async function enviar(){
   try{
     const r=await fetch(CONFIG.ENDPOINT,{method:'POST',body:JSON.stringify(d)});
     const j=await r.json(); if(!j.ok)throw new Error(j.erro||'Falha no envio');
-    $("#ov").classList.remove('on');f.style.display='none';$("#progress").style.display='none';$("#nav").style.display='none';
+    $("#ov").classList.remove('on');f.style.display='none';
     $("#proto").textContent='#'+j.protocolo;try{localStorage.removeItem(DRAFT)}catch(e){}
     $("#wasave").href='https://wa.me/55'+d.whatsapp.replace(/\D/g,'')+'?text='+encodeURIComponent('DFL VALKÍRIAS 2 — minha inscrição\nProtocolo: '+j.protocolo+'\nAtleta: '+d.nome+'\nEquipe: '+d.equipe+'\nCategoria: '+d.categoria+' kg');$("#done").style.display='block';window.scrollTo(0,0);
   }catch(e){
