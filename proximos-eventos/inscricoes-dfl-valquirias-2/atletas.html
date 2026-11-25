@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Atletas confirmadas — DFL Valkírias 2</title>
+<meta name="description" content="Atletas confirmadas do DFL Valkírias 2 — Muay Thai feminino. Consulte idade, altura, peso e número de lutas.">
+<meta name="theme-color" content="#080A0E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--red:#FF303B;--white:#F1F4F8;--black:#080A0E;--gray:#8F959E;--panel:#10141b;--line:#1f2630;--line2:#2b3440;
+--mono:'IBM Plex Mono',ui-monospace,monospace;--sans:'Inter',system-ui,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--black);color:var(--white);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+body{min-height:100vh;background:radial-gradient(120% 60% at 50% -10%,rgba(255,48,59,.18),transparent 60%),
+repeating-linear-gradient(0deg,rgba(255,255,255,.018) 0 1px,transparent 1px 4px),var(--black)}
+.wrap{max-width:560px;margin:0 auto;padding:22px 18px 48px}
+.hero{padding:16px 0 20px;border-bottom:1px solid var(--line);margin-bottom:18px}
+.tag{font:700 11px var(--mono);letter-spacing:.28em;color:var(--red)}
+h1{font:700 30px/1.05 var(--mono);letter-spacing:.02em;margin-top:10px;text-transform:uppercase}
+h1 span{color:var(--red)}
+.sub{color:var(--gray);font-size:13.5px;line-height:1.45;margin-top:10px}
+.count{display:flex;align-items:baseline;gap:10px;margin-top:16px}
+.count b{font:700 34px var(--mono);color:#fff}.count small{font:500 11px var(--mono);letter-spacing:.2em;color:var(--gray)}
+.search{position:sticky;top:0;z-index:5;padding:10px 0 12px;background:linear-gradient(var(--black) 80%,transparent)}
+.sbox{display:flex;align-items:center;gap:10px;border:1px solid var(--line2);background:var(--panel);padding:0 14px;height:54px}
+.sbox:focus-within{border-color:var(--red);box-shadow:0 0 0 3px rgba(255,48,59,.15)}
+.sbox svg{flex:none;opacity:.7}
+.sbox input{flex:1;background:none;border:0;outline:0;color:#fff;font:500 16px var(--sans);height:100%}
+.sbox input::placeholder{color:var(--gray)}
+.sbox input::-webkit-search-cancel-button{-webkit-appearance:none;display:none}
+.clr{border:0;background:none;color:var(--gray);font-size:22px;line-height:1;display:none;cursor:pointer}
+.hint{font:500 10.5px var(--mono);letter-spacing:.14em;color:var(--gray);margin-top:8px}
+.list{display:flex;flex-direction:column;gap:8px;margin-top:4px}
+.item{display:flex;align-items:center;gap:14px;width:100%;text-align:left;border:1px solid var(--line);background:rgba(16,20,27,.75);
+color:inherit;padding:14px 14px 14px 0;cursor:pointer;font:inherit;position:relative;overflow:hidden}
+.item::before{content:"";width:4px;align-self:stretch;background:var(--red);flex:none}
+.item:active{background:#151a23}
+.av{width:42px;height:42px;flex:none;display:grid;place-items:center;border:1px solid var(--line2);font:700 17px var(--mono);color:var(--red);background:#0c1016}
+.nm{flex:1;min-width:0}
+.nm b{display:block;font:700 16px var(--sans);color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nm small{display:block;color:var(--gray);font-size:12.5px;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kg{font:700 12px var(--mono);color:#fff;border:1px solid var(--line2);padding:6px 8px;flex:none;letter-spacing:.04em}
+.chev{color:var(--gray);flex:none;font-size:18px}
+.empty{border:1px dashed var(--line2);padding:26px 18px;text-align:center;color:var(--gray);font-size:14px;line-height:1.5}
+.empty b{display:block;color:#fff;font:700 13px var(--mono);letter-spacing:.16em;margin-bottom:6px}
+.foot{margin-top:28px;padding-top:16px;border-top:1px solid var(--line);color:var(--gray);font-size:12px;line-height:1.5}
+.foot b{color:#fff;font-weight:600}
+/* CARD */
+.ov{position:fixed;inset:0;background:rgba(4,5,8,.78);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);z-index:20;
+display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s}
+.ov.on{opacity:1;pointer-events:auto}
+.sheet{width:100%;max-width:560px;background:linear-gradient(180deg,#121722,#0a0d13);border-top:2px solid var(--red);
+padding:14px 20px calc(26px + env(safe-area-inset-bottom));transform:translateY(30px);transition:transform .25s}
+.ov.on .sheet{transform:none}
+.grip{width:44px;height:4px;background:var(--line2);margin:0 auto 16px}
+.stag{font:700 10.5px var(--mono);letter-spacing:.28em;color:var(--red)}
+.sname{font:700 30px/1.05 var(--mono);text-transform:uppercase;margin-top:8px;word-break:break-word}
+.steam{color:var(--white);font-size:14.5px;margin-top:8px}.steam span{color:var(--gray)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line2);border:1px solid var(--line2);margin-top:20px}
+.cell{background:#0c1016;padding:16px 14px}
+.cell small{display:block;font:700 10px var(--mono);letter-spacing:.22em;color:var(--gray)}
+.cell b{display:block;font:700 28px var(--mono);color:#fff;margin-top:6px;line-height:1}
+.cell b i{font-style:normal;font-size:13px;color:var(--gray);margin-left:4px}
+.cell em{display:block;font-style:normal;font-size:11.5px;color:var(--gray);margin-top:6px}
+.cell.hl b{color:var(--red)}
+.note{font-size:11.5px;color:var(--gray);line-height:1.45;margin-top:14px}
+.close{width:100%;height:50px;margin-top:16px;border:1px solid var(--line2);background:none;color:#fff;font:700 13px var(--mono);letter-spacing:.2em;cursor:pointer}
+.load{display:flex;gap:10px;align-items:center;color:var(--gray);font:500 12px var(--mono);letter-spacing:.14em;padding:20px 0}
+.spin{width:16px;height:16px;border:2px solid var(--line2);border-top-color:var(--red);border-radius:50%;animation:r .8s linear infinite}
+@keyframes r{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <div class="tag">DFL VALKÍRIAS 2 · MUAY THAI FEMININO</div>
+    <h1>Atletas<br><span>confirmadas</span></h1>
+    <p class="sub">Toque no nome da atleta para ver idade, altura, peso e número de lutas. Feito para treinadores e atletas saberem com quem vão lutar.</p>
+    <div class="count"><b id="total">—</b><small>CONFIRMADAS</small></div>
+  </header>
+
+  <div class="search">
+    <label class="sbox">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F1F4F8" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="q" type="search" placeholder="Digite o nome ou o nome de luta" autocomplete="off" autocapitalize="words" enterkeyhint="search">
+      <button class="clr" id="clr" aria-label="Limpar">×</button>
+    </label>
+    <div class="hint" id="hint">BUSCA POR NOME, NOME DE LUTA OU EQUIPE</div>
+  </div>
+
+  <div class="list" id="list"><div class="load"><div class="spin"></div>CARREGANDO ATLETAS…</div></div>
+
+  <footer class="foot">
+    Aparecem aqui só as atletas com inscrição e pagamento <b>confirmados</b> pela organização. Os dados são os informados na ficha de inscrição.
+    O peso é o <b>peso de luta da inscrição</b>: vale o da pesagem oficial no dia.<br><br>
+    <a href="./" style="display:inline-block;margin:4px 0 14px;color:#fff;font:700 12px var(--mono);letter-spacing:.18em;border:1px solid var(--red);padding:12px 14px;text-decoration:none">INSCREVER ATLETA →</a><br>
+    <span id="upd"></span>
+  </footer>
+</div>
+
+<div class="ov" id="ov" role="dialog" aria-modal="true">
+  <div class="sheet" id="sheet"></div>
+</div>
+
+<script>
+/* ===================== CONFIGURAÇÃO ===================== */
+const CONFIG = {
+  // mesma URL /exec da ficha de inscrição (Apps Script)
+  ENDPOINT: "https://script.google.com/macros/s/AKfycbyMm2io76oZhdluToQQb2M30q30Q-jFrvbJQtKDeBTvAKgQ2vF9pUUuaTCaTMFSqyyVtg/exec"
+};
+/* ======================================================= */
+const $=s=>document.querySelector(s);
+const norm=s=>String(s||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/\s+/g,' ').trim();
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const kg=n=>n==null?'—':String(n).replace('.',',');
+let ATL=[];
+
+const TESTE=[
+  {nome:"Rita Caipora",primeiro:"Rita",equipe:"Team Panda",cidade:"Mococa",uf:"SP",idade:24,divisao:"ADULTO",altura:164,peso:60,categoria:"60",lutas:5},
+  {nome:"Maria",primeiro:"Maria",equipe:"Fight Lira",cidade:"Alpinópolis",uf:"MG",idade:22,divisao:"ADULTO",altura:160,peso:59.5,categoria:"60",lutas:4},
+  {nome:"Ana Clara",primeiro:"Ana",equipe:"Forja Fight",cidade:"Serrania",uf:"MG",idade:16,divisao:"JUVENIL",altura:158,peso:51,categoria:"51",lutas:0},
+  {nome:"Júlia S.",primeiro:"Júlia",equipe:"Máfia Muay Thai",cidade:"Guaxupé",uf:"MG",idade:19,divisao:"ADULTO",altura:170,peso:63,categoria:"63",lutas:2},
+  {nome:"Júlia O.",primeiro:"Júlia",equipe:"Máfia Muay Thai",cidade:"Guaxupé",uf:"MG",idade:31,divisao:"ADULTO 2",altura:166,peso:66,categoria:"66",lutas:11},
+  {nome:"Bianca",primeiro:"Bianca",equipe:"Fight Lira",cidade:"Alpinópolis",uf:"MG",idade:13,divisao:"INFANTO-JUVENIL",altura:152,peso:45,categoria:"45",lutas:1}
+];
+
+function render(){
+  const q=norm($("#q").value);$("#clr").style.display=q?'block':'none';
+  const r=q?ATL.filter(a=>[a.nome,a.primeiro,a.equipe].some(x=>norm(x).includes(q))):ATL;
+  if(!ATL.length){$("#list").innerHTML='<div class="empty"><b>NENHUMA CONFIRMADA AINDA</b>As atletas aparecem aqui assim que a organização confirma a inscrição.</div>';return}
+  if(!r.length){$("#list").innerHTML=`<div class="empty"><b>NÃO ENCONTRADA</b>Nenhuma atleta confirmada com “${esc($("#q").value)}”.<br>Tente só o primeiro nome ou o nome de luta.</div>`;return}
+  $("#list").innerHTML=r.map(a=>`<button class="item" data-i="${ATL.indexOf(a)}">
+    <div class="av">${esc(a.nome.charAt(0))}</div>
+    <div class="nm"><b>${esc(a.nome)}</b><small>${esc(a.equipe)} · ${esc(a.cidade)}/${esc(a.uf)}</small></div>
+    <div class="kg">${a.categoria==='+90'?'+90':kg(a.peso)} KG</div><div class="chev">›</div></button>`).join('');
+}
+function abrir(a){
+  const L=a.lutas||0;
+  $("#sheet").innerHTML=`<div class="grip"></div><div class="stag">ATLETA CONFIRMADA</div>
+  <div class="sname">${esc(a.nome)}</div>
+  <div class="steam">${esc(a.equipe)} <span>· ${esc(a.cidade)}/${esc(a.uf)}</span></div>
+  <div class="grid">
+    <div class="cell"><small>IDADE</small><b>${a.idade??'—'}<i>anos</i></b><em>${esc(a.divisao||'')}</em></div>
+    <div class="cell"><small>ALTURA</small><b>${a.altura?kg((a.altura/100).toFixed(2)):'—'}<i>m</i></b><em>${a.altura?a.altura+' cm':''}</em></div>
+    <div class="cell"><small>PESO DE LUTA</small><b>${kg(a.peso)}<i>kg</i></b><em>${a.categoria==='+90'?'Acima de 90 kg':a.categoria?'Categoria até '+esc(a.categoria)+' kg':''}</em></div>
+    <div class="cell hl"><small>CARTEL</small><b>${L===0?'0':L}<i>${L===1?'luta':'lutas'}</i></b><em>${L===0?'Estreante':'Lutas oficiais'}</em></div>
+  </div>
+  <p class="note">Peso e cartel informados na ficha de inscrição. Vale o peso da pesagem oficial no dia do evento.</p>
+  <button class="close" id="fechar">FECHAR</button>`;
+  $("#ov").classList.add('on');$("#fechar").onclick=fechar;
+}
+function fechar(){$("#ov").classList.remove('on')}
+$("#ov").addEventListener('click',e=>{if(e.target.id==='ov')fechar()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')fechar()});
+$("#list").addEventListener('click',e=>{const b=e.target.closest('.item');if(b)abrir(ATL[+b.dataset.i])});
+$("#q").addEventListener('input',render);
+$("#clr").addEventListener('click',e=>{e.preventDefault();$("#q").value='';render();$("#q").focus()});
+
+async function carregar(){
+  const teste=new URLSearchParams(location.search).has('teste');
+  try{
+    let j;
+    if(teste){j={ok:true,atualizado:new Date().toISOString(),atletas:TESTE}}
+    else{const r=await fetch(CONFIG.ENDPOINT+'?acao=confirmadas',{cache:'no-store'});j=await r.json()}
+    if(!j.ok)throw new Error(j.erro||'erro');
+    ATL=(j.atletas||[]).filter(a=>a&&a.nome);
+    $("#total").textContent=ATL.length;
+    $("#upd").textContent='Atualizado em '+new Date(j.atualizado).toLocaleString('pt-BR',{dateStyle:'short',timeStyle:'short'})+(teste?' · MODO TESTE':'');
+    render();
+  }catch(e){
+    $("#list").innerHTML='<div class="empty"><b>NÃO FOI POSSÍVEL CARREGAR</b>Verifique a internet e tente de novo em instantes.</div>';
+  }
+}
+carregar();
+</script>
+</body>
+</html>
