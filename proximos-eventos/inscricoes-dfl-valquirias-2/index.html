@@ -171,6 +171,7 @@
       <h2>Dados da atleta</h2>
       <p class="hint">Tudo numa página só: preencha de cima a baixo e toque em <b style="color:#fff">ENVIAR</b> no final. Leva cerca de 2 minutos. Tenha à mão: <b style="color:#fff">2 fotos</b> (de frente e de perfil) e o <b style="color:#fff">comprovante do Pix</b>.</p>
       <div class="field"><label class="l">Nome completo <em>*</em></label><input type="text" name="nome" autocomplete="name" required><div class="msg">Informe o nome completo.</div></div>
+      <div class="field"><label class="l">Nome de luta <span style="color:var(--gray);font-weight:500">(opcional)</span></label><input type="text" name="apelido" maxlength="30" placeholder="Ex.: Rita Caipora"><div class="cs" style="margin-top:6px">É como você aparece na lista de atletas confirmadas. Sem nome de luta, aparece só o seu primeiro nome.</div></div>
       <div class="field"><label class="l">Data de nascimento <em>*</em></label><input type="text" name="nascimento" inputmode="numeric" placeholder="DD/MM/AAAA" maxlength="10" required><div class="msg">Data inválida (use DD/MM/AAAA) ou abaixo da idade mínima de 10 anos.</div></div>
       <div class="div-badge" id="divbadge"></div>
       <div class="field" style="margin-top:16px"><label class="l">WhatsApp <em>*</em></label><input type="tel" name="whatsapp" inputmode="tel" placeholder="(35) 90000-0000" autocomplete="tel" required><div class="msg">Informe um WhatsApp válido.</div></div>
@@ -460,7 +461,7 @@ function validarTudo(){let ok=true;for(let i=0;i<steps.length;i++)ok=validate(i)
 
 function resumo(){ficha();const c=f.querySelector('input[name=categoria]:checked'),i=idade(),L=f.lutas.value===''?null:+f.lutas.value;const eq=f.equipe.value==='__outra'?f.equipe_nova.value:f.equipe.value;
   const ln=(k,v)=>`<div style="display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-bottom:1px solid var(--line2)"><span style="color:var(--gray)">${k}</span><b style="color:#fff;text-align:right">${v}</b></div>`;
-  $("#resumo").innerHTML='<div class="cartel-h">SUA FICHA</div>'+ln('Atleta',f.nome.value||'—')+ln('Idade',i==null?'—':`${i} anos · ${divisao(i)}`)+ln('Equipe',eq||'—')
+  $("#resumo").innerHTML='<div class="cartel-h">SUA FICHA</div>'+ln('Atleta',f.nome.value||'—')+(f.apelido.value.trim()?ln('Nome de luta',f.apelido.value.trim()):'')+ln('Idade',i==null?'—':`${i} anos · ${divisao(i)}`)+ln('Equipe',eq||'—')
    +ln('Peso de luta',f.peso.value?`${String(f.peso.value).replace('.',',')} kg${c?' · cat. '+c.value:''}`:'—')+ln('Altura',f.altura.value?`${f.altura.value} cm`:'—')+ln('Cartel',L===null?'—':L===0?'Estreante':`${L} lutas · ${f.vitorias.value}V ${f.derrotas.value}D`)
    +ln('Instagram',f.ig_atleta.value?'@'+f.ig_atleta.value:'—')+'<p class="cs" style="margin-top:10px">Algo errado? Corrija lá em cima; este resumo atualiza sozinho.</p>'}
 $("#next").onclick=()=>{resumo();if(!validarTudo())return;enviar()};
