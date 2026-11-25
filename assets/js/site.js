@@ -1,37 +1,81 @@
-/* MENU GLOBAL FIGHT LIRA */
+/* MENU GLOBAL — Fight Lira e DFL no mesmo site (atualizado 25/11/2026)
+ * Páginas do DFL ganham menu próprio; páginas da Fight Lira ganham a faixa DFL no topo e o botão DFL em destaque. */
+const PAGINA = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
+const PAGINAS_DFL = ['dfl.html','dfl1.html','dfl3.html','dfl-valquirias.html','inscricoes.html','seminarios.html','projeto-social.html','acoes-sociais.html'];
+const EH_DFL = PAGINAS_DFL.includes(PAGINA) || PAGINA.startsWith('seminario');
+const WA_AULA = 'https://wa.me/553599101762?text=' + encodeURIComponent('Olá! Quero agendar minha aula experimental gratuita na Fight Lira.');
+const INSCR = 'proximos-eventos/inscricoes-dfl-valquirias-2/';
+
+(function estiloMenu(){
+  const st = document.createElement('style');
+  st.textContent = `
+  .dfl-bar{position:fixed;left:0;right:0;top:0;z-index:110;height:36px;display:flex;align-items:center;justify-content:center;gap:12px;
+    background:linear-gradient(90deg,#7b0004,#e3262b 30%,#e3262b 70%,#7b0004);color:#fff;text-decoration:none;
+    font:800 11px/1 'JetBrains Mono',ui-monospace,monospace;letter-spacing:.22em;text-transform:uppercase;box-shadow:0 6px 18px rgba(0,0,0,.35)}
+  .dfl-bar b{font-family:Anton,sans-serif;font-weight:400;font-size:17px;letter-spacing:.06em}
+  .dfl-bar .seta{display:inline-block;transition:transform .2s}.dfl-bar:hover .seta{transform:translateX(4px)}
+  body.tem-dfl-bar{padding-top:36px}body.tem-dfl-bar .nav{top:36px}
+  .nav-links a.nav-dfl{border:1px solid rgba(227,38,43,.75)!important;color:#fff;background:rgba(227,38,43,.12)}
+  .nav-links a.nav-dfl:hover{background:rgba(227,38,43,.28)}
+  .mobile-panel a.m-dfl{color:var(--red)}
+  .mobile-panel a.mobile-wa{margin-top:18px;min-height:56px;display:flex;align-items:center;justify-content:center;border:0;border-radius:999px;background:linear-gradient(180deg,#f12f36,#a70006);font-family:Archivo,Arial,sans-serif;font-size:13px!important;font-weight:900;letter-spacing:.1em;text-align:center}
+  .mobile-panel a.m-volta{font-size:20px!important;color:var(--muted);border-bottom:0!important;padding-top:18px!important}
+  .brand-dfl{font-family:Anton,sans-serif;font-size:30px;letter-spacing:.04em;display:flex;align-items:baseline;gap:10px}
+  .brand-dfl small{font:700 9px 'JetBrains Mono',monospace;letter-spacing:.2em;color:var(--muted);white-space:nowrap}
+  .nav-links a{white-space:nowrap}
+  @media(max-width:1240px){.brand-dfl small{display:none}}
+  @media(max-width:640px){.dfl-bar{font-size:9.5px;letter-spacing:.16em;gap:8px}.dfl-bar b{font-size:15px}}`;
+  document.head.appendChild(st);
+})();
 
 const desktopMenu = document.querySelector('.nav-links');
+const mobileMenu = document.querySelector('.mobile-panel');
 
-if (desktopMenu) {
-  desktopMenu.innerHTML = `
+if (EH_DFL) {
+  const brand = document.querySelector('.nav .brand');
+  if (brand) { brand.setAttribute('href','dfl.html'); brand.innerHTML = '<span class="brand-dfl">D<span class="red">F</span>L <small>DESAFIO FIGHT LIRA</small></span>'; }
+  if (desktopMenu) desktopMenu.innerHTML = `
+    <a href="dfl.html#eventos">Eventos</a>
+    <a href="${INSCR}atletas.html">Atletas</a>
+    <a href="seminarios.html">Seminários</a>
+    <a href="projeto-social.html">Social</a>
+    <a href="dfl.html#patrocinadores">Patrocinadores</a>
+    <a href="index.html">← Fight Lira</a>
+    <a class="nav-cta" href="${INSCR}">Inscrever atleta</a>`;
+  if (mobileMenu) mobileMenu.innerHTML = `
+    <button class="mobile-close" aria-label="Fechar menu">×</button>
+    <a href="dfl.html#eventos">Eventos</a>
+    <a href="${INSCR}">Inscrições</a>
+    <a href="${INSCR}atletas.html">Atletas confirmadas</a>
+    <a href="seminarios.html">Seminários</a>
+    <a href="projeto-social.html">Projeto Social</a>
+    <a href="dfl.html#patrocinadores">Patrocinadores</a>
+    <a class="m-volta" href="index.html">← Academia Fight Lira</a>`;
+} else {
+  if (desktopMenu) desktopMenu.innerHTML = `
     <a href="index.html">Início</a>
     <a href="jiujitsu.html">Jiu-Jitsu</a>
     <a href="muaythai.html">Muay Thai</a>
     <a href="professores.html">Professores</a>
     <a href="graduados.html">Graduados</a>
-    <a href="dfl.html">DFL</a>
-    <a href="seminarios.html">Seminários</a>
-    <a href="projeto-social.html">Projeto Social</a>
-    <a class="nav-cta" href="index.html#contato">Contato</a>
-  `;
-}
-
-const mobileMenu = document.querySelector('.mobile-panel');
-
-if (mobileMenu) {
-  mobileMenu.innerHTML = `
+    <a class="nav-dfl" href="dfl.html">DFL →</a>
+    <a class="nav-cta" href="${WA_AULA}" target="_blank" rel="noopener">Aula experimental</a>`;
+  if (mobileMenu) mobileMenu.innerHTML = `
     <button class="mobile-close" aria-label="Fechar menu">×</button>
     <a href="index.html">Início</a>
     <a href="jiujitsu.html">Jiu-Jitsu</a>
     <a href="muaythai.html">Muay Thai</a>
     <a href="professores.html">Professores</a>
     <a href="graduados.html">Graduados</a>
-    <a href="dfl.html">DFL</a>
-    <a href="seminarios.html">Seminários</a>
-    <a href="projeto-social.html">Projeto Social</a>
     <a href="index.html#contato">Contato</a>
-  `;
+    <a class="m-dfl" href="dfl.html">DFL →</a>
+    <a class="mobile-wa" href="${WA_AULA}" target="_blank" rel="noopener">Agendar aula experimental</a>`;
+  const bar = document.createElement('a');
+  bar.className = 'dfl-bar'; bar.href = 'dfl.html';
+  bar.innerHTML = '<b>DFL</b><span>Eventos e inscrições</span><span class="seta">→</span>';
+  document.body.prepend(bar); document.body.classList.add('tem-dfl-bar');
 }
+
 const nav=document.querySelector('.nav');if(nav){addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>35),{passive:true});}
 const mb=document.querySelector('.menu-btn'),mp=document.querySelector('.mobile-panel'),mc=document.querySelector('.mobile-close');
 if(mb&&mp){mb.addEventListener('click',()=>mp.classList.add('open'));mc?.addEventListener('click',()=>mp.classList.remove('open'));mp.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>mp.classList.remove('open')))}
