@@ -131,6 +131,12 @@ html{overflow-x:clip}
 .hz-card{position:relative;padding:26px 24px 24px;border-radius:var(--radius);border:1px solid var(--line);background:linear-gradient(160deg,#171717,#0b0b0b);box-shadow:var(--shadow);overflow:hidden}
 .hz-card:before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,var(--red),var(--red-dark))}
 .hz-card.kids:before{background:linear-gradient(180deg,var(--yellow),#8a6c0c)}
+.hz-feature{grid-column:1/-1;border:1px solid rgba(212,175,55,.55);background:radial-gradient(120% 140% at 100% 0%,rgba(212,175,55,.14),transparent 55%),linear-gradient(160deg,#1c1a14,#0b0b0b);box-shadow:0 0 0 1px rgba(212,175,55,.12),0 18px 50px rgba(212,175,55,.10),var(--shadow)}
+.hz-feature:before{background:linear-gradient(180deg,var(--yellow),#8a6c0c)}
+.hz-feature h3{font-size:46px}
+.hz-feature .hz-tag{padding-right:130px}
+.hz-badge{position:absolute;top:18px;right:18px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#0b0b0b;background:var(--yellow);padding:6px 10px;border-radius:999px}
+@media(min-width:760px){.hz-feature ul{grid-template-columns:1fr 1fr}.hz-feature p{max-width:620px}}
 .hz-tag{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--yellow)}
 .hz-card h3{font-family:Anton,sans-serif;font-weight:400;text-transform:uppercase;font-size:40px;line-height:.95;margin:8px 0 6px}
 .hz-card p{margin:0 0 16px;color:var(--muted);font-weight:600;line-height:1.5}
@@ -226,11 +232,11 @@ html{overflow-x:clip}
       <p class="section-copy reveal">Aula experimental <b style="color:#fff">gratuita</b>. Chame no WhatsApp, escolha o dia e venha treinar.</p>
     </div>
     <div class="hz-grid">
+      <article class="hz-card hz-feature"><div class="hz-badge">Vagas abertas</div><div class="hz-tag">Individual • 1 a 1</div><h3>Personal Fight</h3><p>Treino só seu, com o professor do seu lado o tempo todo. Muay Thai ou Jiu-Jitsu, no horário que encaixa na sua rotina.</p><ul><li><span>Horário</span><b>Você escolhe</b></li><li><span>Frequência</span><b>2x ou 3x/sem</b></li></ul><a class="btn primary" href="https://wa.me/553599101762?text=Ol%C3%A1%21%20Quero%20reservar%20um%20hor%C3%A1rio%20de%20Personal%20Fight." target="_blank" rel="noopener">Quero meu horário</a></article>
       <article class="hz-card"><div class="hz-tag">Adulto</div><h3>Muay Thai</h3><p>Do primeiro treino ao nível de competição.</p><ul><li><span>Seg • Ter • Qua • Qui</span><b>19h</b></li></ul><a class="btn primary" href="https://wa.me/553599101762?text=Ol%C3%A1%21%20Quero%20agendar%20minha%20aula%20experimental%20gratuita%20de%20Muay%20Thai." target="_blank" rel="noopener">Agendar aula grátis</a></article>
       <article class="hz-card"><div class="hz-tag">Adulto</div><h3>Jiu-Jitsu</h3><p>Com kimono (Gi) e sem kimono (No-Gi).</p><ul><li><span>Ter • Qui</span><b>19h</b></li><li><span>Sex • No-Gi</span><b>18h</b></li></ul><a class="btn primary" href="https://wa.me/553599101762?text=Ol%C3%A1%21%20Quero%20agendar%20minha%20aula%20experimental%20gratuita%20de%20Jiu-Jitsu." target="_blank" rel="noopener">Agendar aula grátis</a></article>
       <article class="hz-card kids"><div class="hz-tag">4 a 9 anos</div><h3>Jiu-Jitsu Kids</h3><p>Disciplina, coordenação e confiança, com segurança.</p><ul><li><span>Seg • Qua • Sex</span><b>10h</b></li></ul><a class="btn primary" href="https://wa.me/553599101762?text=Ol%C3%A1%21%20Quero%20agendar%20uma%20aula%20experimental%20gratuita%20de%20Jiu-Jitsu%20Kids%20para%20meu%20filho%28a%29." target="_blank" rel="noopener">Agendar aula grátis</a></article>
       <article class="hz-card kids"><div class="hz-tag">10 a 13 anos</div><h3>Jiu-Jitsu Infantil</h3><p>Base técnica e foco para a pré-adolescência.</p><ul><li><span>Seg • Qua • Sex</span><b>17h</b></li></ul><a class="btn primary" href="https://wa.me/553599101762?text=Ol%C3%A1%21%20Quero%20agendar%20uma%20aula%20experimental%20gratuita%20de%20Jiu-Jitsu%20Infantil." target="_blank" rel="noopener">Agendar aula grátis</a></article>
-      <article class="hz-card"><div class="hz-tag">Individual</div><h3>Personal Fight</h3><p>Treino individual de luta, no seu ritmo e objetivo.</p><ul><li><span>Horários</span><b>A combinar</b></li></ul><a class="btn primary" href="https://wa.me/553599101762?text=Ol%C3%A1%21%20Quero%20saber%20sobre%20o%20Personal%20Fight." target="_blank" rel="noopener">Falar no WhatsApp</a></article>
     </div>
   </section>
 <section class="section team-home-section" id="professores">
