@@ -108,6 +108,10 @@
   .key{display:flex;gap:8px;margin-top:14px}
   .key code{flex:1;background:var(--black);border:1px solid var(--line2);padding:12px;font:14px var(--mono);overflow:auto;white-space:nowrap}
   .key button{background:var(--white);color:var(--black);border:0;font:700 12px var(--mono);letter-spacing:.08em;padding:0 14px;cursor:pointer}
+  .cardpay{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:10px;border:1px solid var(--line2);background:#0c0f15;padding:14px 16px;color:#fff;text-decoration:none}
+  .cardpay b{display:block;font:700 14px var(--mono);letter-spacing:.04em}
+  .cardpay small{color:var(--gray);font-size:12px}
+  .cardpay span.go{background:var(--red);color:#fff;font:700 12px var(--mono);letter-spacing:.08em;padding:10px 12px;white-space:nowrap}
 
   /* TERMO */
   .termo{max-height:46vh;overflow:auto;border:1px solid var(--line2);background:var(--panel);padding:16px;font-size:13px;line-height:1.6;color:#d6dbe2}
@@ -169,7 +173,7 @@
     <section class="step active" data-title="ATLETA">
       <div class="bloco"><i>1</i>DE 4 · ATLETA</div>
       <h2>Dados da atleta</h2>
-      <p class="hint">Tudo numa página só: preencha de cima a baixo e toque em <b style="color:#fff">ENVIAR</b> no final. Leva cerca de 2 minutos. Tenha à mão: <b style="color:#fff">2 fotos</b> (de frente e de perfil) e o <b style="color:#fff">comprovante do Pix</b>.</p>
+      <p class="hint">Tudo numa página só: preencha de cima a baixo e toque em <b style="color:#fff">ENVIAR</b> no final. Leva cerca de 2 minutos. Tenha à mão: <b style="color:#fff">2 fotos</b> (de frente e de perfil) e o <b style="color:#fff">comprovante do pagamento</b> (Pix ou cartão).</p>
       <div class="field"><label class="l">Nome completo <em>*</em></label><input type="text" name="nome" autocomplete="name" required><div class="msg">Informe o nome completo.</div></div>
       <div class="field"><label class="l">Nome de luta <span style="color:var(--gray);font-weight:500">(opcional)</span></label><input type="text" name="apelido" maxlength="30" placeholder="Ex.: Rita Caipora"><div class="cs" style="margin-top:6px">É como você aparece na lista de atletas confirmadas. Sem nome de luta, aparece só o seu primeiro nome.</div></div>
       <div class="field"><label class="l">Data de nascimento <em>*</em></label><input type="text" name="nascimento" inputmode="numeric" placeholder="DD/MM/AAAA" maxlength="10" required><div class="msg">Data inválida (use DD/MM/AAAA) ou abaixo da idade mínima de 10 anos.</div></div>
@@ -262,7 +266,7 @@
       <div class="field bad-holder" id="fotomsg" style="margin-top:10px"><div class="msg">Envie as duas fotos.</div></div>
     <div style="height:34px"></div>
       <h2>Taxa de inscrição</h2>
-      <p class="hint">Faça o Pix e anexe o comprovante. A vaga só é confirmada após a conferência.</p>
+      <p class="hint">Pague no Pix ou no cartão e anexe o comprovante. A vaga só é confirmada após a conferência.</p>
       <div class="notice" style="margin-bottom:16px"><b>Política de reembolso.</b><br>
         ✓ Luta <b>não casada</b> pela organização: devolvemos 100%.<br>
         ✓ Desistência <b>antes</b> da luta casada: devolvemos 100%.<br>
@@ -273,7 +277,9 @@
         <div class="key"><code id="pixkey"></code><button type="button" id="copy">COPIAR</button></div>
         <p style="font-size:12px;color:var(--gray);margin-top:10px" id="pixname"></p>
       </div>
-      <div class="field" style="margin-top:16px"><label class="l">Comprovante do Pix <em>*</em></label>
+      <a class="cardpay" href="https://link.picpay.com/p/17957168176b0876d1a1236" target="_blank" rel="noopener"><div><b>Prefiro pagar no cartão</b><small>Em até 3x pelo PicPay · juros do parcelamento por conta de quem paga</small></div><span class="go">CARTÃO ›</span></a>
+      <p style="font-size:12px;color:var(--gray);margin-top:8px">O cartão abre em outra aba. Pague, tire um print da tela de confirmação e volte aqui para anexar.</p>
+      <div class="field" style="margin-top:16px"><label class="l">Comprovante do Pix ou do cartão <em>*</em></label>
         <label class="filebox" id="fb_comp"><div class="ic">$</div><div class="t"><b>Anexar comprovante</b><small>Print ou PDF</small></div><input type="file" name="comprovante" accept="image/*,application/pdf"></label>
         <div class="msg">Anexe o comprovante.</div></div>
 
@@ -331,7 +337,7 @@ const CONFIG = {
   EVENTO: "DFL Valkírias 2",
   DATA_EVENTO: "2027-03-01",                   // usada para calcular a idade
   WHATS_ORG: "553599101762",
-  TERMO_VERSAO: "v6-2026-11",
+  TERMO_VERSAO: "v7-2026-11",
   ANO_EVENTO: 2027,                            // idade esportiva = ano do evento - ano de nascimento
   IDADE_MINIMA: 10,
   ABRE: "2026-11-21T00:00:00-03:00",
@@ -368,7 +374,7 @@ const termoHTML = `
 <h3>7. DADOS PESSOAIS (LGPD)</h3>
 <p>Autorizo o tratamento dos meus dados para organizar o evento, casar as lutas, prestar atendimento de saúde, contatar emergências e divulgar o evento. Os dados de saúde serão acessados apenas pela organização e pela equipe médica. Posso pedir correção ou exclusão dos dados após o evento, exceto o que precisar ser guardado por obrigação legal ou para defesa da organização.</p>
 <h3>8. TAXA DE INSCRIÇÃO E REEMBOLSO</h3>
-<p><b>Luta casada</b> é o confronto confirmado pela organização e comunicado à atleta. <b>Antes da luta casada</b>, a atleta pode desistir e recebe de volta o valor integral pago. <b>Se a organização não conseguir casar a luta</b>, devolve o valor integral. <b>Depois da luta casada, não haverá reembolso em nenhuma hipótese</b>, inclusive desistência, doença, lesão, viagem, pedido de troca de adversária pelo treinador ou pela equipe, falta de atestado, não comparecer à pesagem ou não bater o peso. Se a desistência for da adversária, a organização oferece nova adversária compatível ou devolve o valor integral, à escolha da atleta. Se o evento for cancelado pela organização, o valor é devolvido. Reembolsos são feitos por Pix em até 15 dias.</p>
+<p><b>Luta casada</b> é o confronto confirmado pela organização e comunicado à atleta. <b>Antes da luta casada</b>, a atleta pode desistir e recebe de volta o valor integral pago. <b>Se a organização não conseguir casar a luta</b>, devolve o valor integral. <b>Depois da luta casada, não haverá reembolso em nenhuma hipótese</b>, inclusive desistência, doença, lesão, viagem, pedido de troca de adversária pelo treinador ou pela equipe, falta de atestado, não comparecer à pesagem ou não bater o peso. Se a desistência for da adversária, a organização oferece nova adversária compatível ou devolve o valor integral, à escolha da atleta. Se o evento for cancelado pela organização, o valor é devolvido. Reembolsos são feitos em até 15 dias: por Pix, para quem pagou no Pix, ou por estorno no cartão, para quem pagou no cartão.</p>
 <h3>9. CONDUTA</h3>
 <p>Respeitarei adversários, árbitros, staff e público. Atitudes antidesportivas, uso de substâncias proibidas ou comportamento violento fora da luta podem levar à desclassificação e à proibição em edições futuras.</p>
 <h3>10. PREMIAÇÃO</h3>
