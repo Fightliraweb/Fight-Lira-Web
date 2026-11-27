@@ -764,6 +764,10 @@
 
   const totalVagas = 20;
 
+  /* Seminário já aconteceu: true = mostra só "encerrado / vagas esgotadas"
+     (some o contador de vagas, que deixava "esgotado" e "20 disponíveis" ao mesmo tempo). */
+  const seminarioEncerrado = true;
+
 
   /*
     ==================================================
@@ -822,7 +826,7 @@
     participantesConfirmados.length;
 
 
-  const disponiveis =
+  const disponiveis = seminarioEncerrado ? 0 :
     Math.max(totalVagas - confirmados,0);
 
 
@@ -864,7 +868,7 @@ const URL_VAGAS = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQsuFTspAb6OU
 
 }
 
-atualizarVagasDaPlanilha();
+if(!seminarioEncerrado) atualizarVagasDaPlanilha();
 
   function renderParticipantes(){
 
@@ -951,6 +955,14 @@ atualizarVagasDaPlanilha();
   */
 
 
+  if(seminarioEncerrado){
+    const grade = document.querySelector(".spots-grid");
+    if(grade) grade.style.display = "none";
+    if(participantsToggle) participantsToggle.style.display = "none";
+    soldOutMessage.querySelector("p").textContent =
+      "Seminário encerrado. Todas as vagas foram preenchidas.";
+  }
+
   if(disponiveis === 0){
 
     registrationForm.style.display =
@@ -961,8 +973,8 @@ atualizarVagasDaPlanilha();
       "block";
 
 
-    eventStatus.textContent =
-      "VAGAS ESGOTADAS";
+    eventStatus.textContent = seminarioEncerrado ?
+      "SEMINÁRIO ENCERRADO" : "VAGAS ESGOTADAS";
 
 
     registrationButton.textContent =

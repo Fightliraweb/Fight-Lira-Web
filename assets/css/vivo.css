@@ -1,0 +1,162 @@
+/* ============================================================
+   FIGHT LIRA — CAMADA "VIVO" (27/11/2026)
+   Cores mais vivas e movimento esportivo, dentro da marca da academia:
+   preto, vermelho e branco; luz, reflexo e textura (sem fogo, raio ou fumaça).
+   Só nas páginas da Fight Lira (o DFL tem identidade própria).
+   Para desligar tudo: remover o <link> deste arquivo da página.
+   ============================================================ */
+:root{
+  --red:#ff1f2d;            /* vermelho mais aceso */
+  --red-hot:#ff3b47;
+  --red-dark:#8a0008;
+  --glow:rgba(255,31,45,.55);
+  --line:rgba(255,255,255,.12);
+}
+
+/* ---------- Barra de progresso de rolagem ---------- */
+.fl-progress{position:fixed;left:0;top:0;height:3px;width:100%;z-index:200;pointer-events:none;
+  transform-origin:0 50%;transform:scaleX(var(--p,0));
+  background:linear-gradient(90deg,#8a0008,var(--red) 60%,#fff);
+  box-shadow:0 0 12px var(--glow)}
+
+/* ---------- Fundo da página: luz vermelha viva e respirando ---------- */
+body.fl-vivo{background:
+  radial-gradient(60vw 60vw at 110% 8%,rgba(255,31,45,.10),transparent 60%),
+  radial-gradient(55vw 55vw at -10% 46%,rgba(255,31,45,.08),transparent 60%),
+  radial-gradient(60vw 60vw at 110% 86%,rgba(255,31,45,.08),transparent 60%),
+  #070707}
+
+/* ---------- Títulos: vermelho com reflexo de luz passando ---------- */
+.fl-vivo .red{
+  background:linear-gradient(100deg,var(--red) 0%,var(--red) 38%,#ffd9db 48%,var(--red-hot) 56%,var(--red) 70%);
+  background-size:260% 100%;
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:flShine 5.5s ease-in-out infinite;
+  filter:drop-shadow(0 0 22px rgba(255,31,45,.35))}
+@keyframes flShine{0%,20%{background-position:100% 0}60%,100%{background-position:0 0}}
+
+/* Etiquetas (01 / TREINAMENTO…) em vermelho vivo, sem dourado */
+.fl-vivo .kicker,.fl-vivo .eyebrow,.fl-vivo .hz-tag,.fl-vivo .card-tag,.fl-vivo .contact-card span{color:var(--red-hot)}
+.fl-vivo .kicker:before{content:'';display:inline-block;width:22px;height:2px;margin-right:10px;vertical-align:middle;
+  background:var(--red);box-shadow:0 0 10px var(--glow)}
+
+/* ---------- Hero: feixes de luz e pulso ---------- */
+.fl-vivo .hero-glow{background:
+  radial-gradient(48% 55% at 78% 30%,rgba(255,31,45,.42),transparent 70%),
+  radial-gradient(40% 40% at 10% 100%,rgba(255,31,45,.22),transparent 70%);
+  animation:flBreath 4.5s ease-in-out infinite}
+@keyframes flBreath{0%,100%{opacity:.75}50%{opacity:1}}
+.fl-vivo .hero:before{content:'';position:absolute;inset:-20% -40%;z-index:-2;pointer-events:none;
+  background:repeating-linear-gradient(115deg,transparent 0 120px,rgba(255,255,255,.035) 120px 124px,transparent 124px 260px);
+  animation:flBeams 14s linear infinite;mix-blend-mode:screen}
+@keyframes flBeams{to{transform:translateX(260px)}}
+.fl-vivo .hero h1{text-shadow:0 10px 60px rgba(0,0,0,.6)}
+.fl-vivo .hero-logo{filter:drop-shadow(0 0 40px rgba(255,31,45,.55)) drop-shadow(0 24px 60px rgba(0,0,0,.5))}
+.fl-vivo .hero:after{background:
+  linear-gradient(180deg,rgba(7,7,7,.66),rgba(7,7,7,.10) 34%,rgba(7,7,7,.80) 82%,#070707),
+  linear-gradient(90deg,rgba(7,7,7,.92),rgba(7,7,7,.55) 42%,rgba(7,7,7,0) 82%)}
+
+/* ---------- Botões: vermelho aceso, brilho passando e pulso no principal ---------- */
+.fl-vivo .btn.primary,.fl-vivo .nav-cta,.fl-vivo .mobile-sticky-cta,.fl-vivo .mobile-panel .mobile-wa{
+  position:relative;overflow:hidden;
+  background:linear-gradient(180deg,#ff3a46,#c4000c)!important;
+  border-color:rgba(255,120,128,.55)!important;
+  box-shadow:0 10px 28px rgba(255,31,45,.38),0 0 0 1px rgba(255,31,45,.35),inset 0 1px 0 rgba(255,255,255,.35)!important}
+.fl-vivo .btn.primary:after,.fl-vivo .nav-cta:after,.fl-vivo .mobile-sticky-cta:after{
+  content:'';position:absolute;top:0;bottom:0;left:-60%;width:40%;pointer-events:none;
+  background:linear-gradient(100deg,transparent,rgba(255,255,255,.45),transparent);
+  transform:skewX(-20deg);animation:flSweep 3.8s ease-in-out infinite}
+@keyframes flSweep{0%,55%{left:-60%}100%{left:130%}}
+.fl-vivo .hero .btn.primary,.fl-vivo .mobile-sticky-cta{animation:flPulse 2.4s ease-in-out infinite}
+@keyframes flPulse{0%,100%{box-shadow:0 10px 28px rgba(255,31,45,.38),0 0 0 0 rgba(255,31,45,.55)}
+  50%{box-shadow:0 10px 34px rgba(255,31,45,.55),0 0 0 10px rgba(255,31,45,0)}}
+.fl-vivo .btn:hover{border-color:var(--red);box-shadow:0 12px 30px rgba(255,31,45,.32)}
+/* botão que era dourado vira branco (marca: preto, vermelho e branco) */
+.fl-vivo .btn.yellow{background:linear-gradient(180deg,#ffffff,#d9d9d9)!important;color:#0a0a0a!important;
+  box-shadow:0 10px 26px rgba(255,255,255,.12),inset 0 1px 0 #fff!important}
+
+/* ---------- Faixa "Método • Padrão…" : fita dupla em X ---------- */
+.fl-vivo .marquee{background:linear-gradient(90deg,#b8000b,var(--red) 30%,#ff4652 50%,var(--red) 70%,#b8000b);
+  color:#fff;box-shadow:0 0 40px rgba(255,31,45,.45);border-block:2px solid rgba(255,255,255,.18)}
+.fl-vivo .marquee-track span{text-shadow:0 2px 0 rgba(0,0,0,.25)}
+.fl-vivo .marquee-track span:after{color:#0a0a0a}
+.fl-vivo .marquee.fl-cross{position:relative;margin-top:-10px;transform:rotate(1.4deg);background:#f4f4f4;color:#0a0a0a;
+  box-shadow:0 10px 30px rgba(0,0,0,.5);z-index:3;opacity:.95}
+.fl-vivo .marquee.fl-cross .marquee-track{animation-direction:reverse;animation-duration:26s;font-size:clamp(20px,2.2vw,32px)}
+.fl-vivo .marquee.fl-cross .marquee-track span:after{color:var(--red)}
+
+/* ---------- Seções: linha de luz entre blocos ---------- */
+.fl-vivo .section{position:relative}
+.fl-vivo .section + .section:before,.fl-vivo .section.alt:before{content:'';position:absolute;left:50%;top:0;
+  width:min(720px,80%);height:1px;transform:translateX(-50%);
+  background:linear-gradient(90deg,transparent,var(--red),transparent);box-shadow:0 0 18px var(--glow);opacity:.7}
+.fl-vivo .section.alt{background:
+  radial-gradient(70% 90% at 50% 0%,rgba(255,31,45,.10),transparent 60%),
+  linear-gradient(180deg,#0e0b0b,#080808)}
+.fl-vivo .display{text-shadow:0 6px 40px rgba(0,0,0,.5)}
+
+/* ---------- Cards de turma: borda de luz e destaque do Personal ---------- */
+.fl-vivo .hz-card{background:linear-gradient(160deg,#1a1212,#0b0b0b);transition:transform .25s,border-color .25s,box-shadow .25s}
+.fl-vivo .hz-card:hover{transform:translateY(-4px);border-color:rgba(255,31,45,.6);
+  box-shadow:0 18px 50px rgba(255,31,45,.18),var(--shadow)}
+.fl-vivo .hz-card:before,.fl-vivo .hz-card.kids:before{background:linear-gradient(180deg,#ff4a55,var(--red-dark));box-shadow:0 0 16px var(--glow)}
+.fl-vivo .hz-card li b{color:#fff}
+.fl-vivo .hz-card li{background:rgba(255,255,255,.045)}
+/* Personal Fight: borda que gira (efeito hipnótico) */
+.fl-vivo .hz-feature{border:0!important;isolation:isolate;
+  background:radial-gradient(120% 140% at 100% 0%,rgba(255,31,45,.22),transparent 55%),linear-gradient(160deg,#1f0d0e,#0b0b0b)!important;
+  box-shadow:0 22px 60px rgba(255,31,45,.22),var(--shadow)!important}
+.fl-vivo .hz-feature:after{content:'';position:absolute;inset:0;border-radius:inherit;padding:2px;z-index:-1;pointer-events:none;
+  background:conic-gradient(from var(--a,0deg),transparent 0 55%,var(--red) 70%,#fff 76%,var(--red) 82%,transparent 95%);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;
+  mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0);
+  animation:flSpin 4.5s linear infinite}
+@property --a{syntax:'<angle>';inherits:false;initial-value:0deg}
+@keyframes flSpin{to{--a:360deg}}
+.fl-vivo .hz-feature:before{background:linear-gradient(180deg,#fff,var(--red))!important}
+.fl-vivo .hz-badge{background:var(--red);color:#fff;box-shadow:0 0 16px var(--glow)}
+
+/* ---------- Pôsteres e fotos: moldura com reflexo ---------- */
+.fl-vivo .category-card,.fl-vivo .pf-card,.fl-vivo .slide,.fl-vivo .dfl-strip{transition:transform .3s,box-shadow .3s,border-color .3s}
+.fl-vivo .category-card:hover,.fl-vivo .pf-card:hover{border-color:rgba(255,31,45,.7);box-shadow:0 20px 60px rgba(255,31,45,.25)}
+.fl-vivo .pf-card{background:linear-gradient(180deg,#140e0e,#0b0b0b)}
+.fl-vivo .pf-card:hover{transform:translateY(-4px)}
+.fl-vivo .pf-card small{color:#cfc9c4}
+.fl-vivo .kids-photo{display:block;max-width:720px;border-radius:18px;overflow:hidden;border:1px solid rgba(255,31,45,.4);
+  box-shadow:0 20px 60px rgba(255,31,45,.18)}
+.fl-vivo .kids-photo img{display:block;width:100%;max-height:480px;object-fit:cover;transition:transform .8s}
+.fl-vivo .kids-photo:hover img{transform:scale(1.03)}
+
+/* ---------- Contato e faixa DFL ---------- */
+.fl-vivo .contact-card{background:linear-gradient(150deg,#151010,#0c0c0c)}
+.fl-vivo .contact-primary{border-color:rgba(255,31,45,.7)!important;
+  background:radial-gradient(100% 100% at 0% 0%,rgba(255,31,45,.25),transparent 60%),#140c0c!important;
+  box-shadow:0 16px 44px rgba(255,31,45,.2)}
+.fl-vivo .contact-icon{color:var(--red-hot)}
+.fl-vivo .dfl-strip{border-color:rgba(255,31,45,.55);box-shadow:0 20px 60px rgba(255,31,45,.16)}
+.fl-vivo .dfl-strip:hover{transform:translateY(-3px)}
+
+/* ---------- Parceiros ---------- */
+.fl-vivo .partner-feature-refresh{background:radial-gradient(60% 80% at 50% 0%,rgba(255,31,45,.12),transparent 65%),#080808!important}
+.fl-vivo .partner-marquee-card{border-color:rgba(255,255,255,.12)!important;
+  background:radial-gradient(circle at 50% 40%,rgba(255,255,255,.07),transparent 65%),#101010!important}
+
+/* ---------- Rodapé ---------- */
+.fl-vivo .footer{position:relative;background:radial-gradient(60% 90% at 50% 100%,rgba(255,31,45,.16),transparent 70%)}
+.fl-footer-links{display:flex;flex-wrap:wrap;gap:8px 22px;margin-top:34px;font-weight:800;font-size:12px;letter-spacing:.12em;text-transform:uppercase}
+.fl-footer-links a{color:#d8d2cc;border-bottom:1px solid transparent;padding-bottom:3px;transition:.2s}
+.fl-footer-links a:hover{color:#fff;border-color:var(--red)}
+
+/* ---------- Animação de entrada mais esportiva ---------- */
+.fl-vivo .reveal{transition:opacity .7s cubic-bezier(.2,.7,.1,1),transform .7s cubic-bezier(.2,.7,.1,1)!important}
+
+/* ---------- Acessibilidade: quem pede menos movimento não recebe animação ---------- */
+@media (prefers-reduced-motion:reduce){
+  .fl-vivo .red,.fl-vivo .hero-glow,.fl-vivo .hero:before,.fl-vivo .btn.primary,.fl-vivo .btn.primary:after,
+  .fl-vivo .nav-cta:after,.fl-vivo .mobile-sticky-cta,.fl-vivo .mobile-sticky-cta:after,.fl-vivo .hz-feature:after,
+  .fl-vivo .marquee-track{animation:none!important}
+}
+@media (max-width:640px){
+  .fl-vivo .marquee.fl-cross{margin-top:-8px}
+  .fl-vivo .hero:before{opacity:.7}
+}

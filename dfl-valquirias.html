@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <meta name="theme-color" content="#070707">
-<title>DFL Valquírias | Galeria Oficial</title>
+<title>DFL Valkírias | Galeria Oficial</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}body{background:#070707;color:#fff;font-family:Arial,Helvetica,sans-serif}
 header{padding:28px 20px 24px;text-align:center;border-bottom:1px solid #242424;background:#0b0b0b}
@@ -34,7 +34,7 @@ h1{font-size:clamp(38px,8vw,68px);font-weight:900;letter-spacing:2px}h1 span{col
 <body>
 <header>
 <a class="back" href="dfl.html">← VOLTAR PARA O ARQUIVO DFL</a>
-<h1>DFL <span>VALQUÍRIAS</span></h1>
+<h1>DFL <span>VALKÍRIAS</span></h1>
 <div class="subtitle">Galeria Oficial</div>
 <div class="meta">869 fotos disponíveis</div>
 </header>
@@ -48,7 +48,7 @@ h1{font-size:clamp(38px,8vw,68px);font-weight:900;letter-spacing:2px}h1 span{col
 <div class="lightbox" id="lightbox">
 <button class="close" id="close">&times;</button>
 <button class="navbtn prev" id="prev">‹</button>
-<img id="lightboxImg" alt="Foto ampliada DFL Valquírias">
+<img id="lightboxImg" alt="Foto ampliada DFL Valkírias">
 <button class="navbtn next" id="next">›</button>
 <div class="counter" id="counter"></div>
 </div>
@@ -78,7 +78,7 @@ function renderMore(){
     img.loading='lazy';
     img.decoding='async';
     img.src=photos[i];
-    img.alt=`DFL Valquírias — Foto ${i+1}`;
+    img.alt=`DFL Valkírias — Foto ${i+1}`;
     button.addEventListener('click',()=>openLightbox(i));
     button.appendChild(img);
     fragment.appendChild(button);
