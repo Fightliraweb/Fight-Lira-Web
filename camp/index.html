@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0a0a0c">
+<meta name="robots" content="noindex,nofollow">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Camp Fight Lira">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" href="icon-192.png">
+<title>Camp Fight Lira</title>
+<style>
+@font-face{font-family:Anton;src:url(fonts/anton.ttf);font-display:swap}
+@font-face{font-family:Fira;src:url(fonts/fira.ttf);font-display:swap}
+@font-face{font-family:Fira;font-weight:700;src:url(fonts/fira-b.ttf);font-display:swap}
+:root{--r:#e0141f;--g:#e8b04a;--bg:#0a0a0c;--mut:#9a9a9a}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{background:var(--bg);color:#f2f2f2;font-family:Fira,system-ui,sans-serif}
+body{min-height:100vh;overflow-x:hidden}
+button,input,textarea{font:inherit;color:inherit}
+.hide{display:none!important}
+.hero{position:absolute;left:0;top:0;width:100%;height:380px;background:url(bg.jpg) center top/cover;z-index:0}
+.hero:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(60,0,4,.55),rgba(20,0,2,.62) 45%,var(--bg)),radial-gradient(ellipse 70% 55% at 50% 45%,rgba(224,20,31,.28),transparent 70%)}
+.wrap{position:relative;z-index:1;max-width:520px;margin:0 auto;padding:calc(env(safe-area-inset-top) + 18px) 20px 110px}
+/* login */
+#login{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:24px;position:relative}
+#login .hero{height:100%}
+#login .in{position:relative;z-index:1;width:100%;max-width:380px}
+#login img{width:120px;filter:drop-shadow(0 0 30px rgba(224,20,31,.5))}
+#login h1{font-family:Anton;font-size:44px;letter-spacing:1px;margin-top:14px;line-height:1}
+#login h1 span{color:var(--r)}
+#login p{color:#bbb;margin:10px 0 28px;font-size:16px}
+.field{width:100%;background:rgba(0,0,0,.55);border:1.5px solid #3a3a3e;border-radius:16px;padding:16px 18px;font-size:18px;outline:none}
+.field:focus{border-color:var(--r)}
+.pin{display:flex;gap:12px;justify-content:center;margin-top:14px}
+.pin input{width:62px;height:70px;text-align:center;font-family:Anton;font-size:32px;padding:0}
+.btn{display:block;width:100%;border:0;border-radius:16px;padding:17px;font-weight:700;font-size:18px;letter-spacing:1px;background:linear-gradient(180deg,#f0202b,#b30e18);box-shadow:0 10px 30px rgba(224,20,31,.35);margin-top:20px;cursor:pointer}
+.btn.gold{background:linear-gradient(180deg,#f3c46a,#c58f2c);color:#1a1205;box-shadow:0 10px 30px rgba(232,176,74,.35)}
+.btn.ghost{color:#f2f2f2;text-align:center;background:transparent;border:1.5px solid #3a3a3e;box-shadow:none;margin-top:12px}
+.err{color:#ff5a62;font-size:15px;margin-top:14px;min-height:20px}
+/* app */
+.top{display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:10px}
+.brand img{width:40px;height:40px}
+.brand b{font-family:Anton;font-size:20px;letter-spacing:1px;font-weight:400}.brand b span{color:var(--r)}
+.ic{width:40px;height:40px;border-radius:50%;background:rgba(0,0,0,.45);border:1px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;cursor:pointer}
+.prof{text-align:center;margin-top:14px}
+.av{width:128px;height:128px;border-radius:50%;margin:0 auto;padding:4px;background:linear-gradient(160deg,#ff3a44,#8a0710);box-shadow:0 0 36px rgba(224,20,31,.55)}
+.av img{width:100%;height:100%;border-radius:50%;object-fit:cover;border:3px solid var(--bg)}
+.nm{font-family:Anton;font-size:40px;margin-top:10px;line-height:1;letter-spacing:.5px;text-transform:uppercase}
+.inf{font-size:15px;color:#bdbdbd;margin-top:6px}
+.chip{display:inline-block;margin-top:12px;padding:7px 16px;border-radius:30px;background:rgba(224,20,31,.15);border:1px solid rgba(224,20,31,.6);font-size:15px;font-weight:700}
+.sec{display:flex;justify-content:space-between;align-items:baseline;margin-top:24px}
+.sec h2{font-family:Anton;font-size:28px;font-weight:400;letter-spacing:.5px}.sec h2 span{color:var(--r)}
+.sec em{font-style:normal;font-size:13px;color:#888}
+.card{background:linear-gradient(160deg,rgba(255,255,255,.07),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:16px 18px;margin-top:12px}
+.lab{font-size:11.5px;font-weight:700;letter-spacing:2.5px;color:var(--mut);text-transform:uppercase}
+.row{display:flex;gap:12px}.row .card{flex:1;min-width:0}
+.big{font-family:Anton;font-size:32px;line-height:1.15;margin-top:4px}.big small{font-family:Fira;font-size:14px;color:#999;margin-left:5px}
+.t{font-size:13.5px;color:#999;margin-top:3px}
+.gold{color:var(--g)}
+.streak{display:flex;align-items:center;justify-content:space-between}
+.ring{width:66px;height:66px;flex:none;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 0 24px rgba(232,176,74,.3)}
+.ring div{width:52px;height:52px;border-radius:50%;background:#141416;display:flex;align-items:center;justify-content:center}
+.bar{display:flex;gap:5px;margin-top:12px}
+.bar i{flex:1;height:22px;border-radius:6px;background:#2a2a2e}.bar .p{background:#f2f2f2}.bar .f{background:var(--r)}
+.leg{display:flex;gap:16px;margin-top:10px;font-size:12.5px;color:#999}
+.leg span:before{content:"";display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;background:var(--c)}
+.ph{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.delta{font-size:13px;font-weight:700;color:var(--g);background:rgba(232,176,74,.12);padding:5px 10px;border-radius:8px;white-space:nowrap}
+.mis{font-size:19px;font-weight:700;margin-top:6px;line-height:1.3}
+.prog{height:9px;background:#2a2a2e;border-radius:6px;margin-top:12px;overflow:hidden}.prog div{height:100%;background:linear-gradient(90deg,#9e0c16,var(--r))}
+.done .prog div{background:linear-gradient(90deg,#c58f2c,var(--g))}
+.done{border-color:rgba(232,176,74,.5);box-shadow:0 0 30px rgba(232,176,74,.12)}
+.cmp{display:flex;justify-content:space-between;align-items:flex-end;margin-top:10px}
+.cmp div{font-size:13px;color:#999}.cmp b{display:block;font-family:Anton;font-weight:400;font-size:30px;color:#f2f2f2}
+.cmp .q b{color:#555}
+.conq{display:flex;align-items:center;gap:14px;cursor:pointer}
+.medal{width:48px;height:48px;flex:none;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ffe2a3,#c58f2c 60%,#7a5410);display:flex;align-items:center;justify-content:center;box-shadow:0 0 18px rgba(232,176,74,.4)}
+.conq b{display:block;font-size:15px}.conq span{font-size:12.5px;color:#999}
+.conq .go{margin-left:auto;color:var(--g);font-size:13px;font-weight:700}
+.empty{font-size:14px;color:#888;margin-top:8px;line-height:1.4}
+/* recado */
+.audio{display:flex;align-items:center;gap:14px;margin-top:12px}
+.play{width:58px;height:58px;flex:none;border-radius:50%;border:0;background:linear-gradient(180deg,#f0202b,#b30e18);box-shadow:0 0 24px rgba(224,20,31,.45);display:flex;align-items:center;justify-content:center;cursor:pointer}
+.wave{flex:1;display:flex;align-items:center;gap:3px;height:40px}
+.wave i{flex:1;background:#444;border-radius:2px}
+.wave i.on{background:var(--r)}
+.rec{font-size:16px;line-height:1.45;margin-top:10px;color:#ddd}
+textarea.field{min-height:90px;resize:none;font-size:16px;margin-top:10px}
+.obs{font-size:14px;color:#aaa;margin-top:10px;border-top:1px solid #222;padding-top:10px}
+.obs b{color:#ddd;font-weight:400}
+/* nav */
+.nav{position:fixed;left:0;right:0;bottom:0;z-index:5;background:rgba(14,14,16,.96);backdrop-filter:blur(10px);border-top:1px solid rgba(255,255,255,.08);display:flex;justify-content:space-around;padding:8px 0 calc(8px + env(safe-area-inset-bottom))}
+.nav button{background:none;border:0;text-align:center;font-size:12px;color:#777;width:25%;cursor:pointer;position:relative}
+.nav svg{width:24px;height:24px;display:block;margin:0 auto 4px;stroke:currentColor;fill:none;stroke-width:2}
+.nav .on{color:var(--r)}
+.dot{position:absolute;top:0;right:30%;width:9px;height:9px;border-radius:50%;background:var(--g)}
+/* modal conquista */
+#modal{position:fixed;inset:0;z-index:20;background:rgba(0,0,0,.88);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:20px;overflow:auto}
+#modal .in{width:100%;max-width:380px;text-align:center}
+#modal .k{font-size:13px;letter-spacing:4px;color:var(--g);font-weight:700}
+#modal h3{font-family:Anton;font-weight:400;font-size:34px;margin:6px 0 14px}
+#modal img{width:72%;border-radius:16px;box-shadow:0 0 50px rgba(232,176,74,.35)}
+.burst{animation:pop .6s cubic-bezier(.2,1.4,.4,1)}
+@keyframes pop{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
+.toast{position:fixed;left:50%;bottom:100px;transform:translateX(-50%);background:#1c1c20;border:1px solid #333;padding:12px 18px;border-radius:14px;font-size:14px;z-index:30}
+</style></head>
+<body>
+
+<section id="login">
+  <div class="hero"></div>
+  <div class="in">
+    <img src="logo.png" alt="Fight Lira">
+    <h1>CAMP <span>FIGHT LIRA</span></h1>
+    <p>Entre na sua Sala de Guerra</p>
+    <input id="lnome" class="field" placeholder="Seu primeiro nome" autocomplete="given-name" autocapitalize="words">
+    <div class="pin" id="pin">
+      <input class="field" inputmode="numeric" maxlength="1" aria-label="Senha 1">
+      <input class="field" inputmode="numeric" maxlength="1" aria-label="Senha 2">
+      <input class="field" inputmode="numeric" maxlength="1" aria-label="Senha 3">
+      <input class="field" inputmode="numeric" maxlength="1" aria-label="Senha 4">
+    </div>
+    <button class="btn" id="entrar">ENTRAR</button>
+    <div class="err" id="lerr"></div>
+  </div>
+</section>
+
+<section id="app" class="hide">
+  <div class="hero"></div>
+  <div class="wrap" id="view"></div>
+  <nav class="nav">
+    <button data-t="hoje" class="on"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8v10h-6v-6H9v6H3z"/></svg>Hoje</button>
+    <button data-t="missao"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg>Missão</button>
+    <button data-t="evolucao"><svg viewBox="0 0 24 24"><path d="M3 20h18M6 16v-4M11 16V8M16 16v-6M21 16V5"/></svg>Evolução</button>
+    <button data-t="recados"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4z"/></svg>Recados</button>
+  </nav>
+</section>
+
+<div id="modal" class="hide"></div>
+
+<script>
+const $=s=>document.querySelector(s);
+const enc=new TextEncoder();
+const norm=s=>s.normalize('NFD').replace(/[̀-ͯ]/g,'').trim().toLowerCase().split(/\s+/)[0]||'';
+const hex=b=>[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('');
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const store={get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}},del(k){try{localStorage.removeItem(k)}catch(e){}}};
+let D=null,ID=null,tab='hoje';
+
+async function derive(nome,senha){
+  const km=await crypto.subtle.importKey('raw',enc.encode(norm(nome)+'|'+senha),'PBKDF2',false,['deriveBits']);
+  const bits=await crypto.subtle.deriveBits({name:'PBKDF2',hash:'SHA-256',salt:enc.encode('camp-fight-lira-v1'),iterations:150000},km,512);
+  const id=hex(await crypto.subtle.digest('SHA-256',bits.slice(32))).slice(0,24);
+  return {id,raw:hex(bits.slice(0,32))};
+}
+async function load(id,rawHex){
+  const r=await fetch('d/'+id+'.bin?v='+Date.now(),{cache:'no-store'});
+  if(!r.ok) throw new Error('nf');
+  const buf=Uint8Array.from(atob((await r.text()).trim()),c=>c.charCodeAt(0));
+  const key=await crypto.subtle.importKey('raw',Uint8Array.from(rawHex.match(/../g),h=>parseInt(h,16)),'AES-GCM',false,['decrypt']);
+  const pt=await crypto.subtle.decrypt({name:'AES-GCM',iv:buf.slice(0,12)},key,buf.slice(12));
+  return JSON.parse(new TextDecoder().decode(pt));
+}
+
+// ---- login
+const pins=[...document.querySelectorAll('#pin input')];
+pins.forEach((p,i)=>{
+  p.addEventListener('input',()=>{p.value=p.value.replace(/\D/g,'').slice(-1);if(p.value&&pins[i+1])pins[i+1].focus();if(i===3&&p.value)entrar()});
+  p.addEventListener('keydown',e=>{if(e.key==='Backspace'&&!p.value&&pins[i-1])pins[i-1].focus()});
+});
+$('#entrar').onclick=entrar;
+async function entrar(){
+  const nome=$('#lnome').value,senha=pins.map(p=>p.value).join('');
+  if(!norm(nome)||senha.length<4){$('#lerr').textContent='Digite seu nome e os 4 números da senha.';return}
+  $('#entrar').textContent='ENTRANDO...';$('#lerr').textContent='';
+  try{const k=await derive(nome,senha);D=await load(k.id,k.raw);ID=k.id;store.set('camp-sessao',k);abrir()}
+  catch(e){$('#lerr').textContent='Nome ou senha não conferem. Confira com o professor.';pins.forEach(p=>p.value='');pins[0].focus()}
+  $('#entrar').textContent='ENTRAR';
+}
+(async()=>{const s=store.get('camp-sessao');if(s){try{D=await load(s.id,s.raw);ID=s.id;abrir()}catch(e){store.del('camp-sessao')}}})();
+function sair(){store.del('camp-sessao');location.reload()}
+
+function abrir(){
+  $('#login').classList.add('hide');$('#app').classList.remove('hide');
+  render();
+  const novas=(D.conquistas||[]).filter(c=>!vistas().includes(c.id));
+  if(novas.length) setTimeout(()=>conquista(novas[0],true),500);
+}
+document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>{tab=b.dataset.t;document.querySelectorAll('.nav button').forEach(x=>x.classList.toggle('on',x===b));render();scrollTo(0,0)});
+
+// ---- helpers
+const presentes=()=>D.presencas.filter(x=>x==='p').length;
+function sequencia(){let n=0;for(let i=D.presencas.length-1;i>=0;i--){if(D.presencas[i]==='p')n++;else break}return n}
+const kg=v=>v.toFixed(1).replace('.',',');
+const vistas=()=>store.get('camp-vistas-'+ID)||[];
+function topo(){return `<div class="top"><div class="brand"><img src="logo.png" alt=""><b>CAMP <span>FIGHT LIRA</span></b></div>
+<div class="ic" onclick="sair()" title="Sair"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ddd" stroke-width="2"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4M10 17l5-5-5-5M15 12H3"/></svg></div></div>`}
+function perfil(){return `<div class="prof"><div class="av"><img src="${D.foto}" alt=""></div>
+<div class="nm">${esc(D.nomeCompleto)}</div><div class="inf">${esc(D.plano)}${D.dias?' · '+esc(D.dias):''}</div>
+${D.objetivo?`<div class="chip">🎯 Objetivo: ${esc(D.objetivo)}</div>`:''}</div>`}
+function barra(){let h='';for(let i=0;i<D.aulasMes;i++){const v=D.presencas[i];h+=`<i class="${v||''}"></i>`}
+return `<div class="card"><div class="lab">Barra do mês</div><div class="bar">${h}</div>
+<div class="leg"><span style="--c:#f2f2f2">Presente</span><span style="--c:#e0141f">Falta</span><span style="--c:#2a2a2e">A treinar</span></div></div>`}
+function cards2(){const s=sequencia(),pct=Math.min(s/Math.max(D.metaPresenca,1),1)*100;
+return `<div class="row"><div class="card streak"><div><div class="lab">Sequência</div><div class="big gold">${s}<small>treino${s===1?'':'s'}</small></div><div class="t">sem faltar</div></div>
+<div class="ring" style="background:conic-gradient(var(--g) 0 ${pct}%,#2a2a2e ${pct}%)"><div><svg width="28" height="28" viewBox="0 0 24 24" fill="#e8b04a"><path d="M12 2l2.9 6.3 6.9.7-5.2 4.6 1.5 6.8L12 17l-6.1 3.4 1.5-6.8L2.2 9l6.9-.7z"/></svg></div></div></div>
+<div class="card"><div class="lab">Presença</div><div class="big">${presentes()}<small>de ${D.aulasMes} aulas</small></div><div class="t">Meta do camp: ${D.metaPresenca}</div></div></div>`}
+function peso(alto){const P=D.peso;if(!P||!P.pesagens||!P.pesagens.length)return '';
+ const pts=P.pesagens,ult=pts[pts.length-1][1],dif=P.inicio-ult;
+ const vals=pts.map(p=>p[1]).concat([P.meta,P.inicio]),mx=Math.max(...vals)+.3,mn=Math.min(...vals)-.3;
+ const W=300,H=alto?150:110,y=v=>8+(mx-v)/(mx-mn)*(H-30),x=i=>pts.length===1?W/2:14+i*(W-28)/(pts.length-1);
+ const line=pts.map((p,i)=>`${x(i)},${y(p[1])}`).join(' ');
+ const area=`M${x(0)},${y(pts[0][1])} `+pts.map((p,i)=>`L${x(i)},${y(p[1])}`).join(' ')+` L${x(pts.length-1)},${H-20} L${x(0)},${H-20}Z`;
+ const ym=y(P.meta);
+ return `<div class="card"><div class="ph"><div><div class="lab">Peso</div><div class="big">${kg(ult)}<small>kg</small></div></div>
+ ${dif>0?`<div class="delta">↓ ${kg(dif)} kg desde o início</div>`:''}</div>
+ <svg viewBox="0 0 ${W} ${H}" width="100%" style="margin-top:6px;overflow:visible">
+ <defs><linearGradient id="ga" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e0141f" stop-opacity=".35"/><stop offset="1" stop-color="#e0141f" stop-opacity="0"/></linearGradient></defs>
+ <line x1="0" x2="${W}" y1="${ym}" y2="${ym}" stroke="#e8b04a" stroke-dasharray="4 4" opacity=".75"/>
+ <text x="${W}" y="${ym-5}" fill="#e8b04a" font-size="10" text-anchor="end">meta ${kg(P.meta)}</text>
+ <path d="${area}" fill="url(#ga)"/><polyline points="${line}" fill="none" stroke="#e0141f" stroke-width="2.5" style="filter:drop-shadow(0 0 4px #e0141f)"/>
+ ${pts.map((p,i)=>`<circle cx="${x(i)}" cy="${y(p[1])}" r="${i===pts.length-1?5:4}" fill="${i===pts.length-1?'#e0141f':'#fff'}" ${i===pts.length-1?'stroke="#fff" stroke-width="2"':''}/>
+ <text x="${x(i)}" y="${H-4}" fill="#888" font-size="10" text-anchor="middle">${esc(p[0])}</text>${alto?`<text x="${x(i)}" y="${y(p[1])-10}" fill="#ccc" font-size="10" text-anchor="middle">${kg(p[1])}</text>`:''}`).join('')}
+ </svg></div>`}
+function missao(grande){const M=D.missao;return `<div class="card ${M.cumprida?'done':''}"><div class="lab ${M.cumprida?'gold':''}">${M.cumprida?'Missão cumprida ★':'Missão do mês'}</div>
+<div class="mis" ${grande?'style="font-size:23px"':''}>${esc(M.titulo)}</div><div class="prog"><div style="width:${Math.round((M.cumprida?1:M.progresso)*100)}%"></div></div><div class="t">${esc(M.status)}</div></div>`}
+function teste(){const T=D.teste;return `<div class="card"><div class="lab">Teste do mês · ${esc(T.nome)}</div>
+<div class="cmp"><div>Início do mês<b ${T.inicio?'':'style="color:#555"'}>${T.inicio?esc(T.inicio):'—'}</b></div><div style="color:var(--r);font-size:22px">→</div><div class="${T.fim?'':'q'}" style="text-align:right">Fim do mês<b ${T.fim?'class="gold"':''}>${T.fim?esc(T.fim):'?'}</b></div></div>
+<div class="t">${!T.inicio?'Primeira medição no próximo treino.':T.fim?'Comparação fechada pelo professor.':'O professor aplica de novo no fim do mês.'}</div></div>`}
+function sec(a,b,c){return `<div class="sec"><h2>${a} <span>${b}</span></h2><em>${c||''}</em></div>`}
+
+// ---- telas
+function render(){
+  const v=$('#view');
+  const temNovo=(D.conquistas||[]).some(c=>!vistas().includes(c.id));
+  document.querySelector('.nav [data-t="missao"]').innerHTML=document.querySelector('.nav [data-t="missao"]').innerHTML.replace(/<span class="dot"><\/span>/,'')+(temNovo?'<span class="dot"></span>':'');
+  if(tab==='hoje') v.innerHTML=topo()+perfil()+sec('SALA DE','GUERRA',`${esc(D.mes)} · semana ${D.semana}`)+cards2()+barra()+peso()+missao();
+  if(tab==='missao') v.innerHTML=topo()+sec('MINHA','MISSÃO',esc(D.mes))+missao(true)+teste()+sec('CONQUISTAS','',' ')+
+    ((D.conquistas||[]).length?D.conquistas.map((c,i)=>`<div class="card conq" onclick="conquista(D.conquistas[${i}])"><div class="medal"><svg width="24" height="24" viewBox="0 0 24 24" fill="#3a2706"><path d="M12 2l2.9 6.3 6.9.7-5.2 4.6 1.5 6.8L12 17l-6.1 3.4 1.5-6.8L2.2 9l6.9-.7z"/></svg></div><div><b>${esc(c.titulo)}</b><span>${esc(c.sub)} · ${esc(c.data)}</span></div><div class="go">POSTAR ›</div></div>`).join('')
+    :'<div class="card"><div class="empty">Sua primeira conquista aparece aqui quando você cumprir a missão ou bater um recorde.</div></div>');
+  if(tab==='evolucao') v.innerHTML=topo()+sec('MINHA','EVOLUÇÃO',esc(D.mes))+cards2()+barra()+peso(true)+teste();
+  if(tab==='recados') v.innerHTML=topo()+sec('RECADO DO','PROFESSOR',esc(D.recado.data||''))+recado()+obsCard();
+}
+function recado(){const R=D.recado;
+ const w=Array.from({length:34},(_,i)=>`<i style="height:${20+Math.round(Math.abs(Math.sin(i*1.7)+Math.sin(i*.6))*40)}%"></i>`).join('');
+ return `<div class="card">${R.audio?`<div class="lab">Áudio da semana</div><div class="audio"><button class="play" id="play" onclick="tocar()" aria-label="Ouvir"><svg width="22" height="22" viewBox="0 0 24 24" fill="#fff" id="pico"><path d="M7 4v16l13-8z"/></svg></button><div class="wave" id="wave">${w}</div></div><audio id="aud" src="${R.audio}" preload="metadata"></audio>`:''}
+ ${R.texto?`<div class="rec">"${esc(R.texto)}"</div>`:''}<div class="t" style="margin-top:8px">— Prof. David Lira</div></div>`}
+function tocar(){const a=$('#aud'),bars=[...document.querySelectorAll('#wave i')];
+ if(a.paused){a.play();$('#pico').innerHTML='<path d="M6 4h4v16H6zM14 4h4v16h-4z"/>'}else{a.pause();$('#pico').innerHTML='<path d="M7 4v16l13-8z"/>'}
+ a.ontimeupdate=()=>{const k=Math.round(a.currentTime/(a.duration||1)*bars.length);bars.forEach((b,i)=>b.classList.toggle('on',i<k))};
+ a.onended=()=>{$('#pico').innerHTML='<path d="M7 4v16l13-8z"/>'};}
+function obsCard(){const L=store.get('camp-obs-'+ID)||[];
+ return sec('MINHAS','OBSERVAÇÕES','')+`<div class="card"><div class="lab">Como foi o treino?</div>
+ <textarea class="field" id="obs" placeholder="Ex.: dormi mal, rendi menos no 3º round" maxlength="400"></textarea>
+ <button class="btn" onclick="enviarObs()">MANDAR PRO PROFESSOR</button>
+ ${L.slice(-4).reverse().map(o=>`<div class="obs">${esc(o.d)} · <b>"${esc(o.t)}"</b></div>`).join('')}</div>`}
+function enviarObs(){const t=$('#obs').value.trim();if(!t)return;
+ const L=store.get('camp-obs-'+ID)||[];const d=new Date().toLocaleDateString('pt-BR',{weekday:'short',day:'2-digit',month:'2-digit'});
+ L.push({d,t});store.set('camp-obs-'+ID,L.slice(-30));
+ window.open('https://wa.me/'+D.whatsapp+'?text='+encodeURIComponent('🥊 Camp Fight Lira — '+D.nomeCompleto+'\n'+t),'_blank');render()}
+
+// ---- conquista: card para stories
+async function gerarCard(c){
+  await Promise.all([document.fonts.load('80px Anton'),document.fonts.load('bold 40px Fira'),document.fonts.load('40px Fira')]);
+  const cv=document.createElement('canvas');cv.width=1080;cv.height=1920;const x=cv.getContext('2d');
+  const img=s=>new Promise((ok,no)=>{const i=new Image();i.onload=()=>ok(i);i.onerror=no;i.src=s});
+  const [bg,foto,logo]=await Promise.all([img('bg.jpg'),img(D.fotoCard||D.foto),img('logo.png')]);
+  x.fillStyle='#0a0a0c';x.fillRect(0,0,1080,1920);
+  x.globalAlpha=.55;x.drawImage(bg,0,0,1080,1080*bg.height/bg.width*1.8);x.globalAlpha=1;
+  let g=x.createLinearGradient(0,0,0,1920);g.addColorStop(0,'rgba(70,0,6,.55)');g.addColorStop(.5,'rgba(10,10,12,.85)');g.addColorStop(1,'#0a0a0c');x.fillStyle=g;x.fillRect(0,0,1080,1920);
+  g=x.createRadialGradient(540,780,50,540,780,700);g.addColorStop(0,'rgba(232,176,74,.28)');g.addColorStop(1,'rgba(232,176,74,0)');x.fillStyle=g;x.fillRect(0,0,1080,1920);
+  // tudo dentro da área segura dos stories (sem ficar sob a barra de cima e o campo de resposta)
+  x.drawImage(logo,465,250,150,150);
+  x.textAlign='center';x.fillStyle='#fff';x.font='50px Anton';x.fillText('CAMP FIGHT LIRA',540,460);
+  // foto com moldura dourada
+  const fw=560,fh=680,fx=260,fy=500;
+  x.save();x.shadowColor='rgba(232,176,74,.6)';x.shadowBlur=60;rr(x,fx-10,fy-10,fw+20,fh+20,40);x.fillStyle='#e8b04a';x.fill();x.restore();
+  x.save();rr(x,fx,fy,fw,fh,32);x.clip();const s=Math.max(fw/foto.width,fh/foto.height);x.drawImage(foto,fx+(fw-foto.width*s)/2,fy+(fh-foto.height*s)/2,foto.width*s,foto.height*s);
+  g=x.createLinearGradient(0,fy+fh*.55,0,fy+fh);g.addColorStop(0,'rgba(0,0,0,0)');g.addColorStop(1,'rgba(0,0,0,.85)');x.fillStyle=g;x.fillRect(fx,fy,fw,fh);x.restore();
+  x.fillStyle='#fff';x.font='64px Anton';x.fillText(D.nomeCompleto.toUpperCase(),540,fy+fh-40);
+  x.fillStyle='#e8b04a';x.font='bold 32px Fira';x.fillText('★  C O N Q U I S T A  ★',540,1250);
+  x.fillStyle='#fff';let fs=110;x.font=fs+'px Anton';while(x.measureText(c.titulo).width>960&&fs>60){fs-=4;x.font=fs+'px Anton'}x.fillText(c.titulo,540,1250+fs+5);
+  x.fillStyle='#cfcfcf';x.font='38px Fira';x.fillText(c.sub+' · '+c.data,540,1440);
+  x.fillStyle='#e0141f';x.fillRect(440,1490,200,6);
+  x.fillStyle='#fff';x.font='bold 36px Fira';x.fillText('📍 Alpinópolis–MG',540,1570);
+  x.fillStyle='#9a9a9a';x.font='32px Fira';x.fillText('@lira_personal7',540,1625);
+  return new Promise(ok=>cv.toBlob(ok,'image/png'));
+}
+function rr(x,a,b,w,h,r){x.beginPath();x.moveTo(a+r,b);x.arcTo(a+w,b,a+w,b+h,r);x.arcTo(a+w,b+h,a,b+h,r);x.arcTo(a,b+h,a,b,r);x.arcTo(a,b,a+w,b,r);x.closePath()}
+let blobAtual=null,conqAtual=null;
+async function conquista(c,nova){
+  conqAtual=c;const m=$('#modal');m.classList.remove('hide');
+  m.innerHTML=`<div class="in"><div class="k">${nova?'NOVA CONQUISTA':'CONQUISTA'}</div><h3>${esc(c.titulo)}</h3><div class="t">Gerando seu card...</div></div>`;
+  blobAtual=await gerarCard(c);const u=URL.createObjectURL(blobAtual);
+  m.innerHTML=`<div class="in burst"><div class="k">${nova?'NOVA CONQUISTA':'CONQUISTA'}</div><h3>${esc(c.titulo)}</h3><img src="${u}" alt="">
+  <button class="btn gold" onclick="compartilhar()">POSTAR NOS STORIES</button>
+  <a class="btn ghost" href="${u}" download="camp-fight-lira-conquista.png" style="text-decoration:none">GUARDAR A IMAGEM</a>
+  <button class="btn ghost" onclick="fechar()">FECHAR</button></div>`;
+  if(nova){const v=vistas();v.push(c.id);store.set('camp-vistas-'+ID,v)}
+}
+async function compartilhar(){const f=new File([blobAtual],'camp-fight-lira-conquista.png',{type:'image/png'});
+ try{if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],text:'Camp Fight Lira 🥊 @lira_personal7'});return}}catch(e){if(e.name==='AbortError')return}
+ const a=document.createElement('a');a.href=URL.createObjectURL(blobAtual);a.download=f.name;a.click();toast('Imagem salva. Abra o Instagram e poste nos stories.')}
+function fechar(){$('#modal').classList.add('hide');render()}
+function toast(t){const d=document.createElement('div');d.className='toast';d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),3500)}
+</script>
+</body></html>
