@@ -160,3 +160,13 @@ body.fl-vivo{background:
   .fl-vivo .marquee.fl-cross{margin-top:-8px}
   .fl-vivo .hero:before{opacity:.7}
 }
+
+/* ---------- Selo de avaliações do Google (hero) ---------- */
+.fl-google{display:inline-flex;align-items:center;gap:10px;margin-top:14px;padding:9px 16px 9px 9px;border-radius:999px;
+  background:rgba(10,10,10,.72);border:1px solid rgba(255,255,255,.16);backdrop-filter:blur(10px);
+  font-size:13px;font-weight:700;color:#e9e4df;box-shadow:0 10px 26px rgba(0,0,0,.4);transition:.2s;width:max-content;max-width:100%}
+.fl-google:hover{border-color:var(--red);transform:translateY(-2px)}
+.fl-google b{color:#fff;font-size:15px}
+.fl-g{display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:#fff;color:#4285f4;font-weight:900;font-size:15px;font-family:Arial,sans-serif}
+.fl-stars{color:#fbbc04;letter-spacing:1px;font-size:14px;text-shadow:0 0 10px rgba(251,188,4,.4)}
+@media(max-width:640px){.fl-google{font-size:12px;gap:8px}.fl-stars{font-size:12px}}
