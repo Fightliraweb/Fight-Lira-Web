@@ -150,20 +150,10 @@ const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&g
 const store={get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}},del(k){try{localStorage.removeItem(k)}catch(e){}}};
 let D=null,ID=null,tab='hoje';
 
-async function derive(nome,senha){
-  const km=await crypto.subtle.importKey('raw',enc.encode(norm(nome)+'|'+senha),'PBKDF2',false,['deriveBits']);
-  const bits=await crypto.subtle.deriveBits({name:'PBKDF2',hash:'SHA-256',salt:enc.encode('camp-fight-lira-v1'),iterations:150000},km,512);
-  const id=hex(await crypto.subtle.digest('SHA-256',bits.slice(32))).slice(0,24);
-  return {id,raw:hex(bits.slice(0,32))};
-}
-async function load(id,rawHex){
-  const r=await fetch('d/'+id+'.bin?v='+Date.now(),{cache:'no-store'});
-  if(!r.ok) throw new Error('nf');
-  const buf=Uint8Array.from(atob((await r.text()).trim()),c=>c.charCodeAt(0));
-  const key=await crypto.subtle.importKey('raw',Uint8Array.from(rawHex.match(/../g),h=>parseInt(h,16)),'AES-GCM',false,['decrypt']);
-  const pt=await crypto.subtle.decrypt({name:'AES-GCM',iv:buf.slice(0,12)},key,buf.slice(12));
-  return JSON.parse(new TextDecoder().decode(pt));
-}
+const SB='https://nvwmxcgxmevvnlhvzvza.supabase.co/rest/v1/rpc/',SBK='sb_publishable_lxgptApQpbleuj7jexhATA_Dzos_aYv';
+async function rpc(fn,body){const r=await fetch(SB+fn,{method:'POST',headers:{apikey:SBK,'Content-Type':'application/json'},body:JSON.stringify(body)});if(!r.ok)throw new Error('rede');return r.json()}
+let TOK=store.get('camp-tok');
+function setD(d){D=d;ID=d.salaId||(d.tipo==='admin'?'professor':'x');if(d.tipo==='jj'&&!d.ficha&&!ADMIN){d.nomeCompleto=''}}
 
 // ---- login
 const pins=[...document.querySelectorAll('#pin input')];
@@ -176,26 +166,40 @@ async function entrar(){
   const nome=$('#lnome').value,senha=pins.map(p=>p.value).join('');
   if(!norm(nome)||senha.length<4){$('#lerr').textContent='Digite seu nome e os 4 números da senha.';return}
   $('#entrar').textContent='ENTRANDO...';$('#lerr').textContent='';
-  try{const k=await derive(nome,senha);D=await load(k.id,k.raw);ID=k.id;store.set('camp-sessao',k);abrir()}
-  catch(e){$('#lerr').textContent='Nome ou senha não conferem. Confira com o professor.';pins.forEach(p=>p.value='');pins[0].focus()}
+  try{const r=await rpc('camp_entrar',{p_nome:nome,p_senha:senha});
+    if(r.erro==='bloqueado')throw new Error('Muitas tentativas. Espere 15 minutos ou fale com o professor.');
+    if(!r.token)throw new Error('Nome ou senha não conferem. Confira com o professor.');
+    TOK=r.token;store.set('camp-tok',TOK);setD(r.dados);abrir()}
+  catch(e){$('#lerr').textContent=e.message==='rede'||e.message==='Failed to fetch'?'Sem conexão. Tente de novo.':e.message;pins.forEach(p=>p.value='');pins[0].focus()}
   $('#entrar').textContent='ENTRAR';
 }
-(async()=>{const s=store.get('camp-sessao');if(s){try{D=await load(s.id,s.raw);ID=s.id;abrir()}catch(e){store.del('camp-sessao')}}})();
-function sair(){store.del('camp-sessao');location.reload()}
+(async()=>{if(TOK){try{const r=await rpc('camp_dados',{p_token:TOK});if(r.dados){setD(r.dados);abrir()}else{store.del('camp-tok');TOK=null}}catch(e){}}})();
+function sair(){store.del('camp-tok');location.reload()}
+// atualização automática: o aluno vê na hora o que o professor lança
+let ULT='';
+async function atualizar(){
+  if(!TOK||ADMIN||document.hidden||!$('#modal').classList.contains('hide'))return;
+  const ae=document.activeElement;if(ae&&(ae.tagName==='TEXTAREA'||ae.tagName==='INPUT')&&ae.value)return;
+  if($('#aud')&&!$('#aud').paused)return;
+  try{const r=await rpc('camp_dados',{p_token:TOK});if(!r.dados)return;const j=JSON.stringify(r.dados);if(j===ULT)return;
+    const antes=ULT;ULT=j;if(!antes)return;setD(r.dados);render();
+    const novas=conqs().filter(c=>!vistas().includes(c.id));if(novas.length)conquista(novas[0],true)}catch(e){}
+}
+setInterval(atualizar,15000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)atualizar()});
 
 let ADMIN=null;
 function painel(){D=ADMIN;tab='hoje';const v=$('#view');document.querySelector('.nav').classList.add('hide');
-  v.innerHTML=`<div class="top"><div class="brand"><img src="logo.png" alt=""><b>CAMP <span>FIGHT LIRA</span></b></div><div class="ic" onclick="sair()" title="Sair"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ddd" stroke-width="2"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4M10 17l5-5-5-5M15 12H3"/></svg></div></div>`+sec('CHAVE DO','PROFESSOR','todas as salas')+
+  v.innerHTML=`<div class="top"><div class="brand"><img src="logo.png" alt=""><b>CAMP <span>FIGHT LIRA</span></b></div><div class="ic" onclick="sair()" title="Sair"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ddd" stroke-width="2"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4M10 17l5-5-5-5M15 12H3"/></svg></div></div>`+sec('CHAVE DO','PROFESSOR','todas as salas')+`<a class="btn gold" href="painel.html" style="text-decoration:none;text-align:center">MODO PROFESSOR · LANÇAR DADOS</a>`+
   ADMIN.grupos.map(g=>`<div class="lab" style="margin-top:22px">${esc(g.nome)}</div>`+g.salas.map(x=>`<div class="card conq" onclick="entrarSala('${x.id}')"><div style="width:44px;height:16px;border-radius:4px;flex:none;background:${COR[x.dados.faixa]||'#e0141f'};border:1px solid #444"></div><div><b>${esc(x.titulo)}</b><span>${esc(x.sub)}</span></div><div class="go">ENTRAR ›</div></div>`).join('')).join('');}
-function entrarSala(id){let x=null;ADMIN.grupos.forEach(g=>g.salas.forEach(s=>{if(s.id===id)x=s}));D=JSON.parse(JSON.stringify(x.dados));if(D.generico){D.generico=false;D.nomeCompleto='Professor'}
+function entrarSala(id){let x=null;ADMIN.grupos.forEach(g=>g.salas.forEach(s=>{if(s.id===id)x=s}));D=JSON.parse(JSON.stringify(x.dados));if(D.generico){D.generico=false;D.nomeCompleto='Professor'}ID=x.id;
   document.querySelector('.nav').classList.remove('hide');tab='hoje';document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('on',b.dataset.t==='hoje'));
   const L=D.tipo==='jj'?{hoje:'Sala',missao:'Ciclo',evolucao:'Regras',recados:'Recados'}:{hoje:'Hoje',missao:'Missão',evolucao:'Evolução',recados:'Recados'};document.querySelectorAll('.nav button').forEach(b=>{b.lastChild.textContent=L[b.dataset.t]});render();scrollTo(0,0)}
 function abrir(){
   $('#login').classList.add('hide');$('#app').classList.remove('hide');
   if(D.tipo==='admin'){ADMIN=D;painel();return}
   if(D.tipo==='jj'){const L={hoje:'Sala',missao:'Ciclo',evolucao:'Regras',recados:'Recados'};document.querySelectorAll('.nav button').forEach(b=>{b.lastChild.textContent=L[b.dataset.t]})}
-  render();
-  const novas=(D.conquistas||[]).filter(c=>!vistas().includes(c.id));
+  ULT=JSON.stringify(D);render();
+  const novas=conqs().filter(c=>!vistas().includes(c.id));
   if(novas.length) setTimeout(()=>conquista(novas[0],true),500);
 }
 document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>{tab=b.dataset.t;document.querySelectorAll('.nav button').forEach(x=>x.classList.toggle('on',x===b));render();scrollTo(0,0)});
@@ -204,7 +208,8 @@ document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>{tab=b.dataset
 const presentes=()=>D.presencas.filter(x=>x==='p').length;
 function sequencia(){let n=0;for(let i=D.presencas.length-1;i>=0;i--){if(D.presencas[i]==='p')n++;else break}return n}
 const kg=v=>v.toFixed(1).replace('.',',');
-const vistas=()=>store.get('camp-vistas-'+ID)||[];
+const vistas=()=>store.get('camp-vistas-'+ID+(D&&D.ficha?D.ficha.alunoId:''))||[];
+const conqs=()=>(D.ficha?D.ficha.conquistas:D.conquistas)||[];
 function topo(){return (ADMIN?`<div onclick="painel()" style="font-size:13px;font-weight:700;letter-spacing:1px;color:var(--g);margin-bottom:10px;cursor:pointer">← TODAS AS SALAS</div>`:'')+`<div class="top"><div class="brand"><img src="logo.png" alt=""><b>CAMP <span>FIGHT LIRA</span></b></div>
 <div class="ic" onclick="sair()" title="Sair"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ddd" stroke-width="2"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4M10 17l5-5-5-5M15 12H3"/></svg></div></div>`}
 function perfil(){return `<div class="prof"><div class="av"><img src="${D.foto}" alt=""></div>
@@ -239,6 +244,13 @@ function missao(grande){const M=D.missao;return `<div class="card ${M.cumprida?'
 function teste(){const T=D.teste;return `<div class="card"><div class="lab">Teste do mês · ${esc(T.nome)}</div>
 <div class="cmp"><div>Início do mês<b ${T.inicio?'':'style="color:#555"'}>${T.inicio?esc(T.inicio):'—'}</b></div><div style="color:var(--r);font-size:22px">→</div><div class="${T.fim?'':'q'}" style="text-align:right">Fim do mês<b ${T.fim?'class="gold"':''}>${T.fim?esc(T.fim):'?'}</b></div></div>
 <div class="t">${!T.inicio?'Primeira medição no próximo treino.':T.fim?'Comparação fechada pelo professor.':'O professor aplica de novo no fim do mês.'}</div></div>`}
+function contagem(){const C=D.camp;if(!C||!C.data)return '';
+ const dia=s=>new Date(s+'T12:00:00-03:00'),hoje=new Date(),fim=dia(C.data),ini=C.inicio?dia(C.inicio):null;
+ const n=Math.ceil((fim-hoje)/864e5),pct=ini?Math.max(0,Math.min(1,(hoje-ini)/(fim-ini)))*100:0;
+ return `<div class="card done" style="margin-top:18px;text-align:center"><div class="lab gold">Meu camp${C.titulo?' · '+esc(C.titulo):''}</div>
+ <div style="font-family:Anton;font-size:64px;line-height:1.05;margin-top:6px">${n>0?n:n===0?'HOJE':'FIM'}<small style="font-family:Fira;font-size:16px;color:#bbb;margin-left:8px">${n>1?'dias':n===1?'dia':''}</small></div>
+ <div class="t">${n>0?'para o dia D · '+fim.toLocaleDateString('pt-BR',{day:'2-digit',month:'long'}):n===0?'É o dia D. Mostra o que treinou.':'Camp encerrado. Bora para o próximo.'}</div>
+ ${ini?`<div class="prog"><div style="width:${pct}%"></div></div>`:''}</div>`}
 function sec(a,b,c){return `<div class="sec"><h2>${a} <span>${b}</span></h2><em>${c||''}</em></div>`}
 
 // ---- telas
@@ -247,7 +259,7 @@ function render(){
   if(D.tipo==='jj'){renderJJ(v);return}
   const temNovo=(D.conquistas||[]).some(c=>!vistas().includes(c.id));
   document.querySelector('.nav [data-t="missao"]').innerHTML=document.querySelector('.nav [data-t="missao"]').innerHTML.replace(/<span class="dot"><\/span>/,'')+(temNovo?'<span class="dot"></span>':'');
-  if(tab==='hoje') v.innerHTML=topo()+perfil()+sec('SALA DE','GUERRA',`${esc(D.mes)} · semana ${D.semana}`)+cards2()+barra()+peso()+missao();
+  if(tab==='hoje') v.innerHTML=topo()+perfil()+contagem()+sec('SALA DE','GUERRA',`${esc(D.mes)} · semana ${D.semana}`)+cards2()+barra()+peso()+missao();
   if(tab==='missao') v.innerHTML=topo()+sec('MINHA','MISSÃO',esc(D.mes))+missao(true)+teste()+sec('CONQUISTAS','',' ')+
     ((D.conquistas||[]).length?D.conquistas.map((c,i)=>`<div class="card conq" onclick="conquista(D.conquistas[${i}])"><div class="medal"><svg width="24" height="24" viewBox="0 0 24 24" fill="#3a2706"><path d="M12 2l2.9 6.3 6.9.7-5.2 4.6 1.5 6.8L12 17l-6.1 3.4 1.5-6.8L2.2 9l6.9-.7z"/></svg></div><div><b>${esc(c.titulo)}</b><span>${esc(c.sub)} · ${esc(c.data)}</span></div><div class="go">POSTAR ›</div></div>`).join('')
     :'<div class="card"><div class="empty">Sua primeira conquista aparece aqui quando você cumprir a missão ou bater um recorde.</div></div>');
@@ -262,34 +274,46 @@ function tocar(){const a=$('#aud'),bars=[...document.querySelectorAll('#wave i')
  if(a.paused){a.play();$('#pico').innerHTML='<path d="M6 4h4v16H6zM14 4h4v16h-4z"/>'}else{a.pause();$('#pico').innerHTML='<path d="M7 4v16l13-8z"/>'}
  a.ontimeupdate=()=>{const k=Math.round(a.currentTime/(a.duration||1)*bars.length);bars.forEach((b,i)=>b.classList.toggle('on',i<k))};
  a.onended=()=>{$('#pico').innerHTML='<path d="M7 4v16l13-8z"/>'};}
-function obsCard(){const L=store.get('camp-obs-'+ID)||[];
+function obsCard(){if(ADMIN)return '';const F=D.ficha||D;const L=F.observacoes||[];
+ if(D.tipo==='jj'&&!D.ficha)return '';
  return sec('MINHAS','OBSERVAÇÕES','')+`<div class="card"><div class="lab">Como foi o treino?</div>
  <textarea class="field" id="obs" placeholder="Ex.: dormi mal, rendi menos no 3º round" maxlength="400"></textarea>
- <button class="btn" onclick="enviarObs()">MANDAR PRO PROFESSOR</button>
- ${L.slice(-4).reverse().map(o=>`<div class="obs">${esc(o.d)} · <b>"${esc(o.t)}"</b></div>`).join('')}</div>`}
-function enviarObs(){const t=$('#obs').value.trim();if(!t)return;
- const L=store.get('camp-obs-'+ID)||[];const d=new Date().toLocaleDateString('pt-BR',{weekday:'short',day:'2-digit',month:'2-digit'});
- L.push({d,t});store.set('camp-obs-'+ID,L.slice(-30));
- window.open('https://wa.me/'+D.whatsapp+'?text='+encodeURIComponent('🥊 Camp Fight Lira — '+D.nomeCompleto+'\n'+t),'_blank');render()}
+ <button class="btn" id="bobs" onclick="enviarObs()">MANDAR PRO PROFESSOR</button>
+ ${L.slice(0,6).map(o=>`<div class="obs">${esc(o.d)} · <b>"${esc(o.t)}"</b></div>`).join('')}</div>`}
+async function enviarObs(){const t=$('#obs').value.trim();if(!t)return;$('#bobs').textContent='ENVIANDO...';
+ try{const r=await rpc('camp_observar',{p_token:TOK,p_texto:t,p_nome:D.nomeCompleto||''});if(r.erro)throw 0;setD(r.dados);ULT=JSON.stringify(D);render();toast('Recebido. O professor vai ver no painel.')}
+ catch(e){$('#bobs').textContent='MANDAR PRO PROFESSOR';toast('Não foi. Confira a internet e tente de novo.')}}
 
 
 // ---- jiu-jitsu: salas por faixa
 const COR={branca:'#f2f2f2',azul:'#1f6fd6',roxa:'#7b2fbf',marrom:'#7a4a2a',preta:'#111',cinza:'#8a8a8a',amarela:'#e6c200',laranja:'#e8781a',verde:'#2e9e4a'};
 function faixaSVG(f){const c=COR[f]||'#888';return `<svg viewBox="0 0 300 34" width="100%" height="30"><rect x="0" y="4" width="300" height="26" rx="5" fill="${c}" stroke="#444"/><rect x="210" y="4" width="62" height="26" fill="${f==='preta'?'#e0141f':'#111'}"/></svg>`}
 function semanaCiclo(){const ini=new Date('2026-11-30T00:00:00-03:00');const w=Math.floor((Date.now()-ini)/6048e5);return w<0?0:w%8}
-function salvarNome(){const n=$('#meunome').value.trim();if(!n)return;store.set('camp-nome-'+ID,n);render()}
+async function abrirFicha(){const n=$('#fnome').value,p=$('#fpin').value.trim();if(!n||!/^\d{4}$/.test(p)){$('#ferr').textContent='Escolha seu nome e digite seus 4 números.';return}
+ $('#bfi').textContent='ABRINDO...';
+ try{const r=await rpc('camp_ficha',{p_token:TOK,p_nome:n,p_pin:p});
+  if(r.erro){$('#ferr').textContent=r.erro==='bloqueado'?'Muitas tentativas. Espere 15 minutos.':'Senha pessoal não confere. Confira com o professor.';$('#bfi').textContent='ABRIR MINHA FICHA';return}
+  setD(r.dados);ULT=JSON.stringify(D);render();const novas=conqs().filter(c=>!vistas().includes(c.id));if(novas.length)setTimeout(()=>conquista(novas[0],true),400)}
+ catch(e){$('#ferr').textContent='Sem conexão. Tente de novo.';$('#bfi').textContent='ABRIR MINHA FICHA'}}
+const NOTA=['não sabe','com ajuda','faz sozinho','aplica no rola'];
 function renderJJ(v){
-  if(D.generico){D.nomeCompleto=store.get('camp-nome-'+ID)||''}
-  if(D.generico&&!D.nomeCompleto&&tab==='hoje'){v.innerHTML=topo()+`<div class="prof" style="margin-top:40px"><div style="max-width:260px;margin:0 auto">${faixaSVG(D.faixa)}</div><div class="nm" style="margin-top:18px">${esc(D.sala)}</div><div class="inf">${esc(D.rumo)}</div></div>
-  <div class="card" style="margin-top:28px"><div class="lab">Primeira vez aqui</div><div class="mis">Qual é o seu nome?</div><input id="meunome" class="field" style="margin-top:12px" placeholder="Seu primeiro nome" autocapitalize="words"><button class="btn" onclick="salvarNome()">ENTRAR NA SALA</button></div>`;return}
+  if(D.generico&&!D.ficha&&tab==='hoje'){v.innerHTML=topo()+`<div class="prof" style="margin-top:40px"><div style="max-width:260px;margin:0 auto">${faixaSVG(D.faixa)}</div><div class="nm" style="margin-top:18px">${esc(D.sala)}</div><div class="inf">${esc(D.rumo)}</div></div>
+  <div class="card" style="margin-top:28px"><div class="lab">Sua ficha individual</div><div class="mis">Quem é você?</div>
+  ${(D.alunos||[]).length?`<select id="fnome" class="field" style="margin-top:12px;appearance:none"><option value="">Escolha seu nome</option>${D.alunos.map(n=>`<option>${esc(n)}</option>`).join('')}</select>
+  <input id="fpin" class="field" style="margin-top:10px;text-align:center;letter-spacing:10px;font-family:Anton;font-size:26px" inputmode="numeric" maxlength="4" placeholder="••••" aria-label="Senha pessoal">
+  <button class="btn" id="bfi" onclick="abrirFicha()">ABRIR MINHA FICHA</button><div class="err" id="ferr"></div>
+  <div class="t">A senha pessoal de 4 números é entregue pelo professor. Só você vê as suas notas.</div>`:`<div class="t" style="margin-top:8px">O professor ainda vai cadastrar você nesta sala.</div>`}</div>`;return}
   const ini=(D.nomeCompleto||'?').trim()[0].toUpperCase();
   const topoJJ=topo()+`<div class="prof"><div class="av" style="background:linear-gradient(160deg,${COR[D.faixa]},#8a0710)"><div style="width:100%;height:100%;border-radius:50%;background:#141416;display:flex;align-items:center;justify-content:center;font-family:Anton;font-size:56px;border:3px solid var(--bg)">${esc(ini)}</div></div>
   <div class="nm">${esc(D.nomeCompleto)}</div><div class="inf">Jiu-Jitsu · Faixa ${esc(D.faixa)}</div><div style="max-width:260px;margin:12px auto 0">${faixaSVG(D.faixa)}</div></div>`;
-  const total=D.materia.reduce((a,m)=>a+m.qtd,0);
+  const total=D.materia.reduce((a,m)=>a+m.qtd,0);const N=(D.ficha&&D.ficha.notas)||{};
   if(tab==='hoje'){
     v.innerHTML=topoJJ+`<div class="sec"><h2>${esc(D.sala.split(' ').slice(0,-1).join(' ')||D.sala)} <span>${esc(D.sala.split(' ').slice(-1)[0])}</span></h2><em>${esc(D.rumo)}</em></div>
-    <div class="card"><div class="lab">Sua matéria</div><div class="big">${total}<small>técnicas para dominar</small></div><div class="t">Cada técnica vale de 0 a 3. A nota individual é lançada pelo professor na avaliação.</div></div>
-    <div class="card">${D.materia.map(m=>`<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 0;border-bottom:1px solid #222"><span style="font-size:15.5px">${esc(m.cat)}</span><span style="display:flex;gap:5px;align-items:center">${Array.from({length:m.qtd},()=>'<i style="width:12px;height:12px;border-radius:50%;border:1.5px solid #555;display:inline-block"></i>').join('')}<b style="font-family:Anton;font-weight:400;font-size:20px;margin-left:6px;color:var(--r)">${m.qtd}</b></span></div>`).join('')}</div>`;
+    ${fichaJJ(total)}
+    <div class="card">${D.materia.map(m=>{const ns=Array.from({length:m.qtd},(_,i)=>N[m.cat+'#'+(i+1)]||null);
+     return `<div style="padding:11px 0;border-bottom:1px solid #222"><div style="display:flex;align-items:center;justify-content:space-between;gap:10px"><span style="font-size:15.5px">${esc(m.cat)}</span><span style="display:flex;gap:5px;align-items:center">${ns.map(x=>`<i style="width:14px;height:14px;border-radius:50%;display:inline-block;${x?`background:${['#3a3a3e','#7a0a12','#e0141f','#e8b04a'][x.nota]};border:1.5px solid ${x.nota===3?'#e8b04a':'#555'}`:'border:1.5px solid #555'}"></i>`).join('')}<b style="font-family:Anton;font-weight:400;font-size:20px;margin-left:6px;color:var(--r)">${m.qtd}</b></span></div>
+     ${ns.some(x=>x&&x.rotulo)?`<div class="t" style="margin-top:4px">${ns.map((x,i)=>x&&x.rotulo?`${i+1}. ${esc(x.rotulo)} · <span class="gold">${x.nota}</span>`:'').filter(Boolean).join(' &nbsp; ')}</div>`:''}</div>`}).join('')}</div>
+    ${D.ficha&&conqs().length?sec('MINHAS','CONQUISTAS','')+conqs().map((c,i)=>`<div class="card conq" onclick="conquista(conqs()[${i}])"><div class="medal"><svg width="24" height="24" viewBox="0 0 24 24" fill="#3a2706"><path d="M12 2l2.9 6.3 6.9.7-5.2 4.6 1.5 6.8L12 17l-6.1 3.4 1.5-6.8L2.2 9l6.9-.7z"/></svg></div><div><b>${esc(c.titulo)}</b><span>${esc(c.sub)}${c.data?' · '+esc(c.data):''}</span></div><div class="go">POSTAR ›</div></div>`).join(''):''}`;
   }
   if(tab==='missao'){const w=semanaCiclo();
     v.innerHTML=topo()+sec('CICLO DE','8 SEMANAS','')+`<div class="card done"><div class="lab gold">Esta semana · ${w+1} de 8</div><div class="mis" style="font-size:24px">${esc(D.ciclo[w].pos)}</div>
@@ -307,12 +331,18 @@ function renderJJ(v){
   if(tab==='recados') v.innerHTML=topo()+sec('RECADO DO','PROFESSOR',esc(D.recado.data||''))+recado()+obsCard();
 }
 
+function fichaJJ(total){const F=D.ficha;
+ if(!F)return `<div class="card"><div class="lab">Matéria da prova</div><div class="big">${total}<small>técnicas para dominar</small></div><div class="t">Cada técnica vale de 0 a 3. A nota individual é lançada pelo professor na avaliação.</div></div>`;
+ const vals=Object.values(F.notas||{}),pts=vals.reduce((a,x)=>a+x.nota,0),max=total*3,pct=max?Math.round(pts/max*100):0,aulas=D.regra&&+D.regra.aulas;
+ return `<div class="row"><div class="card"><div class="lab">Pontos da prova</div><div class="big ${pct>=80?'gold':''}">${pct}%<small>${pts}/${max}</small></div><div class="t">Meta: 80% e nada abaixo de 2</div><div class="prog"><div style="width:${pct}%"></div></div></div>
+ <div class="card"><div class="lab">Aulas na faixa</div><div class="big">${F.aulasTotal}<small>${aulas?'de '+aulas:''}</small></div><div class="t">${vals.length} de ${total} técnicas avaliadas</div>${aulas?`<div class="prog"><div style="width:${Math.min(100,F.aulasTotal/aulas*100)}%"></div></div>`:''}</div></div>`}
+
 // ---- conquista: card para stories
 async function gerarCard(c){
   await Promise.all([document.fonts.load('80px Anton'),document.fonts.load('bold 40px Fira'),document.fonts.load('40px Fira')]);
   const cv=document.createElement('canvas');cv.width=1080;cv.height=1920;const x=cv.getContext('2d');
   const img=s=>new Promise((ok,no)=>{const i=new Image();i.onload=()=>ok(i);i.onerror=no;i.src=s});
-  const [bg,foto,logo]=await Promise.all([img('bg.jpg'),img(D.fotoCard||D.foto),img('logo.png')]);
+  const fs0=(D.ficha&&(D.ficha.fotoCard||D.ficha.foto))||D.fotoCard||D.foto;const [bg,foto,logo]=await Promise.all([img('bg.jpg'),fs0?img(fs0).catch(()=>null):null,img('logo.png')]);
   x.fillStyle='#0a0a0c';x.fillRect(0,0,1080,1920);
   x.globalAlpha=.55;x.drawImage(bg,0,0,1080,1080*bg.height/bg.width*1.8);x.globalAlpha=1;
   let g=x.createLinearGradient(0,0,0,1920);g.addColorStop(0,'rgba(70,0,6,.55)');g.addColorStop(.5,'rgba(10,10,12,.85)');g.addColorStop(1,'#0a0a0c');x.fillStyle=g;x.fillRect(0,0,1080,1920);
@@ -323,12 +353,12 @@ async function gerarCard(c){
   // foto com moldura dourada
   const fw=560,fh=680,fx=260,fy=500;
   x.save();x.shadowColor='rgba(232,176,74,.6)';x.shadowBlur=60;rr(x,fx-10,fy-10,fw+20,fh+20,40);x.fillStyle='#e8b04a';x.fill();x.restore();
-  x.save();rr(x,fx,fy,fw,fh,32);x.clip();const s=Math.max(fw/foto.width,fh/foto.height);x.drawImage(foto,fx+(fw-foto.width*s)/2,fy+(fh-foto.height*s)/2,foto.width*s,foto.height*s);
+  x.save();rr(x,fx,fy,fw,fh,32);x.clip();if(foto){const s=Math.max(fw/foto.width,fh/foto.height);x.drawImage(foto,fx+(fw-foto.width*s)/2,fy+(fh-foto.height*s)/2,foto.width*s,foto.height*s)}else{x.fillStyle=COR[D.faixa]||'#1a1a1e';x.fillRect(fx,fy,fw,fh);x.fillStyle='rgba(0,0,0,.55)';x.fillRect(fx,fy,fw,fh);x.fillStyle='#fff';x.font='360px Anton';x.fillText((D.nomeCompleto||'?')[0].toUpperCase(),540,fy+470)}
   g=x.createLinearGradient(0,fy+fh*.55,0,fy+fh);g.addColorStop(0,'rgba(0,0,0,0)');g.addColorStop(1,'rgba(0,0,0,.85)');x.fillStyle=g;x.fillRect(fx,fy,fw,fh);x.restore();
   x.fillStyle='#fff';x.font='64px Anton';x.fillText(D.nomeCompleto.toUpperCase(),540,fy+fh-40);
   x.fillStyle='#e8b04a';x.font='bold 32px Fira';x.fillText('★  C O N Q U I S T A  ★',540,1250);
   x.fillStyle='#fff';let fs=110;x.font=fs+'px Anton';while(x.measureText(c.titulo).width>960&&fs>60){fs-=4;x.font=fs+'px Anton'}x.fillText(c.titulo,540,1250+fs+5);
-  x.fillStyle='#cfcfcf';x.font='38px Fira';x.fillText(c.sub+' · '+c.data,540,1440);
+  x.fillStyle='#cfcfcf';x.font='38px Fira';x.fillText(c.sub+(c.data?' · '+c.data:''),540,1440);
   x.fillStyle='#e0141f';x.fillRect(440,1490,200,6);
   x.fillStyle='#fff';x.font='bold 36px Fira';x.fillText('📍 Alpinópolis–MG',540,1570);
   x.fillStyle='#9a9a9a';x.font='32px Fira';x.fillText('@lira_personal7',540,1625);
@@ -344,7 +374,7 @@ async function conquista(c,nova){
   <button class="btn gold" onclick="compartilhar()">POSTAR NOS STORIES</button>
   <a class="btn ghost" href="${u}" download="camp-fight-lira-conquista.png" style="text-decoration:none">GUARDAR A IMAGEM</a>
   <button class="btn ghost" onclick="fechar()">FECHAR</button></div>`;
-  if(nova){const v=vistas();v.push(c.id);store.set('camp-vistas-'+ID,v)}
+  if(nova){const v=vistas();v.push(c.id);store.set('camp-vistas-'+ID+(D.ficha?D.ficha.alunoId:''),v)}
 }
 async function compartilhar(){const f=new File([blobAtual],'camp-fight-lira-conquista.png',{type:'image/png'});
  try{if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],text:'Camp Fight Lira 🥊 @lira_personal7'});return}}catch(e){if(e.name==='AbortError')return}

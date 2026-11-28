@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0a0a0c">
+<meta name="robots" content="noindex,nofollow">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Painel Camp">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" href="icon-192.png">
+<title>Painel do Professor · Camp Fight Lira</title>
+<style>
+@font-face{font-family:Anton;src:url(fonts/anton.ttf);font-display:swap}
+@font-face{font-family:Fira;src:url(fonts/fira.ttf);font-display:swap}
+@font-face{font-family:Fira;font-weight:700;src:url(fonts/fira-b.ttf);font-display:swap}
+:root{--r:#e0141f;--g:#e8b04a;--bg:#0a0a0c;--mut:#9a9a9a}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{background:var(--bg);color:#f2f2f2;font-family:Fira,system-ui,sans-serif}
+body{min-height:100vh;overflow-x:hidden;background:radial-gradient(ellipse 90% 40% at 50% 0,rgba(224,20,31,.18),transparent 70%) var(--bg) no-repeat}
+button,input,textarea,select{font:inherit;color:inherit}
+.hide{display:none!important}
+.wrap{max-width:560px;margin:0 auto;padding:calc(env(safe-area-inset-top) + 16px) 18px 120px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.brand{display:flex;align-items:center;gap:10px}.brand img{width:38px;height:38px}
+.brand b{font-family:Anton;font-weight:400;font-size:19px;letter-spacing:1px}.brand b span{color:var(--r)}
+.brand small{display:block;font-size:10.5px;letter-spacing:3px;color:var(--g);font-weight:700}
+.back{font-size:13px;font-weight:700;letter-spacing:1px;color:var(--g);margin:14px 0 2px;cursor:pointer;display:inline-block;padding:6px 0}
+h2{font-family:Anton;font-weight:400;font-size:30px;letter-spacing:.5px;margin-top:14px;line-height:1.05}h2 span{color:var(--r)}
+.sub{color:#999;font-size:14px;margin-top:4px}
+.card{background:linear-gradient(160deg,rgba(255,255,255,.07),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:16px;margin-top:12px}
+.lab{font-size:11.5px;font-weight:700;letter-spacing:2.5px;color:var(--mut);text-transform:uppercase;margin-bottom:8px}
+.field{width:100%;background:rgba(0,0,0,.5);border:1.5px solid #34343a;border-radius:14px;padding:13px 14px;font-size:17px;outline:none}
+.field:focus{border-color:var(--r)}
+select.field{appearance:none}
+textarea.field{min-height:84px;resize:vertical;font-size:16px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.g2+.g2,.field+.field,.field+.g2,.g2+.field{margin-top:10px}
+.mini{font-size:12px;color:#888;margin:8px 0 4px}
+.btn{display:block;width:100%;border:0;border-radius:14px;padding:15px;font-weight:700;font-size:16px;letter-spacing:1px;background:linear-gradient(180deg,#f0202b,#b30e18);box-shadow:0 8px 24px rgba(224,20,31,.3);margin-top:12px;cursor:pointer;text-align:center}
+.btn.gold{background:linear-gradient(180deg,#f3c46a,#c58f2c);color:#1a1205;box-shadow:0 8px 24px rgba(232,176,74,.3)}
+.btn.ghost{background:transparent;border:1.5px solid #3a3a3e;box-shadow:none}
+.btn:disabled{opacity:.5}
+.big2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px}
+.big2 button{border:0;border-radius:18px;padding:22px 8px;font-family:Anton;font-size:24px;letter-spacing:1px;cursor:pointer}
+.bp{background:linear-gradient(180deg,#f4f4f4,#bdbdbd);color:#0a0a0c}
+.bf{background:linear-gradient(180deg,#f0202b,#9e0c16);color:#fff}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.chip{border-radius:10px;padding:6px 9px;font-size:13px;font-weight:700;border:1px solid #333;cursor:pointer}
+.chip.p{background:#e9e9e9;color:#111}.chip.f{background:var(--r)}
+.item{display:flex;align-items:center;gap:12px;cursor:pointer}
+.item .av{width:52px;height:52px;border-radius:50%;flex:none;background:#1b1b1f center/cover;border:2px solid var(--r);display:flex;align-items:center;justify-content:center;font-family:Anton;font-size:22px}
+.item b{display:block;font-size:16px}.item span{font-size:13px;color:#999}
+.item .go{margin-left:auto;color:var(--g);font-weight:700;font-size:13px;white-space:nowrap}
+.fx{width:46px;height:16px;border-radius:4px;flex:none;border:1px solid #444}
+.badge{background:var(--g);color:#1a1205;border-radius:20px;padding:2px 9px;font-size:12px;font-weight:700;margin-left:6px}
+.tec{padding:12px 0;border-bottom:1px solid #222}
+.tec:last-child{border-bottom:0}
+.tec .nm{font-size:15px;font-weight:700}
+.slot{display:flex;align-items:center;gap:8px;margin-top:8px}
+.slot input{flex:1;min-width:0;padding:9px 11px;font-size:14px;border-radius:10px}
+.nb{display:flex;gap:5px}
+.nb button{width:38px;height:38px;border-radius:10px;border:1.5px solid #3a3a3e;background:#141416;font-family:Anton;font-size:18px;cursor:pointer}
+.nb button.on0{background:#3a3a3e;border-color:#666}.nb button.on1{background:#7a0a12;border-color:#b30e18}
+.nb button.on2{background:var(--r);border-color:#ff5a62}.nb button.on3{background:var(--g);border-color:#ffe2a3;color:#1a1205}
+.obs{font-size:14.5px;line-height:1.4;padding:10px 0;border-top:1px solid #222}.obs:first-of-type{border-top:0}
+.obs small{display:block;color:#888;font-size:12px}
+.obs.nova{color:#fff}.obs.nova small{color:var(--g)}
+.rec{display:flex;align-items:center;gap:12px;margin-top:10px}
+.rbtn{width:64px;height:64px;border-radius:50%;flex:none;border:0;background:linear-gradient(180deg,#f0202b,#b30e18);box-shadow:0 0 24px rgba(224,20,31,.45);display:flex;align-items:center;justify-content:center;cursor:pointer}
+.rbtn.on{animation:pul 1s infinite}@keyframes pul{50%{box-shadow:0 0 0 10px rgba(224,20,31,.2)}}
+audio{width:100%;margin-top:10px}
+.tog{display:flex;align-items:center;gap:10px;margin-top:10px;font-size:15px}
+.tog input{width:22px;height:22px;accent-color:var(--g)}
+input[type=range]{width:100%;accent-color:var(--r);margin-top:6px}
+.toast{position:fixed;left:50%;bottom:30px;transform:translateX(-50%);background:#1c1c20;border:1px solid #3a3a3e;padding:12px 18px;border-radius:14px;font-size:14.5px;z-index:30;white-space:nowrap}
+.toast.ok{border-color:rgba(232,176,74,.6)}.toast.er{border-color:var(--r)}
+.err{color:#ff5a62;font-size:14.5px;margin-top:10px;min-height:18px}
+.tabs{display:flex;gap:6px;margin-top:14px;overflow-x:auto;padding-bottom:4px}
+.tabs button{flex:none;border:1.5px solid #333;background:#121214;border-radius:30px;padding:9px 14px;font-size:13.5px;font-weight:700;cursor:pointer}
+.tabs button.on{background:var(--r);border-color:var(--r)}
+.load{text-align:center;color:#888;margin-top:60px}
+</style></head>
+<body>
+<div class="wrap" id="v"><div class="load">Carregando...</div></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.js"></script>
+<script>
+const URLSB='https://nvwmxcgxmevvnlhvzvza.supabase.co',KEY='sb_publishable_lxgptApQpbleuj7jexhATA_Dzos_aYv',EMAIL='anjogelado16@gmail.com';
+const sb=supabase.createClient(URLSB,KEY,{auth:{persistSession:true,autoRefreshToken:true,storageKey:'camp-prof'}});
+const $=s=>document.querySelector(s),V=()=>$('#v');
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const COR={branca:'#f2f2f2',azul:'#1f6fd6',roxa:'#7b2fbf',marrom:'#7a4a2a',preta:'#111',cinza:'#8a8a8a',amarela:'#e6c200',laranja:'#e8781a',verde:'#2e9e4a'};
+const hoje=()=>{const d=new Date(Date.now()-3*36e5);return d.toISOString().slice(0,10)};
+const mes1=()=>hoje().slice(0,8)+'01';
+const br=d=>d?d.slice(8,10)+'/'+d.slice(5,7):'';
+function toast(t,tipo='ok'){document.querySelectorAll('.toast').forEach(x=>x.remove());const d=document.createElement('div');d.className='toast '+tipo;d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),2600)}
+async function ok(p,msg='Salvo'){const r=await p;if(r&&r.error){console.error(r.error);toast('Não salvou: '+(r.error.message||'erro'),'er');throw r.error}if(msg)toast('✓ '+msg);return r}
+const topo=(voltar)=>`<div class="top"><div class="brand"><img src="logo.png" alt=""><div><b>CAMP <span>FIGHT LIRA</span></b><small>PAINEL DO PROFESSOR</small></div></div>
+<a href="./" class="btn ghost" style="width:auto;margin:0;padding:9px 12px;font-size:12px;text-decoration:none;color:#f2f2f2">VER APP</a></div>${voltar?`<div class="back" onclick="${voltar}">← VOLTAR</div>`:''}`;
+
+// ===== LOGIN =====
+async function iniciar(){const {data}=await sb.auth.getSession();if(data.session)return home();telaLogin()}
+function telaLogin(){V().innerHTML=`<div style="text-align:center;margin-top:12vh"><img src="logo.png" style="width:96px;filter:drop-shadow(0 0 30px rgba(224,20,31,.5))">
+<h2 style="font-size:38px">MODO <span>PROFESSOR</span></h2><div class="sub">Entre uma vez. Este celular fica lembrando.</div></div>
+<div class="card" style="margin-top:26px"><input id="em" class="field" type="email" value="${EMAIL}" autocomplete="username">
+<input id="pw" class="field" type="password" placeholder="Senha do professor" autocomplete="current-password">
+<button class="btn" id="be" onclick="logar()">ENTRAR</button><div class="err" id="le"></div></div>`}
+async function logar(){$('#be').textContent='ENTRANDO...';const {error}=await sb.auth.signInWithPassword({email:$('#em').value.trim(),password:$('#pw').value});
+ if(error){$('#le').textContent='E-mail ou senha não conferem.';$('#be').textContent='ENTRAR';return}home()}
+async function sairProf(){await sb.auth.signOut();telaLogin()}
+
+// ===== HOME =====
+let SALAS=[],ALUNOS=[];
+async function carregar(){const [s,a]=await Promise.all([sb.from('camp_salas').select('id,tipo,grupo,titulo,sub,ordem,conteudo').order('ordem'),sb.from('camp_alunos').select('*').eq('ativo',true).order('nome')]);
+ if(s.error||a.error){toast('Sem acesso. Entre de novo.','er');await sb.auth.signOut();telaLogin();throw 0}SALAS=s.data;ALUNOS=a.data}
+async function home(){V().innerHTML=topo()+'<div class="load">Carregando...</div>';await carregar();
+ const {data:obs}=await sb.from('camp_observacoes').select('id').eq('lida',false);const nObs=(obs||[]).length;
+ const pers=SALAS.filter(s=>s.tipo==='personal'),jj=SALAS.filter(s=>s.tipo==='jj');
+ const al=sid=>ALUNOS.filter(a=>a.sala_id===sid);
+ const avatar=a=>`<div class="av" style="${a&&a.foto?`background-image:url('${esc(foto(a.foto))}')`:''}">${a&&a.foto?'':esc((a?a.nome:'?')[0])}</div>`;
+ V().innerHTML=topo()+`<h2>HOJE · <span>${br(hoje())}</span></h2><div class="sub">Toque no aluno para lançar presença, nota, peso, teste e recado.</div>
+ ${nObs?`<div class="card item" onclick="telaObs()"><div class="av" style="border-color:var(--g)">✍</div><div><b>Observações dos alunos<span class="badge">${nObs}</span></b><span>Toque para ler</span></div><div class="go">LER ›</div></div>`:''}
+ <div class="lab" style="margin-top:22px">PERSONAL FIGHT</div>
+ ${pers.map(s=>{const a=al(s.id)[0];return a?`<div class="card item" onclick="telaPersonal('${a.id}')">${avatar(a)}<div><b>${esc(a.nome_completo||a.nome)}</b><span>${a.camp_data?'Camp até '+br(a.camp_data):'Sem meta de camp ainda'}</span></div><div class="go">ABRIR ›</div></div>`:''}).join('')}
+ <button class="btn ghost" onclick="novoPersonal()">+ NOVO ALUNO PERSONAL</button>
+ ${['JIU-JITSU ADULTO','JIU-JITSU KIDS'].map(g=>`<div class="lab" style="margin-top:22px">${g}</div>`+jj.filter(s=>s.grupo===g).map(s=>`<div class="card item" onclick="telaSala('${s.id}')"><div class="fx" style="background:${COR[s.conteudo.faixa]}"></div><div><b>${esc(s.titulo)}</b><span>${al(s.id).length} aluno${al(s.id).length===1?'':'s'}${al(s.id).length?' · '+al(s.id).map(a=>esc(a.nome)).join(', '):''}</span></div><div class="go">ABRIR ›</div></div>`).join('')).join('')}
+ <button class="btn ghost" style="margin-top:30px" onclick="sairProf()">SAIR DO MODO PROFESSOR</button>`;scrollTo(0,0)}
+const foto=p=>!p?'':/^https?:/.test(p)?p:p;
+
+// ===== PRESENÇA (comum) =====
+async function blocoPresenca(a){const {data}=await sb.from('camp_presencas').select('dia,status').eq('aluno_id',a.id).gte('dia',mes1()).order('dia');
+ const p=(data||[]).filter(x=>x.status==='p').length;
+ return `<div class="card"><div class="lab">Presença · ${p} de ${a.aulas_mes} no mês · meta ${a.meta_presenca}</div>
+ <input type="date" id="pdia" class="field" value="${hoje()}" max="${hoje()}">
+ <div class="big2" style="margin-top:10px"><button class="bp" onclick="presenca('${a.id}','p')">✓ PRESENTE</button><button class="bf" onclick="presenca('${a.id}','f')">✗ FALTOU</button></div>
+ <div class="chips">${(data||[]).map(x=>`<span class="chip ${x.status}" onclick="tirarPresenca('${a.id}','${x.dia}')">${br(x.dia)} ${x.status==='p'?'✓':'✗'}</span>`).join('')||'<span class="mini">Nenhuma marcação neste mês.</span>'}</div>
+ ${(data||[]).length?'<div class="mini">Marcou errado? Toque no dia para apagar.</div>':''}</div>`}
+async function presenca(id,st){const dia=$('#pdia').value||hoje();await ok(sb.from('camp_presencas').upsert({aluno_id:id,dia,status:st}),st==='p'?'Presença marcada':'Falta marcada');reabrir()}
+async function tirarPresenca(id,dia){if(!confirm('Apagar a marcação de '+br(dia)+'?'))return;await ok(sb.from('camp_presencas').delete().eq('aluno_id',id).eq('dia',dia),'Apagado');reabrir()}
+let reabrir=()=>home();
+
+// ===== RECADO + ÁUDIO =====
+let rec=null,pedacos=[],audioBlob=null,audioTipo='';
+let ALVO=null;
+function blocoRecado(alvo){ALVO=alvo;return `<div class="card"><div class="lab">Novo recado ${alvo.aluno?'para '+esc(alvo.nome):'para a sala toda'}</div>
+ <textarea id="rtx" class="field" placeholder="Escreva o recado da semana"></textarea>
+ <div class="rec"><button class="rbtn" id="rb" onclick="gravar()"><svg width="26" height="26" viewBox="0 0 24 24" fill="#fff" id="ri"><path d="M12 15a3 3 0 003-3V6a3 3 0 00-6 0v6a3 3 0 003 3zm5-3a5 5 0 01-10 0H5a7 7 0 006 6.9V21h2v-2.1a7 7 0 006-6.9z"/></svg></button>
+ <div><b id="rs">Gravar áudio</b><div class="mini" style="margin:2px 0 0">Toque para gravar e toque de novo para parar.</div></div></div>
+ <div id="rp"></div>
+ <input id="rlab" class="field" style="margin-top:10px" placeholder="Rótulo (ex.: Semana 2) — opcional">
+ <button class="btn gold" id="renv" onclick="enviarRecado(ALVO)">ENVIAR RECADO</button></div>`}
+async function gravar(){
+ if(rec&&rec.state==='recording'){rec.stop();return}
+ try{const st=await navigator.mediaDevices.getUserMedia({audio:true});
+  audioTipo=['audio/mp4','audio/webm;codecs=opus','audio/webm','audio/ogg'].find(t=>window.MediaRecorder&&MediaRecorder.isTypeSupported(t))||'';
+  rec=new MediaRecorder(st,audioTipo?{mimeType:audioTipo}:undefined);pedacos=[];
+  rec.ondataavailable=e=>e.data.size&&pedacos.push(e.data);
+  rec.onstop=()=>{st.getTracks().forEach(t=>t.stop());audioBlob=new Blob(pedacos,{type:(rec.mimeType||audioTipo||'audio/mp4').split(';')[0]});
+   $('#rb').classList.remove('on');$('#rs').textContent='Áudio pronto ✓';$('#rp').innerHTML=`<audio controls src="${URL.createObjectURL(audioBlob)}"></audio><div class="mini" onclick="apagarAudio()" style="cursor:pointer;color:#ff5a62">Apagar e gravar de novo</div>`};
+  rec.start();$('#rb').classList.add('on');$('#rs').textContent='Gravando... toque para parar';
+ }catch(e){toast('Libere o microfone para este site.','er')}}
+function apagarAudio(){audioBlob=null;$('#rp').innerHTML='';$('#rs').textContent='Gravar áudio'}
+async function subir(blob,pasta,ext){const nome=pasta+'/'+crypto.randomUUID()+'.'+ext;
+ const r=await sb.storage.from('camp').upload(nome,blob,{contentType:blob.type,upsert:false});if(r.error){toast('Arquivo não subiu: '+r.error.message,'er');throw r.error}
+ return sb.storage.from('camp').getPublicUrl(nome).data.publicUrl}
+async function enviarRecado(alvo){const t=$('#rtx').value.trim();if(!t&&!audioBlob){toast('Escreva ou grave algo.','er');return}
+ $('#renv').disabled=true;$('#renv').textContent='ENVIANDO...';
+ try{let au=null;if(audioBlob){const ext={'audio/mp4':'m4a','audio/webm':'webm','audio/ogg':'ogg'}[audioBlob.type]||'m4a';au=await subir(audioBlob,'audio',ext)}
+  await ok(sb.from('camp_recados').insert({sala_id:alvo.sala,aluno_id:alvo.aluno||null,texto:t||null,audio:au,data_label:$('#rlab').value.trim()||null}),'Recado enviado. O aluno já vê.');
+  audioBlob=null;reabrir()}catch(e){$('#renv').disabled=false;$('#renv').textContent='ENVIAR RECADO'}}
+async function ultimoRecado(sala,aluno){let q=sb.from('camp_recados').select('*').eq('sala_id',sala).order('created_at',{ascending:false}).limit(1);q=aluno?q.eq('aluno_id',aluno):q.is('aluno_id',null);const {data}=await q;const r=(data||[])[0];
+ return r?`<div class="card"><div class="lab">Recado que o aluno está vendo</div>${r.texto?`<div style="font-size:15px;line-height:1.4">"${esc(r.texto)}"</div>`:''}${r.audio?`<audio controls src="${esc(r.audio)}"></audio>`:''}<div class="mini">${esc(r.data_label||br(r.created_at.slice(0,10)))}</div></div>`:''}
+
+// ===== OBSERVAÇÕES =====
+async function blocoObs(a){const {data}=await sb.from('camp_observacoes').select('*').eq('aluno_id',a.id).order('created_at',{ascending:false}).limit(15);
+ const novas=(data||[]).filter(o=>!o.lida).map(o=>o.id);if(novas.length)sb.from('camp_observacoes').update({lida:true}).in('id',novas).then(()=>{});
+ return `<div class="card"><div class="lab">O que o aluno escreveu</div>${(data||[]).map(o=>`<div class="obs ${o.lida?'':'nova'}"><small>${new Date(o.created_at).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})}${o.lida?'':' · NOVA'}</small>"${esc(o.texto)}"</div>`).join('')||'<div class="mini">Nada ainda.</div>'}</div>`}
+async function telaObs(){reabrir=telaObs;await carregar();const {data}=await sb.from('camp_observacoes').select('*').order('created_at',{ascending:false}).limit(40);
+ const nomeDe=o=>{const a=ALUNOS.find(x=>x.id===o.aluno_id);return a?(a.nome_completo||a.nome):(o.nome||'Aluno')};
+ V().innerHTML=topo('home()')+`<h2>OBSERVAÇÕES <span>DOS ALUNOS</span></h2><div class="card">${(data||[]).map(o=>`<div class="obs ${o.lida?'':'nova'}"><small>${esc(nomeDe(o))} · ${new Date(o.created_at).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})}${o.lida?'':' · NOVA'}</small>"${esc(o.texto)}"</div>`).join('')||'<div class="mini">Nada ainda.</div>'}</div>`;
+ const novas=(data||[]).filter(o=>!o.lida).map(o=>o.id);if(novas.length)sb.from('camp_observacoes').update({lida:true}).in('id',novas).then(()=>{});scrollTo(0,0)}
+
+// ===== PERSONAL =====
+let aba='hoje';
+async function telaPersonal(id,ab){if(ab)aba=ab;reabrir=()=>telaPersonal(id);await carregar();const a=ALUNOS.find(x=>x.id===id);if(!a)return home();
+ const abas=[['hoje','Presença'],['peso','Peso'],['teste','Teste'],['missao','Missão'],['camp','Meu camp'],['recado','Recado'],['obs','Observações'],['dados','Cadastro']];
+ let h=topo('aba=\'hoje\';home()')+`<div class="card item" style="cursor:default"><div class="av" style="width:64px;height:64px;${a.foto?`background-image:url('${esc(a.foto)}')`:''}">${a.foto?'':esc(a.nome[0])}</div><div><b style="font-size:19px">${esc(a.nome_completo||a.nome)}</b><span>Personal Fight${a.dias?' · '+esc(a.dias):''}</span></div></div>
+ <div class="tabs">${abas.map(([k,t])=>`<button class="${aba===k?'on':''}" onclick="telaPersonal('${a.id}','${k}')">${t}</button>`).join('')}</div>`;
+ V().innerHTML=h+'<div class="load">...</div>';
+ if(aba==='hoje')h+=await blocoPresenca(a);
+ if(aba==='peso'){const {data}=await sb.from('camp_pesagens').select('*').eq('aluno_id',a.id).order('dia',{ascending:false}).limit(10);
+  h+=`<div class="card"><div class="lab">Pesagem de hoje</div><div class="g2"><input id="kg" class="field" inputmode="decimal" placeholder="Peso (kg)"><input id="kgd" type="date" class="field" value="${hoje()}"></div><button class="btn" onclick="pesar('${a.id}')">SALVAR PESO</button>
+  <div class="mini" style="margin-top:14px">Meta de peso</div><div class="g2"><input id="pi" class="field" inputmode="decimal" placeholder="Peso inicial" value="${a.peso_inicio??''}"><input id="pm" class="field" inputmode="decimal" placeholder="Meta (kg)" value="${a.peso_meta??''}"></div>
+  <button class="btn ghost" onclick="salvarMetaPeso('${a.id}')">SALVAR META</button>
+  <div class="chips">${(data||[]).map(p=>`<span class="chip" onclick="tirarPeso('${a.id}','${p.dia}')">${br(p.dia)} · ${String(p.kg).replace('.',',')} kg</span>`).join('')}</div>${(data||[]).length?'<div class="mini">Toque numa pesagem para apagar.</div>':''}</div>
+  <div class="mini">Peso só aparece para o aluno que tem meta de peso.</div>`}
+ if(aba==='teste'){const {data}=await sb.from('camp_testes').select('*').eq('aluno_id',a.id).order('mes',{ascending:false}).limit(1);const t=(data||[])[0]||{};const atual=t.mes===mes1();
+  h+=`<div class="card"><div class="lab">Teste do mês ${atual?'':'(novo mês)'}</div><input id="tn" class="field" placeholder="Exercício (ex.: 50 chutes)" value="${esc(t.nome||'')}">
+  <div class="g2"><input id="ti" class="field" placeholder="Início do mês" value="${atual?esc(t.inicio||''):''}"><input id="tf" class="field" placeholder="Fim do mês" value="${atual?esc(t.fim||''):''}"></div>
+  <select id="tm" class="field"><option value="maior" ${t.melhor!=='menor'?'selected':''}>Melhor = número MAIOR (repetições)</option><option value="menor" ${t.melhor==='menor'?'selected':''}>Melhor = número MENOR (tempo)</option></select>
+  <button class="btn" onclick="salvarTeste('${a.id}')">SALVAR TESTE</button><div class="mini">Se o fim for melhor que o início, a conquista "Superou o teste" sai sozinha.</div></div>`}
+ if(aba==='missao'){const m=a.missao||{};h+=`<div class="card"><div class="lab">Missão do mês</div><input id="mt" class="field" placeholder="Ex.: Pular corda 3 minutos sem parar" value="${esc(m.titulo||'')}">
+  <div class="mini">Progresso: <b id="mpv">${Math.round((m.progresso||0)*100)}%</b></div><input type="range" id="mp" min="0" max="100" step="5" value="${Math.round((m.progresso||0)*100)}" oninput="$('#mpv').textContent=this.value+'%'">
+  <input id="ms" class="field" style="margin-top:10px" placeholder="Status (ex.: 2 min e 10 s — faltam 50 s)" value="${esc(m.status||'')}">
+  <label class="tog"><input type="checkbox" id="mc" ${m.cumprida?'checked':''}> Missão cumprida ★ (gera conquista)</label>
+  <button class="btn" onclick="salvarMissao('${a.id}')">SALVAR MISSÃO</button></div>`}
+ if(aba==='camp')h+=`<div class="card"><div class="lab">Meta do camp deste aluno</div><div class="mini">O que vocês combinaram</div><input id="ct" class="field" placeholder="Ex.: -4 kg e 3 rounds de manopla" value="${esc(a.camp_titulo||'')}">
+  <div class="g2"><div><div class="mini">Começa em</div><input id="ci" type="date" class="field" value="${a.camp_inicio||hoje()}"></div><div><div class="mini">Dia D</div><input id="cd" type="date" class="field" value="${a.camp_data||''}"></div></div>
+  <button class="btn" onclick="salvarCamp('${a.id}')">SALVAR META DO CAMP</button><div class="mini">O aluno vê a contagem regressiva no topo da Sala de Guerra.</div></div>`;
+ if(aba==='recado')h+=blocoRecado({sala:a.sala_id,aluno:a.id,nome:a.nome})+await ultimoRecado(a.sala_id,a.id);
+ if(aba==='obs')h+=await blocoObs(a);
+ if(aba==='dados')h+=blocoCadastro(a,true);
+ V().innerHTML=h;}
+const num=v=>{v=String(v||'').replace(',','.').trim();return v===''?null:+v};
+async function pesar(id){const k=num($('#kg').value);if(!k||k<20||k>300){toast('Peso inválido.','er');return}await ok(sb.from('camp_pesagens').upsert({aluno_id:id,dia:$('#kgd').value||hoje(),kg:k}),'Peso salvo');reabrir()}
+async function tirarPeso(id,dia){if(!confirm('Apagar a pesagem de '+br(dia)+'?'))return;await ok(sb.from('camp_pesagens').delete().eq('aluno_id',id).eq('dia',dia),'Apagado');reabrir()}
+async function salvarMetaPeso(id){await ok(sb.from('camp_alunos').update({peso_inicio:num($('#pi').value),peso_meta:num($('#pm').value)}).eq('id',id),'Meta de peso salva');reabrir()}
+async function salvarTeste(id){const n=$('#tn').value.trim();if(!n){toast('Escreva o exercício.','er');return}
+ await ok(sb.from('camp_testes').upsert({aluno_id:id,mes:mes1(),nome:n,inicio:$('#ti').value.trim()||null,fim:$('#tf').value.trim()||null,melhor:$('#tm').value}),'Teste salvo');reabrir()}
+async function salvarMissao(id){const a=ALUNOS.find(x=>x.id===id),c=$('#mc').checked,old=a.missao||{};
+ const m={titulo:$('#mt').value.trim(),progresso:+$('#mp').value/100,status:$('#ms').value.trim(),cumprida:c,dia:c?(old.cumprida&&old.dia?old.dia:hoje()):null};
+ await ok(sb.from('camp_alunos').update({missao:m}).eq('id',id),c&&!old.cumprida?'Missão cumprida! Conquista liberada':'Missão salva');reabrir()}
+async function salvarCamp(id){await ok(sb.from('camp_alunos').update({camp_titulo:$('#ct').value.trim()||null,camp_inicio:$('#ci').value||null,camp_data:$('#cd').value||null}).eq('id',id),'Meta do camp salva');reabrir()}
+
+// ===== CADASTRO =====
+function blocoCadastro(a,personal){return `<div class="card"><div class="lab">Cadastro</div>
+ ${personal?`<div class="mini">Foto do aluno</div><input type="file" id="ff" accept="image/*" class="field" onchange="trocarFoto('${a.id}')">
+ <input id="dn" class="field" placeholder="Nome completo" value="${esc(a.nome_completo||'')}">
+ <input id="dob" class="field" placeholder="Objetivo (o aluno define)" value="${esc(a.objetivo||'')}">
+ <input id="dd" class="field" placeholder="Dias e horário (ex.: Ter e Qui · 10h)" value="${esc(a.dias||'')}">`:''}
+ <div class="g2"><div><div class="mini">Aulas no mês</div><input id="dam" class="field" inputmode="numeric" value="${a.aulas_mes}"></div><div><div class="mini">Meta de presença</div><input id="dmp" class="field" inputmode="numeric" value="${a.meta_presenca}"></div></div>
+ <button class="btn" onclick="salvarCadastro('${a.id}',${personal})">SALVAR CADASTRO</button></div>
+ <div class="card"><div class="lab">${personal?'Senha da sala do aluno':'Senha pessoal da ficha'}</div><input id="ds" class="field" inputmode="numeric" maxlength="4" placeholder="Nova senha de 4 números" style="text-align:center;letter-spacing:8px;font-family:Anton;font-size:24px">
+ <button class="btn ghost" onclick="${personal?`trocarSenhaSala('${a.sala_id}')`:`trocarPin('${a.id}')`}">TROCAR SENHA</button><div class="mini">Anote no seu PDF de senhas. Eu não consigo mostrar a senha depois.</div></div>
+ <button class="btn ghost" style="border-color:#5a1a1e;color:#ff7a80" onclick="desativar('${a.id}')">TIRAR ALUNO DO CAMP</button>`}
+async function salvarCadastro(id,personal){const u={aulas_mes:+$('#dam').value||12,meta_presenca:+$('#dmp').value||0};
+ if(personal)Object.assign(u,{nome_completo:$('#dn').value.trim()||null,objetivo:$('#dob').value.trim()||null,dias:$('#dd').value.trim()||null});
+ await ok(sb.from('camp_alunos').update(u).eq('id',id),'Cadastro salvo');reabrir()}
+async function trocarFoto(id){const f=$('#ff').files[0];if(!f)return;toast('Enviando foto...');
+ const img=await new Promise((s,n)=>{const i=new Image();i.onload=()=>s(i);i.onerror=n;i.src=URL.createObjectURL(f)});
+ const m=1100,k=Math.min(1,m/Math.max(img.width,img.height)),c=document.createElement('canvas');c.width=Math.round(img.width*k);c.height=Math.round(img.height*k);c.getContext('2d').drawImage(img,0,0,c.width,c.height);
+ const blob=await new Promise(s=>c.toBlob(s,'image/jpeg',.86));const url=await subir(blob,'fotos','jpg');
+ await ok(sb.from('camp_alunos').update({foto:url,foto_card:url}).eq('id',id),'Foto trocada');reabrir()}
+async function trocarSenhaSala(sala){const p=$('#ds').value.trim();const {data,error}=await sb.rpc('camp_prof_senha_sala',{p_sala:sala,p_senha:p});if(error||data.erro){toast(data?data.erro:'Erro','er');return}toast('✓ Senha trocada');$('#ds').value=''}
+async function trocarPin(id){const p=$('#ds').value.trim();const {data,error}=await sb.rpc('camp_prof_pin',{p_aluno:id,p_pin:p});if(error||data.erro){toast(data?data.erro:'Erro','er');return}toast('✓ Senha pessoal salva');$('#ds').value=''}
+async function desativar(id){if(!confirm('Tirar este aluno do Camp? O histórico fica guardado.'))return;await ok(sb.from('camp_alunos').update({ativo:false}).eq('id',id),'Aluno retirado');aba='hoje';home()}
+function novoPersonal(){reabrir=home;V().innerHTML=topo('home()')+`<h2>NOVO ALUNO <span>PERSONAL</span></h2><div class="card">
+ <input id="nn" class="field" placeholder="Primeiro nome (é o login dele)" autocapitalize="words">
+ <input id="nc" class="field" placeholder="Nome completo" autocapitalize="words">
+ <input id="ns" class="field" inputmode="numeric" maxlength="4" placeholder="Senha de 4 números" style="text-align:center;letter-spacing:8px;font-family:Anton;font-size:24px">
+ <button class="btn" id="bn" onclick="criarPersonal()">CRIAR SALA DE GUERRA</button><div class="err" id="ne"></div>
+ <div class="mini">Depois de criar, abra o aluno e coloque foto, objetivo, missão e a meta do camp.</div></div>`}
+async function criarPersonal(){$('#bn').disabled=true;const {data,error}=await sb.rpc('camp_prof_novo_personal',{p_nome:$('#nn').value,p_nome_completo:$('#nc').value,p_senha:$('#ns').value.trim()});
+ $('#bn').disabled=false;if(error||data.erro){$('#ne').textContent=data?data.erro:'Erro ao criar.';return}
+ toast('✓ Sala criada. Login: '+data.login);await carregar();const a=ALUNOS.find(x=>x.sala_id===data.sala);aba='dados';telaPersonal(a.id)}
+
+// ===== JIU-JITSU =====
+async function telaSala(sid){reabrir=()=>telaSala(sid);await carregar();const s=SALAS.find(x=>x.id===sid),al=ALUNOS.filter(a=>a.sala_id===sid);
+ V().innerHTML=topo('home()')+`<h2>${esc(s.titulo)}</h2><div class="sub">${esc(s.sub)}</div><div style="margin-top:10px;height:14px;border-radius:4px;background:${COR[s.conteudo.faixa]};border:1px solid #444"></div>
+ <div class="lab" style="margin-top:20px">Alunos</div>
+ ${al.map(a=>`<div class="card item" onclick="telaJJ('${a.id}')"><div class="av" style="border-color:${COR[s.conteudo.faixa]}">${esc(a.nome[0])}</div><div><b>${esc(a.nome)}</b><span>${a.pin_hash?'Ficha com senha pessoal ✓':'⚠ Falta a senha pessoal'}</span></div><div class="go">AVALIAR ›</div></div>`).join('')||'<div class="mini">Nenhum aluno nesta sala.</div>'}
+ <div class="card"><div class="lab">Novo aluno nesta faixa</div><div class="g2"><input id="jn" class="field" placeholder="Primeiro nome" autocapitalize="words"><input id="jp" class="field" inputmode="numeric" maxlength="4" placeholder="Senha pessoal (4 nº)"></div>
+ <button class="btn" onclick="novoJJ('${sid}')">CADASTRAR</button></div>
+ ${blocoRecado({sala:sid,aluno:null})}${await ultimoRecado(sid,null)}
+ <div class="card"><div class="lab">Senha da sala da faixa</div><input id="ds" class="field" inputmode="numeric" maxlength="4" placeholder="Nova senha de 4 números" style="text-align:center;letter-spacing:8px;font-family:Anton;font-size:24px">
+ <button class="btn ghost" onclick="trocarSenhaSala('${sid}')">TROCAR SENHA DA SALA</button><div class="mini">Atenção: todos os alunos da faixa vão precisar da nova senha.</div></div>`;scrollTo(0,0)}
+async function novoJJ(sid){const n=$('#jn').value.trim(),p=$('#jp').value.trim();if(!n){toast('Escreva o nome.','er');return}if(!/^\d{4}$/.test(p)){toast('Senha pessoal: 4 números.','er');return}
+ if(ALUNOS.some(a=>a.sala_id===sid&&a.nome.toLowerCase()===n.toLowerCase())){toast('Já tem esse nome nesta sala.','er');return}
+ const {data,error}=await sb.from('camp_alunos').insert({sala_id:sid,nome:n.split(' ')[0].replace(/^./,c=>c.toUpperCase()),plano:'Jiu-Jitsu',aulas_mes:8,meta_presenca:7}).select().single();
+ if(error){toast('Não salvou.','er');return}await sb.rpc('camp_prof_pin',{p_aluno:data.id,p_pin:p});toast('✓ '+data.nome+' cadastrado');telaSala(sid)}
+async function telaJJ(id,ab){if(ab)aba=ab;else if(!['hoje','notas','recado','obs','dados'].includes(aba))aba='hoje';reabrir=()=>telaJJ(id);await carregar();
+ const a=ALUNOS.find(x=>x.id===id),s=SALAS.find(x=>x.id===a.sala_id),C=s.conteudo;
+ const abas=[['hoje','Presença'],['notas','Notas'],['recado','Recado'],['obs','Observações'],['dados','Cadastro']];
+ let h=topo(`aba='hoje';telaSala('${s.id}')`)+`<div class="card item" style="cursor:default"><div class="av" style="width:60px;height:60px;border-color:${COR[C.faixa]}">${esc(a.nome[0])}</div><div><b style="font-size:19px">${esc(a.nome)}</b><span>${esc(s.titulo)}</span></div></div>
+ <div class="tabs">${abas.map(([k,t])=>`<button class="${aba===k?'on':''}" onclick="telaJJ('${a.id}','${k}')">${t}</button>`).join('')}</div>`;
+ V().innerHTML=h+'<div class="load">...</div>';
+ if(aba==='hoje')h+=await blocoPresenca(a);
+ if(aba==='notas'){const {data}=await sb.from('camp_notas').select('*').eq('aluno_id',a.id);const N={};(data||[]).forEach(n=>N[n.item]=n);
+  const total=C.materia.reduce((x,m)=>x+m.qtd,0),pts=(data||[]).reduce((x,n)=>x+n.nota,0);
+  h+=`<div class="card"><div class="lab">Prova · ${pts} de ${total*3} pontos (${Math.round(pts/(total*3)*100)}%)</div><div class="mini" style="margin:0">0 não sabe · 1 com ajuda · 2 faz sozinho · <b class="gold" style="color:var(--g)">3 aplica no rola</b>. Toque na nota: salva na hora.</div></div>
+  <div class="card">${C.materia.map(m=>`<div class="tec"><div class="nm">${esc(m.cat)}</div>${Array.from({length:m.qtd},(_,i)=>{const k=m.cat+'#'+(i+1),n=N[k];
+   return `<div class="slot"><input class="field" placeholder="Técnica ${i+1} (opcional)" value="${esc(n?n.rotulo||'':'')}" onchange="rotulo(${esc(JSON.stringify(a.id))},${esc(JSON.stringify(k))},this.value)">
+   <div class="nb">${[0,1,2,3].map(v=>`<button class="${n&&n.nota===v?'on'+v:''}" onclick="nota(${esc(JSON.stringify(a.id))},${esc(JSON.stringify(k))},${v},this)">${v}</button>`).join('')}</div></div>`}).join('')}</div>`).join('')}</div>`}
+ if(aba==='recado')h+=blocoRecado({sala:a.sala_id,aluno:a.id,nome:a.nome})+await ultimoRecado(a.sala_id,a.id);
+ if(aba==='obs')h+=await blocoObs(a);
+ if(aba==='dados')h+=blocoCadastro(a,false);
+ V().innerHTML=h}
+async function nota(id,item,v,el){const inp=el.closest('.slot').querySelector('input');
+ await ok(sb.from('camp_notas').upsert({aluno_id:id,item,nota:v,rotulo:inp.value.trim()||null,updated_at:new Date().toISOString()}),'Nota '+v);
+ el.parentNode.querySelectorAll('button').forEach((b,i)=>b.className=i===v?'on'+v:'')}
+async function rotulo(id,item,val){const {data}=await sb.from('camp_notas').select('nota').eq('aluno_id',id).eq('item',item).maybeSingle();
+ if(!data){toast('Dê a nota para salvar o nome da técnica.');return}await ok(sb.from('camp_notas').update({rotulo:val.trim()||null}).eq('aluno_id',id).eq('item',item),'Nome da técnica salvo')}
+
+iniciar();
+</script>
+</body></html>
