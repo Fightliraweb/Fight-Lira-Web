@@ -116,7 +116,7 @@ textarea.field{min-height:90px;resize:none;font-size:16px;margin-top:10px}
     <img src="logo.png" alt="Fight Lira">
     <h1>CAMP <span>FIGHT LIRA</span></h1>
     <p>Entre na sua Sala de Guerra</p>
-    <input id="lnome" class="field" placeholder="Seu primeiro nome" autocomplete="given-name" autocapitalize="words">
+    <input id="lnome" class="field" placeholder="Seu nome (Personal) ou sua faixa" autocomplete="given-name" autocapitalize="words">
     <div class="pin" id="pin">
       <input class="field" inputmode="numeric" maxlength="1" aria-label="Senha 1">
       <input class="field" inputmode="numeric" maxlength="1" aria-label="Senha 2">
@@ -269,7 +269,11 @@ function enviarObs(){const t=$('#obs').value.trim();if(!t)return;
 const COR={branca:'#f2f2f2',azul:'#1f6fd6',roxa:'#7b2fbf',marrom:'#7a4a2a',preta:'#111'};
 function faixaSVG(f){const c=COR[f]||'#888';return `<svg viewBox="0 0 300 34" width="100%" height="30"><rect x="0" y="4" width="300" height="26" rx="5" fill="${c}" stroke="#444"/><rect x="210" y="4" width="62" height="26" fill="${f==='preta'?'#e0141f':'#111'}"/></svg>`}
 function semanaCiclo(){const ini=new Date('2026-11-30T00:00:00-03:00');const w=Math.floor((Date.now()-ini)/6048e5);return w<0?0:w%8}
+function salvarNome(){const n=$('#meunome').value.trim();if(!n)return;store.set('camp-nome-'+ID,n);render()}
 function renderJJ(v){
+  if(D.generico){D.nomeCompleto=store.get('camp-nome-'+ID)||''}
+  if(D.generico&&!D.nomeCompleto&&tab==='hoje'){v.innerHTML=topo()+`<div class="prof" style="margin-top:40px"><div style="max-width:260px;margin:0 auto">${faixaSVG(D.faixa)}</div><div class="nm" style="margin-top:18px">${esc(D.sala)}</div><div class="inf">${esc(D.rumo)}</div></div>
+  <div class="card" style="margin-top:28px"><div class="lab">Primeira vez aqui</div><div class="mis">Qual é o seu nome?</div><input id="meunome" class="field" style="margin-top:12px" placeholder="Seu primeiro nome" autocapitalize="words"><button class="btn" onclick="salvarNome()">ENTRAR NA SALA</button></div>`;return}
   const ini=(D.nomeCompleto||'?').trim()[0].toUpperCase();
   const topoJJ=topo()+`<div class="prof"><div class="av" style="background:linear-gradient(160deg,${COR[D.faixa]},#8a0710)"><div style="width:100%;height:100%;border-radius:50%;background:#141416;display:flex;align-items:center;justify-content:center;font-family:Anton;font-size:56px;border:3px solid var(--bg)">${esc(ini)}</div></div>
   <div class="nm">${esc(D.nomeCompleto)}</div><div class="inf">Jiu-Jitsu · Faixa ${esc(D.faixa)}</div><div style="max-width:260px;margin:12px auto 0">${faixaSVG(D.faixa)}</div></div>`;
