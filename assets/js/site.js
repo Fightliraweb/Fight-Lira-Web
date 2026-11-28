@@ -58,6 +58,7 @@ if (EH_DFL) {
     <a href="muaythai.html">Muay Thai</a>
     <a href="professores.html">Professores</a>
     <a href="graduados.html">Graduados</a>
+    <a href="camp/">Área do Aluno</a>
     <a class="nav-dfl" href="dfl.html">DFL →</a>
     <a class="nav-cta" href="${WA_AULA}" target="_blank" rel="noopener">Aula experimental</a>`;
   if (mobileMenu) mobileMenu.innerHTML = `
@@ -68,6 +69,7 @@ if (EH_DFL) {
     <a href="professores.html">Professores</a>
     <a href="graduados.html">Graduados</a>
     <a href="index.html#contato">Contato</a>
+    <a href="camp/">Área do Aluno</a>
     <a class="m-dfl" href="dfl.html">DFL →</a>
     <a class="mobile-wa" href="${WA_AULA}" target="_blank" rel="noopener">Agendar aula experimental</a>`;
   const bar = document.createElement('a');
