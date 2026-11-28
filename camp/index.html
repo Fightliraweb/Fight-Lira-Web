@@ -185,6 +185,7 @@ function sair(){store.del('camp-sessao');location.reload()}
 
 function abrir(){
   $('#login').classList.add('hide');$('#app').classList.remove('hide');
+  if(D.tipo==='jj'){const L={hoje:'Sala',missao:'Ciclo',evolucao:'Regras',recados:'Recados'};document.querySelectorAll('.nav button').forEach(b=>{b.lastChild.textContent=L[b.dataset.t]})}
   render();
   const novas=(D.conquistas||[]).filter(c=>!vistas().includes(c.id));
   if(novas.length) setTimeout(()=>conquista(novas[0],true),500);
@@ -235,6 +236,7 @@ function sec(a,b,c){return `<div class="sec"><h2>${a} <span>${b}</span></h2><em>
 // ---- telas
 function render(){
   const v=$('#view');
+  if(D.tipo==='jj'){renderJJ(v);return}
   const temNovo=(D.conquistas||[]).some(c=>!vistas().includes(c.id));
   document.querySelector('.nav [data-t="missao"]').innerHTML=document.querySelector('.nav [data-t="missao"]').innerHTML.replace(/<span class="dot"><\/span>/,'')+(temNovo?'<span class="dot"></span>':'');
   if(tab==='hoje') v.innerHTML=topo()+perfil()+sec('SALA DE','GUERRA',`${esc(D.mes)} · semana ${D.semana}`)+cards2()+barra()+peso()+missao();
@@ -261,6 +263,37 @@ function enviarObs(){const t=$('#obs').value.trim();if(!t)return;
  const L=store.get('camp-obs-'+ID)||[];const d=new Date().toLocaleDateString('pt-BR',{weekday:'short',day:'2-digit',month:'2-digit'});
  L.push({d,t});store.set('camp-obs-'+ID,L.slice(-30));
  window.open('https://wa.me/'+D.whatsapp+'?text='+encodeURIComponent('🥊 Camp Fight Lira — '+D.nomeCompleto+'\n'+t),'_blank');render()}
+
+
+// ---- jiu-jitsu: salas por faixa
+const COR={branca:'#f2f2f2',azul:'#1f6fd6',roxa:'#7b2fbf',marrom:'#7a4a2a',preta:'#111'};
+function faixaSVG(f){const c=COR[f]||'#888';return `<svg viewBox="0 0 300 34" width="100%" height="30"><rect x="0" y="4" width="300" height="26" rx="5" fill="${c}" stroke="#444"/><rect x="210" y="4" width="62" height="26" fill="${f==='preta'?'#e0141f':'#111'}"/></svg>`}
+function semanaCiclo(){const ini=new Date('2026-11-30T00:00:00-03:00');const w=Math.floor((Date.now()-ini)/6048e5);return w<0?0:w%8}
+function renderJJ(v){
+  const ini=(D.nomeCompleto||'?').trim()[0].toUpperCase();
+  const topoJJ=topo()+`<div class="prof"><div class="av" style="background:linear-gradient(160deg,${COR[D.faixa]},#8a0710)"><div style="width:100%;height:100%;border-radius:50%;background:#141416;display:flex;align-items:center;justify-content:center;font-family:Anton;font-size:56px;border:3px solid var(--bg)">${esc(ini)}</div></div>
+  <div class="nm">${esc(D.nomeCompleto)}</div><div class="inf">Jiu-Jitsu · Faixa ${esc(D.faixa)}</div><div style="max-width:260px;margin:12px auto 0">${faixaSVG(D.faixa)}</div></div>`;
+  const total=D.materia.reduce((a,m)=>a+m.qtd,0);
+  if(tab==='hoje'){
+    v.innerHTML=topoJJ+`<div class="sec"><h2>${esc(D.sala.split(' ').slice(0,-1).join(' ')||D.sala)} <span>${esc(D.sala.split(' ').slice(-1)[0])}</span></h2><em>${esc(D.rumo)}</em></div>
+    <div class="card"><div class="lab">Sua matéria</div><div class="big">${total}<small>técnicas para dominar</small></div><div class="t">Cada técnica vale de 0 a 3. A nota individual é lançada pelo professor na avaliação.</div></div>
+    <div class="card">${D.materia.map(m=>`<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 0;border-bottom:1px solid #222"><span style="font-size:15.5px">${esc(m.cat)}</span><span style="display:flex;gap:5px;align-items:center">${Array.from({length:m.qtd},()=>'<i style="width:12px;height:12px;border-radius:50%;border:1.5px solid #555;display:inline-block"></i>').join('')}<b style="font-family:Anton;font-weight:400;font-size:20px;margin-left:6px;color:var(--r)">${m.qtd}</b></span></div>`).join('')}</div>`;
+  }
+  if(tab==='missao'){const w=semanaCiclo();
+    v.innerHTML=topo()+sec('CICLO DE','8 SEMANAS','')+`<div class="card done"><div class="lab gold">Esta semana · ${w+1} de 8</div><div class="mis" style="font-size:24px">${esc(D.ciclo[w].pos)}</div>
+    <div class="t" style="margin-top:8px;font-size:15px;color:#ddd"><b class="gold">1ª aula:</b> ${esc(D.ciclo[w].a)}<br><b class="gold">2ª aula:</b> ${esc(D.ciclo[w].b)}</div>
+    <div class="t" style="margin-top:10px">Faltou numa das duas? O par fica incompleto: você aprende o ataque sem a defesa, ou o contrário. Reponha no treino seguinte.</div></div>`+
+    D.ciclo.map((c,i)=>`<div class="card" style="${i===w?'border-color:rgba(232,176,74,.5)':''};display:flex;gap:14px;align-items:center"><div style="font-family:Anton;font-size:28px;color:${i===w?'var(--g)':'#555'};width:30px">${i+1}</div><div><b style="font-size:15.5px">${esc(c.pos)}</b><div class="t">${esc(c.a)} → ${esc(c.b)}</div></div></div>`).join('');
+  }
+  if(tab==='evolucao'){const R=D.regra;
+    v.innerHTML=topo()+sec('REGRAS DA','FAIXA','')+`<div class="card"><div class="lab">Para trocar de faixa, as três juntas</div>
+    <div class="row" style="margin-top:8px"><div style="flex:1"><div class="big">${esc(R.tempo)}</div><div class="t">tempo mínimo</div></div><div style="flex:1"><div class="big">${esc(String(R.aulas))}</div><div class="t">aulas mínimas</div></div></div>
+    <div class="t" style="margin-top:10px;font-size:15px;color:#ddd">+ prova aprovada: todas as técnicas com nota mínima 2 e pelo menos 80% dos pontos.</div></div>
+    ${R.grauCada?`<div class="card"><div class="lab">Graus</div><div class="big">1 grau<small>a cada ${R.grauCada} aulas + matéria do grau</small></div></div>`:''}
+    <div class="card"><div class="lab">Como a nota funciona</div><div class="t" style="font-size:15px;color:#ddd;line-height:1.7">0 · não sabe<br>1 · faz com ajuda<br>2 · faz sozinho<br><b class="gold">3 · aplica no rola</b></div><div class="t" style="margin-top:8px">Você pode ser avaliado a qualquer momento pelo professor.</div></div>`;
+  }
+  if(tab==='recados') v.innerHTML=topo()+sec('RECADO DO','PROFESSOR',esc(D.recado.data||''))+recado()+obsCard();
+}
 
 // ---- conquista: card para stories
 async function gerarCard(c){
