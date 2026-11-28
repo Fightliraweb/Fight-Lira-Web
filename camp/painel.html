@@ -124,9 +124,9 @@ async function home(){V().innerHTML=topo()+'<div class="load">Carregando...</div
  const avatar=a=>`<div class="av" style="${a&&a.foto?`background-image:url('${esc(foto(a.foto))}')`:''}">${a&&a.foto?'':esc((a?a.nome:'?')[0])}</div>`;
  V().innerHTML=topo()+`<h2>HOJE · <span>${br(hoje())}</span></h2><div class="sub">Toque no aluno para lançar presença, nota, peso, teste e recado.</div>
  ${nObs?`<div class="card item" onclick="telaObs()"><div class="av" style="border-color:var(--g)">✍</div><div><b>Observações dos alunos<span class="badge">${nObs}</span></b><span>Toque para ler</span></div><div class="go">LER ›</div></div>`:''}
- <div class="lab" style="margin-top:22px">PERSONAL FIGHT</div>
+ <div class="lab" style="margin-top:22px">MUAY THAI</div>
  ${pers.map(s=>{const a=al(s.id)[0];return a?`<div class="card item" onclick="telaPersonal('${a.id}')">${avatar(a)}<div><b>${esc(a.nome_completo||a.nome)}</b><span>${a.camp_data?'Camp até '+br(a.camp_data):'Sem meta de camp ainda'}</span></div><div class="go">ABRIR ›</div></div>`:''}).join('')}
- <button class="btn ghost" onclick="novoPersonal()">+ NOVO ALUNO PERSONAL</button>
+ <button class="btn ghost" onclick="novoPersonal()">+ NOVO ALUNO DE MUAY THAI</button>
  <button class="btn gold" onclick="telaVideosMT()">▶ VÍDEOS DO MUAY THAI</button>
  ${['JIU-JITSU ADULTO','JIU-JITSU KIDS'].map(g=>`<div class="lab" style="margin-top:22px">${g}</div>`+jj.filter(s=>s.grupo===g).map(s=>`<div class="card item" onclick="telaSala('${s.id}')"><div class="fx" style="background:${COR[s.conteudo.faixa]}"></div><div><b>${esc(s.titulo)}</b><span>${al(s.id).length} aluno${al(s.id).length===1?'':'s'}${al(s.id).length?' · '+al(s.id).map(a=>esc(a.nome)).join(', '):''}</span></div><div class="go">ABRIR ›</div></div>`).join('')).join('')}
  <button class="btn ghost" style="margin-top:30px" onclick="sairProf()">SAIR DO MODO PROFESSOR</button>`;scrollTo(0,0)}
@@ -189,7 +189,7 @@ async function telaObs(){reabrir=telaObs;await carregar();const {data}=await sb.
 let aba='hoje';
 async function telaPersonal(id,ab){if(ab)aba=ab;reabrir=()=>telaPersonal(id);await carregar();const a=ALUNOS.find(x=>x.id===id);if(!a)return home();
  const abas=[['hoje','Presença'],['tecnica','Técnica'],['peso','Peso'],['teste','Teste'],['missao','Missão'],['camp','Meu camp'],['recado','Recado'],['obs','Observações'],['dados','Cadastro']];
- let h=topo('aba=\'hoje\';home()')+`<div class="card item" style="cursor:default"><div class="av" style="width:64px;height:64px;${a.foto?`background-image:url('${esc(a.foto)}')`:''}">${a.foto?'':esc(a.nome[0])}</div><div><b style="font-size:19px">${esc(a.nome_completo||a.nome)}</b><span>Personal Fight${a.dias?' · '+esc(a.dias):''}</span></div></div>
+ let h=topo('aba=\'hoje\';home()')+`<div class="card item" style="cursor:default"><div class="av" style="width:64px;height:64px;${a.foto?`background-image:url('${esc(a.foto)}')`:''}">${a.foto?'':esc(a.nome[0])}</div><div><b style="font-size:19px">${esc(a.nome_completo||a.nome)}</b><span>Muay Thai${a.dias?' · '+esc(a.dias):''}</span></div></div>
  <div class="tabs">${abas.map(([k,t])=>`<button class="${aba===k?'on':''}" onclick="telaPersonal('${a.id}','${k}')">${t}</button>`).join('')}</div>`;
  V().innerHTML=h+'<div class="load">...</div>';
  if(aba==='hoje')h+=await blocoPresenca(a);
@@ -233,7 +233,6 @@ async function salvarCamp(id){await ok(sb.from('camp_alunos').update({camp_titul
 function blocoCadastro(a,personal){return `<div class="card"><div class="lab">Cadastro</div>
  ${personal?`<div class="mini">Foto do aluno</div><input type="file" id="ff" accept="image/*" class="field" onchange="trocarFoto('${a.id}')">
  <input id="dn" class="field" placeholder="Nome completo" value="${esc(a.nome_completo||'')}">
- <input id="dob" class="field" placeholder="Objetivo (o aluno define)" value="${esc(a.objetivo||'')}">
  <input id="dd" class="field" placeholder="Dias e horário (ex.: Ter e Qui · 10h)" value="${esc(a.dias||'')}">`:''}
  <div class="g2"><div><div class="mini">Aulas no mês</div><input id="dam" class="field" inputmode="numeric" value="${a.aulas_mes}"></div><div><div class="mini">Meta de presença</div><input id="dmp" class="field" inputmode="numeric" value="${a.meta_presenca}"></div></div>
  <button class="btn" onclick="salvarCadastro('${a.id}',${personal})">SALVAR CADASTRO</button></div>
@@ -241,7 +240,7 @@ function blocoCadastro(a,personal){return `<div class="card"><div class="lab">Ca
  <button class="btn ghost" onclick="${personal?`trocarSenhaSala('${a.sala_id}')`:`trocarPin('${a.id}')`}">TROCAR SENHA</button><div class="mini">Anote no seu PDF de senhas. Eu não consigo mostrar a senha depois.</div></div>
  <button class="btn ghost" style="border-color:#5a1a1e;color:#ff7a80" onclick="desativar('${a.id}')">TIRAR ALUNO DO CAMP</button>`}
 async function salvarCadastro(id,personal){const u={aulas_mes:+$('#dam').value||12,meta_presenca:+$('#dmp').value||0};
- if(personal)Object.assign(u,{nome_completo:$('#dn').value.trim()||null,objetivo:$('#dob').value.trim()||null,dias:$('#dd').value.trim()||null});
+ if(personal)Object.assign(u,{nome_completo:$('#dn').value.trim()||null,dias:$('#dd').value.trim()||null});
  await ok(sb.from('camp_alunos').update(u).eq('id',id),'Cadastro salvo');reabrir()}
 async function trocarFoto(id){const f=$('#ff').files[0];if(!f)return;toast('Enviando foto...');
  const img=await new Promise((s,n)=>{const i=new Image();i.onload=()=>s(i);i.onerror=n;i.src=URL.createObjectURL(f)});
@@ -251,12 +250,12 @@ async function trocarFoto(id){const f=$('#ff').files[0];if(!f)return;toast('Envi
 async function trocarSenhaSala(sala){const p=$('#ds').value.trim();const {data,error}=await sb.rpc('camp_prof_senha_sala',{p_sala:sala,p_senha:p});if(error||data.erro){toast(data?data.erro:'Erro','er');return}toast('✓ Senha trocada');$('#ds').value=''}
 async function trocarPin(id){const p=$('#ds').value.trim();const {data,error}=await sb.rpc('camp_prof_pin',{p_aluno:id,p_pin:p});if(error||data.erro){toast(data?data.erro:'Erro','er');return}toast('✓ Senha pessoal salva');$('#ds').value=''}
 async function desativar(id){if(!confirm('Tirar este aluno do Camp? O histórico fica guardado.'))return;await ok(sb.from('camp_alunos').update({ativo:false}).eq('id',id),'Aluno retirado');aba='hoje';home()}
-function novoPersonal(){reabrir=home;V().innerHTML=topo('home()')+`<h2>NOVO ALUNO <span>PERSONAL</span></h2><div class="card">
+function novoPersonal(){reabrir=home;V().innerHTML=topo('home()')+`<h2>NOVO ALUNO <span>MUAY THAI</span></h2><div class="card">
  <input id="nn" class="field" placeholder="Primeiro nome (é o login dele)" autocapitalize="words">
  <input id="nc" class="field" placeholder="Nome completo" autocapitalize="words">
  <input id="ns" class="field" inputmode="numeric" maxlength="4" placeholder="Senha de 4 números" style="text-align:center;letter-spacing:8px;font-family:Anton;font-size:24px">
  <button class="btn" id="bn" onclick="criarPersonal()">CRIAR SALA DE GUERRA</button><div class="err" id="ne"></div>
- <div class="mini">Depois de criar, abra o aluno e coloque foto, objetivo, missão e a meta do camp.</div></div>`}
+ <div class="mini">Depois de criar, abra o aluno e coloque foto, missão e a meta do camp.</div></div>`}
 async function criarPersonal(){$('#bn').disabled=true;const {data,error}=await sb.rpc('camp_prof_novo_personal',{p_nome:$('#nn').value,p_nome_completo:$('#nc').value,p_senha:$('#ns').value.trim()});
  $('#bn').disabled=false;if(error||data.erro){$('#ne').textContent=data?data.erro:'Erro ao criar.';return}
  toast('✓ Sala criada. Login: '+data.login);await carregar();const a=ALUNOS.find(x=>x.sala_id===data.sala);aba='dados';telaPersonal(a.id)}
@@ -314,7 +313,7 @@ async function blocoTecnica(a){const P=await programa();const {data}=await sb.fr
  ${c.golpes.map(g=>`<div class="rx"><div class="g">${esc(g.nome)}${g.thai?`<small>${esc(g.thai)} · nível ${g.nivel}</small>`:`<small>nível ${g.nivel}</small>`}</div>${P.contextos.map(([x])=>B(a.id,`mt:${g.id}:${x}`,g.nome,N[`mt:${g.id}:${x}`])).join('')}</div>`).join('')}</div>`).join('')+
  `<div class="lab" style="margin-top:20px">Desempenho de luta</div><div class="card">${P.desempenho.map(d=>`<div class="lab" style="margin-top:8px">${esc(d.grupo)}</div>${d.itens.map(i=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #222"><span style="font-size:15px">${esc(i.nome)}</span>${B(a.id,`mt:${i.id}:d`,i.nome,N[`mt:${i.id}:d`])}</div>`).join('')}`).join('')}</div>`}
 async function telaVideosMT(){reabrir=telaVideosMT;PROG=null;const P=await programa(),VD=P.videos||{};
- V().innerHTML=topo('home()')+`<h2>VÍDEOS DO <span>MUAY THAI</span></h2><div class="sub">YouTube: grave, marque <b>Não listado</b>, toque em Compartilhar → Copiar link e cole no golpe. Vale para todos os alunos de Personal.</div>`+
+ V().innerHTML=topo('home()')+`<h2>VÍDEOS DO <span>MUAY THAI</span></h2><div class="sub">YouTube: grave, marque <b>Não listado</b>, toque em Compartilhar → Copiar link e cole no golpe. Vale para todos os alunos de Muay Thai.</div>`+
  P.categorias.map(c=>`<div class="lab" style="margin-top:20px">${esc(c.nome)} · ${esc(c.thai)}</div><div class="card">${c.golpes.map(g=>`<div class="tec"><div class="nm">${VD[g.id]?'<span style="color:var(--g)">▶</span> ':''}${esc(g.nome)}</div>
  <input class="field" style="margin-top:8px;font-size:14px;padding:10px 12px" placeholder="Cole aqui o link do YouTube" inputmode="url" value="${esc((VD[g.id]||{}).url||'')}" id="mv_${g.id}">
  <button class="btn ghost" style="margin-top:8px;padding:11px" onclick="salvarVideoMT('${g.id}',${esc(JSON.stringify(g.nome))},this)">SALVAR VÍDEO</button></div>`).join('')}</div>`).join('');scrollTo(0,0)}
