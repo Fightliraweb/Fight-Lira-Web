@@ -202,6 +202,7 @@ async function telaPersonal(id,ab){if(ab)aba=ab;reabrir=()=>telaPersonal(id);awa
  if(aba==='missao'){const m=a.missao||{};h+=`<div class="card"><div class="lab">Missão do mês</div><input id="mt" class="field" placeholder="Ex.: Pular corda 3 minutos sem parar" value="${esc(m.titulo||'')}">
   <div class="mini">Progresso: <b id="mpv">${Math.round((m.progresso||0)*100)}%</b></div><input type="range" id="mp" min="0" max="100" step="5" value="${Math.round((m.progresso||0)*100)}" oninput="$('#mpv').textContent=this.value+'%'">
   <input id="ms" class="field" style="margin-top:10px" placeholder="Status (ex.: 2 min e 10 s — faltam 50 s)" value="${esc(m.status||'')}">
+ <input id="mv" class="field" style="margin-top:10px" inputmode="url" placeholder="Link do vídeo de como fazer (YouTube, opcional)" value="${esc(m.video||'')}">
   <label class="tog"><input type="checkbox" id="mc" ${m.cumprida?'checked':''}> Missão cumprida ★ (gera conquista)</label>
   <button class="btn" onclick="salvarMissao('${a.id}')">SALVAR MISSÃO</button></div>`}
  if(aba==='camp')h+=`<div class="card"><div class="lab">Meta do camp deste aluno</div><div class="mini">O que vocês combinaram</div><input id="ct" class="field" placeholder="Ex.: -4 kg e 3 rounds de manopla" value="${esc(a.camp_titulo||'')}">
@@ -218,7 +219,7 @@ async function salvarMetaPeso(id){await ok(sb.from('camp_alunos').update({peso_i
 async function salvarTeste(id){const n=$('#tn').value.trim();if(!n){toast('Escreva o exercício.','er');return}
  await ok(sb.from('camp_testes').upsert({aluno_id:id,mes:mes1(),nome:n,inicio:$('#ti').value.trim()||null,fim:$('#tf').value.trim()||null,melhor:$('#tm').value}),'Teste salvo');reabrir()}
 async function salvarMissao(id){const a=ALUNOS.find(x=>x.id===id),c=$('#mc').checked,old=a.missao||{};
- const m={titulo:$('#mt').value.trim(),progresso:+$('#mp').value/100,status:$('#ms').value.trim(),cumprida:c,dia:c?(old.cumprida&&old.dia?old.dia:hoje()):null};
+ const m={video:$('#mv').value.trim()||null,titulo:$('#mt').value.trim(),progresso:+$('#mp').value/100,status:$('#ms').value.trim(),cumprida:c,dia:c?(old.cumprida&&old.dia?old.dia:hoje()):null};
  await ok(sb.from('camp_alunos').update({missao:m}).eq('id',id),c&&!old.cumprida?'Missão cumprida! Conquista liberada':'Missão salva');reabrir()}
 async function salvarCamp(id){await ok(sb.from('camp_alunos').update({camp_titulo:$('#ct').value.trim()||null,camp_inicio:$('#ci').value||null,camp_data:$('#cd').value||null}).eq('id',id),'Meta do camp salva');reabrir()}
 
@@ -257,6 +258,7 @@ async function criarPersonal(){$('#bn').disabled=true;const {data,error}=await s
 // ===== JIU-JITSU =====
 async function telaSala(sid){reabrir=()=>telaSala(sid);await carregar();const s=SALAS.find(x=>x.id===sid),al=ALUNOS.filter(a=>a.sala_id===sid);
  V().innerHTML=topo('home()')+`<h2>${esc(s.titulo)}</h2><div class="sub">${esc(s.sub)}</div><div style="margin-top:10px;height:14px;border-radius:4px;background:${COR[s.conteudo.faixa]};border:1px solid #444"></div>
+ <button class="btn gold" onclick="telaVideos('${sid}')">▶ VÍDEOS DA FAIXA · ${Object.values(s.conteudo.videos||{}).filter(v=>v.url).length} de ${s.conteudo.materia.reduce((x,m)=>x+m.qtd,0)+s.conteudo.ciclo.length*2}</button>
  <div class="lab" style="margin-top:20px">Alunos</div>
  ${al.map(a=>`<div class="card item" onclick="telaJJ('${a.id}')"><div class="av" style="border-color:${COR[s.conteudo.faixa]}">${esc(a.nome[0])}</div><div><b>${esc(a.nome)}</b><span>${a.pin_hash?'Ficha com senha pessoal ✓':'⚠ Falta a senha pessoal'}</span></div><div class="go">AVALIAR ›</div></div>`).join('')||'<div class="mini">Nenhum aluno nesta sala.</div>'}
  <div class="card"><div class="lab">Novo aluno nesta faixa</div><div class="g2"><input id="jn" class="field" placeholder="Primeiro nome" autocapitalize="words"><input id="jp" class="field" inputmode="numeric" maxlength="4" placeholder="Senha pessoal (4 nº)"></div>
@@ -290,6 +292,25 @@ async function nota(id,item,v,el){const inp=el.closest('.slot').querySelector('i
  el.parentNode.querySelectorAll('button').forEach((b,i)=>b.className=i===v?'on'+v:'')}
 async function rotulo(id,item,val){const {data}=await sb.from('camp_notas').select('nota').eq('aluno_id',id).eq('item',item).maybeSingle();
  if(!data){toast('Dê a nota para salvar o nome da técnica.');return}await ok(sb.from('camp_notas').update({rotulo:val.trim()||null}).eq('aluno_id',id).eq('item',item),'Nome da técnica salvo')}
+
+// ===== VÍDEOS DA FAIXA =====
+const ytOk=u=>/(?:youtu\.be\/|v=|shorts\/|embed\/|live\/)[\w-]{11}/.test(u);
+async function telaVideos(sid){reabrir=()=>telaVideos(sid);await carregar();const s=SALAS.find(x=>x.id===sid),C=s.conteudo,VD=C.videos||{};
+ const linha=(k,nome)=>{const v=VD[k]||{};return `<div class="tec"><div class="nm">${v.url?'<span style="color:var(--g)">▶</span> ':''}${esc(nome)}</div>
+  <input class="field" style="margin-top:8px;font-size:14px;padding:10px 12px" placeholder="Nome da técnica (ex.: Baiana)" value="${esc(v.titulo||'')}" data-k="${esc(k)}" data-f="titulo">
+  <input class="field" style="margin-top:6px;font-size:14px;padding:10px 12px" placeholder="Cole aqui o link do YouTube" inputmode="url" value="${esc(v.url||'')}" data-k="${esc(k)}" data-f="url">
+  <button class="btn ghost" style="margin-top:8px;padding:11px" onclick="salvarVideo('${sid}',this)">SALVAR VÍDEO</button></div>`};
+ V().innerHTML=topo(`telaSala('${sid}')`)+`<h2>VÍDEOS · <span>${esc(s.titulo.replace('Sala de Guerra ',''))}</span></h2>
+ <div class="sub">YouTube: grave, marque <b>Não listado</b>, toque em Compartilhar → Copiar link e cole aqui. Vale para todos os alunos da faixa.</div>
+ <div class="lab" style="margin-top:20px">Ciclo de 8 semanas</div><div class="card">${C.ciclo.map((c,i)=>linha('ciclo:'+i+':a',`Semana ${i+1} · 1ª aula · ${c.a}`)+linha('ciclo:'+i+':b',`Semana ${i+1} · 2ª aula · ${c.b}`)).join('')}</div>
+ <div class="lab" style="margin-top:20px">Matéria da prova</div><div class="card">${C.materia.map(m=>Array.from({length:m.qtd},(_,i)=>linha(m.cat+'#'+(i+1),`${m.cat} · ${i+1}`)).join('')).join('')}</div>`;scrollTo(0,0)}
+async function salvarVideo(sid,btn){const box=btn.closest('.tec'),k=box.querySelector('[data-f=url]').dataset.k;
+ const url=box.querySelector('[data-f=url]').value.trim(),titulo=box.querySelector('[data-f=titulo]').value.trim();
+ if(url&&!ytOk(url)&&!/^https?:\/\//.test(url)){toast('Isso não parece um link. Copie de novo no YouTube.','er');return}
+ const {data,error}=await sb.from('camp_salas').select('conteudo').eq('id',sid).single();if(error){toast('Não salvou.','er');return}
+ const C=data.conteudo;C.videos=C.videos||{};if(url)C.videos[k]={url,titulo:titulo||null};else delete C.videos[k];
+ await ok(sb.from('camp_salas').update({conteudo:C}).eq('id',sid),url?'Vídeo salvo. O aluno já vê o ▶':'Vídeo removido');
+ box.querySelector('.nm').innerHTML=(url?'<span style="color:var(--g)">▶</span> ':'')+esc(box.querySelector('.nm').textContent.replace(/^▶\s*/,''))}
 
 iniciar();
 </script>

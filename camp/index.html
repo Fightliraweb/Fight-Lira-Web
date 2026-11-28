@@ -240,7 +240,8 @@ function peso(alto){const P=D.peso;if(!P||!P.pesagens||!P.pesagens.length)return
  <text x="${x(i)}" y="${H-4}" fill="#888" font-size="10" text-anchor="middle">${esc(p[0])}</text>${alto?`<text x="${x(i)}" y="${y(p[1])-10}" fill="#ccc" font-size="10" text-anchor="middle">${kg(p[1])}</text>`:''}`).join('')}
  </svg></div>`}
 function missao(grande){const M=D.missao;return `<div class="card ${M.cumprida?'done':''}"><div class="lab ${M.cumprida?'gold':''}">${M.cumprida?'Missão cumprida ★':'Missão do mês'}</div>
-<div class="mis" ${grande?'style="font-size:23px"':''}>${esc(M.titulo)}</div><div class="prog"><div style="width:${Math.round((M.cumprida?1:M.progresso)*100)}%"></div></div><div class="t">${esc(M.status)}</div></div>`}
+<div class="mis" ${grande?'style="font-size:23px"':''}>${esc(M.titulo)}</div>${M.video?vbtnM(M):''}<div class="prog"><div style="width:${Math.round((M.cumprida?1:M.progresso)*100)}%"></div></div><div class="t">${esc(M.status)}</div></div>`}
+function vbtnM(M){D.videos=D.videos||{};D.videos['missao']={url:M.video,titulo:'Como fazer'};return vbtn('missao','Como fazer')}
 function teste(){const T=D.teste;return `<div class="card"><div class="lab">Teste do mês · ${esc(T.nome)}</div>
 <div class="cmp"><div>Início do mês<b ${T.inicio?'':'style="color:#555"'}>${T.inicio?esc(T.inicio):'—'}</b></div><div style="color:var(--r);font-size:22px">→</div><div class="${T.fim?'':'q'}" style="text-align:right">Fim do mês<b ${T.fim?'class="gold"':''}>${T.fim?esc(T.fim):'?'}</b></div></div>
 <div class="t">${!T.inicio?'Primeira medição no próximo treino.':T.fim?'Comparação fechada pelo professor.':'O professor aplica de novo no fim do mês.'}</div></div>`}
@@ -296,6 +297,15 @@ async function abrirFicha(){const n=$('#fnome').value,p=$('#fpin').value.trim();
   setD(r.dados);ULT=JSON.stringify(D);render();const novas=conqs().filter(c=>!vistas().includes(c.id));if(novas.length)setTimeout(()=>conquista(novas[0],true),400)}
  catch(e){$('#ferr').textContent='Sem conexão. Tente de novo.';$('#bfi').textContent='ABRIR MINHA FICHA'}}
 const NOTA=['não sabe','com ajuda','faz sozinho','aplica no rola'];
+// ---- vídeos (YouTube não listado)
+function ytId(u){const m=String(u||'').match(/(?:youtu\.be\/|v=|shorts\/|embed\/|live\/)([\w-]{11})/);return m?m[1]:null}
+const VID=k=>(D.videos||{})[k];
+function vbtn(k,txt){const v=VID(k);if(!v||!v.url)return '';return `<button onclick="verVideo('${esc(k)}')" style="display:inline-flex;align-items:center;gap:7px;margin:8px 8px 0 0;border:0;border-radius:30px;padding:8px 14px 8px 8px;background:rgba(224,20,31,.16);border:1px solid rgba(224,20,31,.55);font-size:13.5px;font-weight:700;cursor:pointer"><span style="width:24px;height:24px;border-radius:50%;background:var(--r);display:inline-flex;align-items:center;justify-content:center"><svg width="11" height="11" viewBox="0 0 24 24" fill="#fff"><path d="M7 4v16l13-8z"/></svg></span>${esc(v.titulo||txt||'Ver vídeo')}</button>`}
+function verVideo(k){const v=VID(k);if(!v)return;const id=ytId(v.url);if(!id){window.open(v.url,'_blank');return}
+ const vert=/shorts\//.test(v.url),m=$('#modal');m.classList.remove('hide');
+ m.innerHTML=`<div class="in" style="max-width:${vert?'360px':'520px'}"><div class="k">VÍDEO DA TÉCNICA</div><h3 style="font-size:26px">${esc(v.titulo||'')}</h3>
+ <div style="position:relative;width:100%;aspect-ratio:${vert?'9/16':'16/9'};max-height:70vh;border-radius:16px;overflow:hidden;background:#000;box-shadow:0 0 40px rgba(224,20,31,.3)"><iframe src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1&playsinline=1&rel=0&modestbranding=1" style="position:absolute;inset:0;width:100%;height:100%;border:0" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe></div>
+ <button class="btn ghost" onclick="fechar()">FECHAR</button></div>`}
 function renderJJ(v){
   if(D.generico&&!D.ficha&&tab==='hoje'){v.innerHTML=topo()+`<div class="prof" style="margin-top:40px"><div style="max-width:260px;margin:0 auto">${faixaSVG(D.faixa)}</div><div class="nm" style="margin-top:18px">${esc(D.sala)}</div><div class="inf">${esc(D.rumo)}</div></div>
   <div class="card" style="margin-top:28px"><div class="lab">Sua ficha individual</div><div class="mis">Quem é você?</div>
@@ -312,14 +322,15 @@ function renderJJ(v){
     ${fichaJJ(total)}
     <div class="card">${D.materia.map(m=>{const ns=Array.from({length:m.qtd},(_,i)=>N[m.cat+'#'+(i+1)]||null);
      return `<div style="padding:11px 0;border-bottom:1px solid #222"><div style="display:flex;align-items:center;justify-content:space-between;gap:10px"><span style="font-size:15.5px">${esc(m.cat)}</span><span style="display:flex;gap:5px;align-items:center">${ns.map(x=>`<i style="width:14px;height:14px;border-radius:50%;display:inline-block;${x?`background:${['#3a3a3e','#7a0a12','#e0141f','#e8b04a'][x.nota]};border:1.5px solid ${x.nota===3?'#e8b04a':'#555'}`:'border:1.5px solid #555'}"></i>`).join('')}<b style="font-family:Anton;font-weight:400;font-size:20px;margin-left:6px;color:var(--r)">${m.qtd}</b></span></div>
+     ${Array.from({length:m.qtd},(_,i)=>vbtn(m.cat+'#'+(i+1),m.cat+' '+(i+1))).join('')}
      ${ns.some(x=>x&&x.rotulo)?`<div class="t" style="margin-top:4px">${ns.map((x,i)=>x&&x.rotulo?`${i+1}. ${esc(x.rotulo)} · <span class="gold">${x.nota}</span>`:'').filter(Boolean).join(' &nbsp; ')}</div>`:''}</div>`}).join('')}</div>
     ${D.ficha&&conqs().length?sec('MINHAS','CONQUISTAS','')+conqs().map((c,i)=>`<div class="card conq" onclick="conquista(conqs()[${i}])"><div class="medal"><svg width="24" height="24" viewBox="0 0 24 24" fill="#3a2706"><path d="M12 2l2.9 6.3 6.9.7-5.2 4.6 1.5 6.8L12 17l-6.1 3.4 1.5-6.8L2.2 9l6.9-.7z"/></svg></div><div><b>${esc(c.titulo)}</b><span>${esc(c.sub)}${c.data?' · '+esc(c.data):''}</span></div><div class="go">POSTAR ›</div></div>`).join(''):''}`;
   }
   if(tab==='missao'){const w=semanaCiclo();
     v.innerHTML=topo()+sec('CICLO DE','8 SEMANAS','')+`<div class="card done"><div class="lab gold">Esta semana · ${w+1} de 8</div><div class="mis" style="font-size:24px">${esc(D.ciclo[w].pos)}</div>
-    <div class="t" style="margin-top:8px;font-size:15px;color:#ddd"><b class="gold">1ª aula:</b> ${esc(D.ciclo[w].a)}<br><b class="gold">2ª aula:</b> ${esc(D.ciclo[w].b)}</div>
+    <div class="t" style="margin-top:8px;font-size:15px;color:#ddd"><b class="gold">1ª aula:</b> ${esc(D.ciclo[w].a)}<br><b class="gold">2ª aula:</b> ${esc(D.ciclo[w].b)}</div>${vbtn('ciclo:'+w+':a',D.ciclo[w].a)}${vbtn('ciclo:'+w+':b',D.ciclo[w].b)}
     <div class="t" style="margin-top:10px">Faltou numa das duas? O par fica incompleto: você aprende o ataque sem a defesa, ou o contrário. Reponha no treino seguinte.</div></div>`+
-    D.ciclo.map((c,i)=>`<div class="card" style="${i===w?'border-color:rgba(232,176,74,.5)':''};display:flex;gap:14px;align-items:center"><div style="font-family:Anton;font-size:28px;color:${i===w?'var(--g)':'#555'};width:30px">${i+1}</div><div><b style="font-size:15.5px">${esc(c.pos)}</b><div class="t">${esc(c.a)} → ${esc(c.b)}</div></div></div>`).join('');
+    D.ciclo.map((c,i)=>`<div class="card" style="${i===w?'border-color:rgba(232,176,74,.5)':''};display:flex;gap:14px;align-items:center"><div style="font-family:Anton;font-size:28px;color:${i===w?'var(--g)':'#555'};width:30px">${i+1}</div><div><b style="font-size:15.5px">${esc(c.pos)}</b><div class="t">${esc(c.a)} → ${esc(c.b)}</div>${i===w?'':vbtn('ciclo:'+i+':a',c.a)+vbtn('ciclo:'+i+':b',c.b)}</div></div>`).join('');
   }
   if(tab==='evolucao'){const R=D.regra;
     v.innerHTML=topo()+sec('REGRAS DA','FAIXA','')+`<div class="card"><div class="lab">Para trocar de faixa, as três juntas</div>
