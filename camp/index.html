@@ -391,11 +391,13 @@ function renderJJ(v){
   if(tab==='recados') v.innerHTML=topo()+sec('RECADO DO','PROFESSOR',esc(D.recado.data||''))+recado()+obsCard();
 }
 
+function barraJJ(F){if(!F||!F.aulasMes)return '';const o=D;D=Object.assign({},o,{aulasMes:F.aulasMes,presencas:F.presencas||[]});let b;try{b=sec('PRESENÇA DE',String(F.mes||'').toUpperCase(),'')+barra()}finally{D=o}return b}
 function fichaJJ(total){const F=D.ficha;
  if(!F)return `<div class="card"><div class="lab">Matéria da prova</div><div class="big">${total}<small>técnicas para dominar</small></div><div class="t">Cada técnica vale de 0 a 3. A nota individual é lançada pelo professor na avaliação.</div></div>`;
  const vals=Object.entries(F.notas||{}).filter(([k])=>!k.includes(':')).map(([,v])=>v),luta=Object.entries(F.notas||{}).filter(([k])=>k.startsWith('luta:')).map(([,v])=>v.nota),pts=vals.reduce((a,x)=>a+x.nota,0),max=total*3,pct=max?Math.round(pts/max*100):0,aulas=D.regra&&+D.regra.aulas;
  return `<div class="row"><div class="card"><div class="lab">Pontos da prova</div><div class="big ${pct>=80?'gold':''}">${pct}%<small>${pts}/${max}</small></div><div class="t">Meta: 80% e nada abaixo de 2</div><div class="prog"><div style="width:${pct}%"></div></div></div>
  <div class="card"><div class="lab">Aulas na faixa</div><div class="big">${F.aulasTotal}<small>${aulas?'de '+aulas:''}</small></div><div class="t">${vals.length} de ${total} técnicas avaliadas</div>${aulas?`<div class="prog"><div style="width:${Math.min(100,F.aulasTotal/aulas*100)}%"></div></div>`:''}</div></div>
+ ${barraJJ(F)}
  <div class="card"><div class="lab">Na luta · sabe aplicar no rola?</div>${luta.length?resumoBol(luta):'<div class="empty">O professor marca aqui se você encaixa a técnica no rola de verdade. É diferente da nota da prova.</div>'}</div>`}
 
 // ---- conquista: card para stories
