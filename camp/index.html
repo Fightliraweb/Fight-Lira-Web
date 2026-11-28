@@ -80,7 +80,7 @@ button,input,textarea{font:inherit;color:inherit}
 .conq{display:flex;align-items:center;gap:14px;cursor:pointer}
 .medal{width:48px;height:48px;flex:none;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ffe2a3,#c58f2c 60%,#7a5410);display:flex;align-items:center;justify-content:center;box-shadow:0 0 18px rgba(232,176,74,.4)}
 .conq b{display:block;font-size:15px}.conq span{font-size:12.5px;color:#999}
-.conq .go{margin-left:auto;color:var(--g);font-size:13px;font-weight:700}
+.conq .go{white-space:nowrap;margin-left:auto;color:var(--g);font-size:13px;font-weight:700}
 .empty{font-size:14px;color:#888;margin-top:8px;line-height:1.4}
 /* recado */
 .audio{display:flex;align-items:center;gap:14px;margin-top:12px}
@@ -183,8 +183,16 @@ async function entrar(){
 (async()=>{const s=store.get('camp-sessao');if(s){try{D=await load(s.id,s.raw);ID=s.id;abrir()}catch(e){store.del('camp-sessao')}}})();
 function sair(){store.del('camp-sessao');location.reload()}
 
+let ADMIN=null;
+function painel(){D=ADMIN;tab='hoje';const v=$('#view');document.querySelector('.nav').classList.add('hide');
+  v.innerHTML=`<div class="top"><div class="brand"><img src="logo.png" alt=""><b>CAMP <span>FIGHT LIRA</span></b></div><div class="ic" onclick="sair()" title="Sair"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ddd" stroke-width="2"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4M10 17l5-5-5-5M15 12H3"/></svg></div></div>`+sec('CHAVE DO','PROFESSOR','todas as salas')+
+  ADMIN.grupos.map(g=>`<div class="lab" style="margin-top:22px">${esc(g.nome)}</div>`+g.salas.map(x=>`<div class="card conq" onclick="entrarSala('${x.id}')"><div style="width:44px;height:16px;border-radius:4px;flex:none;background:${COR[x.dados.faixa]||'#e0141f'};border:1px solid #444"></div><div><b>${esc(x.titulo)}</b><span>${esc(x.sub)}</span></div><div class="go">ENTRAR ›</div></div>`).join('')).join('');}
+function entrarSala(id){let x=null;ADMIN.grupos.forEach(g=>g.salas.forEach(s=>{if(s.id===id)x=s}));D=JSON.parse(JSON.stringify(x.dados));if(D.generico){D.generico=false;D.nomeCompleto='Professor'}
+  document.querySelector('.nav').classList.remove('hide');tab='hoje';document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('on',b.dataset.t==='hoje'));
+  const L=D.tipo==='jj'?{hoje:'Sala',missao:'Ciclo',evolucao:'Regras',recados:'Recados'}:{hoje:'Hoje',missao:'Missão',evolucao:'Evolução',recados:'Recados'};document.querySelectorAll('.nav button').forEach(b=>{b.lastChild.textContent=L[b.dataset.t]});render();scrollTo(0,0)}
 function abrir(){
   $('#login').classList.add('hide');$('#app').classList.remove('hide');
+  if(D.tipo==='admin'){ADMIN=D;painel();return}
   if(D.tipo==='jj'){const L={hoje:'Sala',missao:'Ciclo',evolucao:'Regras',recados:'Recados'};document.querySelectorAll('.nav button').forEach(b=>{b.lastChild.textContent=L[b.dataset.t]})}
   render();
   const novas=(D.conquistas||[]).filter(c=>!vistas().includes(c.id));
@@ -197,7 +205,7 @@ const presentes=()=>D.presencas.filter(x=>x==='p').length;
 function sequencia(){let n=0;for(let i=D.presencas.length-1;i>=0;i--){if(D.presencas[i]==='p')n++;else break}return n}
 const kg=v=>v.toFixed(1).replace('.',',');
 const vistas=()=>store.get('camp-vistas-'+ID)||[];
-function topo(){return `<div class="top"><div class="brand"><img src="logo.png" alt=""><b>CAMP <span>FIGHT LIRA</span></b></div>
+function topo(){return (ADMIN?`<div onclick="painel()" style="font-size:13px;font-weight:700;letter-spacing:1px;color:var(--g);margin-bottom:10px;cursor:pointer">← TODAS AS SALAS</div>`:'')+`<div class="top"><div class="brand"><img src="logo.png" alt=""><b>CAMP <span>FIGHT LIRA</span></b></div>
 <div class="ic" onclick="sair()" title="Sair"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ddd" stroke-width="2"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4M10 17l5-5-5-5M15 12H3"/></svg></div></div>`}
 function perfil(){return `<div class="prof"><div class="av"><img src="${D.foto}" alt=""></div>
 <div class="nm">${esc(D.nomeCompleto)}</div><div class="inf">${esc(D.plano)}${D.dias?' · '+esc(D.dias):''}</div>
