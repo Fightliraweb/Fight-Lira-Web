@@ -115,18 +115,20 @@ async function sairProf(){await sb.auth.signOut();telaLogin()}
 
 // ===== HOME =====
 let SALAS=[],ALUNOS=[];
-async function carregar(){const [s,a]=await Promise.all([sb.from('camp_salas').select('id,tipo,grupo,titulo,sub,ordem,conteudo').order('ordem'),sb.from('camp_alunos').select('*').eq('ativo',true).order('nome')]);
- if(s.error||a.error){toast('Sem acesso. Entre de novo.','er');await sb.auth.signOut();telaLogin();throw 0}SALAS=s.data;ALUNOS=a.data}
+async function carregar(){const [s,a]=await Promise.all([sb.from('camp_salas').select('id,tipo,grupo,titulo,sub,ordem,conteudo').order('ordem'),sb.from('camp_alunos').select('*').order('nome')]);
+ if(s.error||a.error){toast('Sem acesso. Entre de novo.','er');await sb.auth.signOut();telaLogin();throw 0}SALAS=s.data;TODOS=a.data;ALUNOS=a.data.filter(x=>x.ativo);BLOQ=a.data.filter(x=>!x.ativo)}
+let TODOS=[],BLOQ=[];
 async function home(){V().innerHTML=topo()+'<div class="load">Carregando...</div>';await carregar();
  const {data:obs}=await sb.from('camp_observacoes').select('id').eq('lida',false);const nObs=(obs||[]).length;
- const pers=SALAS.filter(s=>s.tipo==='personal'),jj=SALAS.filter(s=>s.tipo==='jj');
+ const mt=SALAS.find(s=>s.tipo==='mt'),jj=SALAS.filter(s=>s.tipo==='jj');
  const al=sid=>ALUNOS.filter(a=>a.sala_id===sid);
  const avatar=a=>`<div class="av" style="${a&&a.foto?`background-image:url('${esc(foto(a.foto))}')`:''}">${a&&a.foto?'':esc((a?a.nome:'?')[0])}</div>`;
  V().innerHTML=topo()+`<h2>HOJE · <span>${br(hoje())}</span></h2><div class="sub">Toque no aluno para lançar presença, nota, peso, teste e recado.</div>
  ${nObs?`<div class="card item" onclick="telaObs()"><div class="av" style="border-color:var(--g)">✍</div><div><b>Observações dos alunos<span class="badge">${nObs}</span></b><span>Toque para ler</span></div><div class="go">LER ›</div></div>`:''}
  <div class="lab" style="margin-top:22px">MUAY THAI</div>
- ${pers.map(s=>{const a=al(s.id)[0];return a?`<div class="card item" onclick="telaPersonal('${a.id}')">${avatar(a)}<div><b>${esc(a.nome_completo||a.nome)}</b><span>${a.camp_data?'Camp até '+br(a.camp_data):'Sem meta de camp ainda'}</span></div><div class="go">ABRIR ›</div></div>`:''}).join('')}
- <button class="btn ghost" onclick="novoPersonal()">+ NOVO ALUNO DE MUAY THAI</button>
+ ${mt?al(mt.id).map(a=>`<div class="card item" onclick="telaPersonal('${a.id}')">${avatar(a)}<div><b>${esc(a.nome_completo||a.nome)}</b><span>${a.aulas_mes/4}x por semana${a.camp_data?' · camp até '+br(a.camp_data):''}${a.pin_hash?'':' · ainda não criou a senha'}</span></div><div class="go">ABRIR ›</div></div>`).join(''):''}
+ <button class="btn ghost" onclick="novoMT()">+ NOVO ALUNO DE MUAY THAI</button>
+ ${mt?`<button class="btn ghost" onclick="telaSala('${mt.id}')">SALA MUAY THAI · senha, recado para todos, bloqueados</button>`:''}
  <button class="btn gold" onclick="telaVideosMT()">▶ VÍDEOS DO MUAY THAI</button>
  ${['JIU-JITSU ADULTO','JIU-JITSU KIDS'].map(g=>`<div class="lab" style="margin-top:22px">${g}</div>`+jj.filter(s=>s.grupo===g).map(s=>`<div class="card item" onclick="telaSala('${s.id}')"><div class="fx" style="background:${COR[s.conteudo.faixa]}"></div><div><b>${esc(s.titulo)}</b><span>${al(s.id).length} aluno${al(s.id).length===1?'':'s'}${al(s.id).length?' · '+al(s.id).map(a=>esc(a.nome)).join(', '):''}</span></div><div class="go">ABRIR ›</div></div>`).join('')).join('')}
  <button class="btn ghost" style="margin-top:30px" onclick="sairProf()">SAIR DO MODO PROFESSOR</button>`;scrollTo(0,0)}
@@ -134,12 +136,14 @@ const foto=p=>!p?'':/^https?:/.test(p)?p:p;
 
 // ===== PRESENÇA (comum) =====
 async function blocoPresenca(a){const {data}=await sb.from('camp_presencas').select('dia,status').eq('aluno_id',a.id).gte('dia',mes1()).order('dia');
- const p=(data||[]).filter(x=>x.status==='p').length;
- return `<div class="card"><div class="lab">Presença · ${p} de ${a.aulas_mes} no mês · meta ${a.meta_presenca}</div>
+ const L=data||[],p=Math.min(L.filter(x=>x.status!=='f').length,a.aulas_mes),ex=L.slice(a.aulas_mes).filter(x=>x.status==='p').length,fal=L.filter(x=>x.status==='f');
+ return `<div class="card"><div class="lab">Barra do mês · ${p} de ${a.aulas_mes}${p>=a.aulas_mes?' · MÊS 100% ★':''}${ex?' · +'+ex+' extra':''}</div>
  <input type="date" id="pdia" class="field" value="${hoje()}" max="${hoje()}">
  <div class="big2" style="margin-top:10px"><button class="bp" onclick="presenca('${a.id}','p')">✓ PRESENTE</button><button class="bf" onclick="presenca('${a.id}','f')">✗ FALTOU</button></div>
- <div class="chips">${(data||[]).map(x=>`<span class="chip ${x.status}" onclick="tirarPresenca('${a.id}','${x.dia}')">${br(x.dia)} ${x.status==='p'?'✓':'✗'}</span>`).join('')||'<span class="mini">Nenhuma marcação neste mês.</span>'}</div>
- ${(data||[]).length?'<div class="mini">Marcou errado? Toque no dia para apagar.</div>':''}</div>`}
+ <div class="chips">${L.map(x=>`<span class="chip ${x.status}" style="${x.status==='r'?'background:var(--g);color:#1a1205':''}" onclick="tirarPresenca('${a.id}','${x.dia}')">${br(x.dia)} ${{p:'✓',f:'✗',r:'↺'}[x.status]}</span>`).join('')||'<span class="mini">Nenhuma marcação neste mês.</span>'}</div>
+ ${fal.length?`<div class="mini" style="margin-top:12px">Ele repôs a falta? Toque e ela fica dourada:</div><div class="chips" style="margin-top:6px">${fal.map(x=>`<span class="chip" style="border-color:var(--g);color:var(--g)" onclick="repor('${a.id}','${x.dia}')">↺ REPÔS ${br(x.dia)}</span>`).join('')}</div>`:''}
+ ${L.length?'<div class="mini">Marcou errado? Toque no dia para apagar.</div>':''}</div>`}
+async function repor(id,dia){await ok(sb.from('camp_presencas').update({status:'r'}).eq('aluno_id',id).eq('dia',dia),'Falta reposta');reabrir()}
 async function presenca(id,st){const dia=$('#pdia').value||hoje();await ok(sb.from('camp_presencas').upsert({aluno_id:id,dia,status:st}),st==='p'?'Presença marcada':'Falta marcada');reabrir()}
 async function tirarPresenca(id,dia){if(!confirm('Apagar a marcação de '+br(dia)+'?'))return;await ok(sb.from('camp_presencas').delete().eq('aluno_id',id).eq('dia',dia),'Apagado');reabrir()}
 let reabrir=()=>home();
@@ -234,12 +238,16 @@ function blocoCadastro(a,personal){return `<div class="card"><div class="lab">Ca
  ${personal?`<div class="mini">Foto do aluno</div><input type="file" id="ff" accept="image/*" class="field" onchange="trocarFoto('${a.id}')">
  <input id="dn" class="field" placeholder="Nome completo" value="${esc(a.nome_completo||'')}">
  <input id="dd" class="field" placeholder="Dias e horário (ex.: Ter e Qui · 10h)" value="${esc(a.dias||'')}">`:''}
- <div class="g2"><div><div class="mini">Aulas no mês</div><input id="dam" class="field" inputmode="numeric" value="${a.aulas_mes}"></div><div><div class="mini">Meta de presença</div><input id="dmp" class="field" inputmode="numeric" value="${a.meta_presenca}"></div></div>
+ <div class="mini">Treinos por semana (a barra do mês fica com isso × 4)</div><select id="dtw" class="field">${[1,2,3,4,5].map(n=>`<option value="${n}" ${Math.round(a.aulas_mes/4)===n?'selected':''}>${n}x por semana · ${n*4} quadradinhos</option>`).join('')}</select>
  <button class="btn" onclick="salvarCadastro('${a.id}',${personal})">SALVAR CADASTRO</button></div>
- <div class="card"><div class="lab">${personal?'Senha da sala do aluno':'Senha pessoal da ficha'}</div><input id="ds" class="field" inputmode="numeric" maxlength="4" placeholder="Nova senha de 4 números" style="text-align:center;letter-spacing:8px;font-family:Anton;font-size:24px">
- <button class="btn ghost" onclick="${personal?`trocarSenhaSala('${a.sala_id}')`:`trocarPin('${a.id}')`}">TROCAR SENHA</button><div class="mini">Anote no seu PDF de senhas. Eu não consigo mostrar a senha depois.</div></div>
- <button class="btn ghost" style="border-color:#5a1a1e;color:#ff7a80" onclick="desativar('${a.id}')">TIRAR ALUNO DO CAMP</button>`}
-async function salvarCadastro(id,personal){const u={aulas_mes:+$('#dam').value||12,meta_presenca:+$('#dmp').value||0};
+ <div class="card"><div class="lab">Senha pessoal · ${a.pin_hash?'<span style="color:#22c55e">criada ✓</span>':'<span style="color:var(--g)">ainda não criada</span>'}</div>
+ <div class="mini" style="margin-top:0">O aluno cria a própria senha no primeiro acesso. Esqueceu? Zere e ele cria de novo.</div>
+ <button class="btn ghost" onclick="zerarPin('${a.id}')">ZERAR SENHA DO ALUNO</button></div>
+ <button class="btn ghost" style="border-color:#5a1a1e;color:#ff7a80" onclick="desativar('${a.id}')">BLOQUEAR ALUNO</button>
+ <div class="mini">Bloqueado: sai do app na hora e não entra mais. O histórico fica guardado e dá para desbloquear na página da sala.</div>`}
+async function zerarPin(id){if(!confirm('Zerar a senha? O aluno vai criar uma nova no próximo acesso.'))return;const {error}=await sb.rpc('camp_prof_zerar_pin',{p_aluno:id});if(error){toast('Não zerou.','er');return}toast('✓ Senha zerada');reabrir()}
+async function desbloquear(id){await ok(sb.from('camp_alunos').update({ativo:true}).eq('id',id),'Aluno desbloqueado');reabrir()}
+async function salvarCadastro(id,personal){const n=+$('#dtw').value||2,u={aulas_mes:n*4,meta_presenca:n*4};
  if(personal)Object.assign(u,{nome_completo:$('#dn').value.trim()||null,dias:$('#dd').value.trim()||null});
  await ok(sb.from('camp_alunos').update(u).eq('id',id),'Cadastro salvo');reabrir()}
 async function trocarFoto(id){const f=$('#ff').files[0];if(!f)return;toast('Enviando foto...');
@@ -249,32 +257,36 @@ async function trocarFoto(id){const f=$('#ff').files[0];if(!f)return;toast('Envi
  await ok(sb.from('camp_alunos').update({foto:url,foto_card:url}).eq('id',id),'Foto trocada');reabrir()}
 async function trocarSenhaSala(sala){const p=$('#ds').value.trim();const {data,error}=await sb.rpc('camp_prof_senha_sala',{p_sala:sala,p_senha:p});if(error||data.erro){toast(data?data.erro:'Erro','er');return}toast('✓ Senha trocada');$('#ds').value=''}
 async function trocarPin(id){const p=$('#ds').value.trim();const {data,error}=await sb.rpc('camp_prof_pin',{p_aluno:id,p_pin:p});if(error||data.erro){toast(data?data.erro:'Erro','er');return}toast('✓ Senha pessoal salva');$('#ds').value=''}
-async function desativar(id){if(!confirm('Tirar este aluno do Camp? O histórico fica guardado.'))return;await ok(sb.from('camp_alunos').update({ativo:false}).eq('id',id),'Aluno retirado');aba='hoje';home()}
-function novoPersonal(){reabrir=home;V().innerHTML=topo('home()')+`<h2>NOVO ALUNO <span>MUAY THAI</span></h2><div class="card">
- <input id="nn" class="field" placeholder="Primeiro nome (é o login dele)" autocapitalize="words">
+async function desativar(id){if(!confirm('Bloquear este aluno? Ele sai do app na hora e não entra mais. O histórico fica guardado.'))return;await ok(sb.from('camp_alunos').update({ativo:false}).eq('id',id),'Aluno bloqueado');aba='hoje';home()}
+function novoMT(){reabrir=home;V().innerHTML=topo('home()')+`<h2>NOVO ALUNO <span>MUAY THAI</span></h2><div class="card">
+ <input id="nn" class="field" placeholder="Primeiro nome" autocapitalize="words">
  <input id="nc" class="field" placeholder="Nome completo" autocapitalize="words">
- <input id="ns" class="field" inputmode="numeric" maxlength="4" placeholder="Senha de 4 números" style="text-align:center;letter-spacing:8px;font-family:Anton;font-size:24px">
- <button class="btn" id="bn" onclick="criarPersonal()">CRIAR SALA DE GUERRA</button><div class="err" id="ne"></div>
- <div class="mini">Depois de criar, abra o aluno e coloque foto, missão e a meta do camp.</div></div>`}
-async function criarPersonal(){$('#bn').disabled=true;const {data,error}=await sb.rpc('camp_prof_novo_personal',{p_nome:$('#nn').value,p_nome_completo:$('#nc').value,p_senha:$('#ns').value.trim()});
- $('#bn').disabled=false;if(error||data.erro){$('#ne').textContent=data?data.erro:'Erro ao criar.';return}
- toast('✓ Sala criada. Login: '+data.login);await carregar();const a=ALUNOS.find(x=>x.sala_id===data.sala);aba='dados';telaPersonal(a.id)}
+ <select id="ntw" class="field">${[1,2,3,4,5].map(n=>`<option value="${n}" ${n===2?'selected':''}>${n}x por semana · ${n*4} quadradinhos</option>`).join('')}</select>
+ <button class="btn" id="bn" onclick="criarMT()">CADASTRAR</button><div class="err" id="ne"></div>
+ <div class="mini">O aluno entra na sala Muay Thai com a senha da sala, escolhe o nome dele e cria a própria senha.</div></div>`}
+async function criarMT(){const mt=SALAS.find(s=>s.tipo==='mt'),n=$('#nn').value.trim().split(' ')[0];if(!n){$('#ne').textContent='Escreva o nome.';return}
+ const nome=n.replace(/^./,c=>c.toUpperCase());if(TODOS.some(a=>a.sala_id===mt.id&&a.nome.toLowerCase()===nome.toLowerCase())){$('#ne').textContent='Já existe um '+nome+'. Use outro nome (ex.: '+nome+'H).';return}
+ const tw=+$('#ntw').value;$('#bn').disabled=true;
+ const {data,error}=await sb.from('camp_alunos').insert({sala_id:mt.id,nome,nome_completo:$('#nc').value.trim()||null,plano:'Muay Thai',aulas_mes:tw*4,meta_presenca:tw*4}).select().single();
+ if(error){$('#bn').disabled=false;$('#ne').textContent='Não salvou.';return}toast('✓ '+nome+' cadastrado');aba='dados';telaPersonal(data.id)}
 
 // ===== JIU-JITSU =====
 async function telaSala(sid){reabrir=()=>telaSala(sid);await carregar();const s=SALAS.find(x=>x.id===sid),al=ALUNOS.filter(a=>a.sala_id===sid);
- V().innerHTML=topo('home()')+`<h2>${esc(s.titulo)}</h2><div class="sub">${esc(s.sub)}</div><div style="margin-top:10px;height:14px;border-radius:4px;background:${COR[s.conteudo.faixa]};border:1px solid #444"></div>
- <button class="btn gold" onclick="telaVideos('${sid}')">▶ VÍDEOS DA FAIXA · ${Object.values(s.conteudo.videos||{}).filter(v=>v.url).length} de ${s.conteudo.materia.reduce((x,m)=>x+m.qtd,0)+s.conteudo.ciclo.length*2}</button>
+ const isMT=s.tipo==='mt',bl=BLOQ.filter(a=>a.sala_id===sid);
+ V().innerHTML=topo('home()')+`<h2>${esc(s.titulo)}</h2><div class="sub">${esc(s.sub)}</div>${isMT?'':`<div style="margin-top:10px;height:14px;border-radius:4px;background:${COR[s.conteudo.faixa]};border:1px solid #444"></div>
+ <button class="btn gold" onclick="telaVideos('${sid}')">▶ VÍDEOS DA FAIXA · ${Object.values(s.conteudo.videos||{}).filter(v=>v.url).length} de ${s.conteudo.materia.reduce((x,m)=>x+m.qtd,0)+s.conteudo.ciclo.length*2}</button>`}
  <div class="lab" style="margin-top:20px">Alunos</div>
- ${al.map(a=>`<div class="card item" onclick="telaJJ('${a.id}')"><div class="av" style="border-color:${COR[s.conteudo.faixa]}">${esc(a.nome[0])}</div><div><b>${esc(a.nome)}</b><span>${a.pin_hash?'Ficha com senha pessoal ✓':'⚠ Falta a senha pessoal'}</span></div><div class="go">AVALIAR ›</div></div>`).join('')||'<div class="mini">Nenhum aluno nesta sala.</div>'}
- <div class="card"><div class="lab">Novo aluno nesta faixa</div><div class="g2"><input id="jn" class="field" placeholder="Primeiro nome" autocapitalize="words"><input id="jp" class="field" inputmode="numeric" maxlength="4" placeholder="Senha pessoal (4 nº)"></div>
- <button class="btn" onclick="novoJJ('${sid}')">CADASTRAR</button></div>
+ ${al.map(a=>`<div class="card item" onclick="${isMT?'telaPersonal':'telaJJ'}('${a.id}')"><div class="av" style="border-color:${isMT?'var(--r)':COR[s.conteudo.faixa]}">${esc(a.nome[0])}</div><div><b>${esc(a.nome)}</b><span>${a.pin_hash?'Senha pessoal criada ✓':'Ainda não criou a senha'}</span></div><div class="go">ABRIR ›</div></div>`).join('')||'<div class="mini">Nenhum aluno nesta sala.</div>'}
+ ${isMT?`<button class="btn ghost" onclick="novoMT()">+ NOVO ALUNO DE MUAY THAI</button>`:`<div class="card"><div class="lab">Novo aluno nesta faixa</div><input id="jn" class="field" placeholder="Primeiro nome" autocapitalize="words">
+ <button class="btn" onclick="novoJJ('${sid}')">CADASTRAR</button><div class="mini">Ele cria a própria senha no primeiro acesso.</div></div>`}
+ ${bl.length?`<div class="lab" style="margin-top:20px">Bloqueados</div>${bl.map(a=>`<div class="card item" style="cursor:default;opacity:.75"><div class="av" style="border-color:#555">${esc(a.nome[0])}</div><div><b>${esc(a.nome)}</b><span>Não entra mais no app</span></div><div class="go" style="cursor:pointer" onclick="desbloquear('${a.id}')">DESBLOQUEAR</div></div>`).join('')}`:''}
  ${blocoRecado({sala:sid,aluno:null})}${await ultimoRecado(sid,null)}
  <div class="card"><div class="lab">Senha da sala da faixa</div><input id="ds" class="field" inputmode="numeric" maxlength="4" placeholder="Nova senha de 4 números" style="text-align:center;letter-spacing:8px;font-family:Anton;font-size:24px">
- <button class="btn ghost" onclick="trocarSenhaSala('${sid}')">TROCAR SENHA DA SALA</button><div class="mini">Atenção: todos os alunos da faixa vão precisar da nova senha.</div></div>`;scrollTo(0,0)}
-async function novoJJ(sid){const n=$('#jn').value.trim(),p=$('#jp').value.trim();if(!n){toast('Escreva o nome.','er');return}if(!/^\d{4}$/.test(p)){toast('Senha pessoal: 4 números.','er');return}
- if(ALUNOS.some(a=>a.sala_id===sid&&a.nome.toLowerCase()===n.toLowerCase())){toast('Já tem esse nome nesta sala.','er');return}
- const {data,error}=await sb.from('camp_alunos').insert({sala_id:sid,nome:n.split(' ')[0].replace(/^./,c=>c.toUpperCase()),plano:'Jiu-Jitsu',aulas_mes:8,meta_presenca:7}).select().single();
- if(error){toast('Não salvou.','er');return}await sb.rpc('camp_prof_pin',{p_aluno:data.id,p_pin:p});toast('✓ '+data.nome+' cadastrado');telaSala(sid)}
+ <button class="btn ghost" onclick="trocarSenhaSala('${sid}')">TROCAR SENHA DA SALA</button><div class="mini">Atenção: todos os alunos ${isMT?'da turma':'da faixa'} vão precisar da nova senha.</div></div>`;scrollTo(0,0)}
+async function novoJJ(sid){const n=$('#jn').value.trim();if(!n){toast('Escreva o nome.','er');return}
+ if(TODOS.some(a=>a.sala_id===sid&&a.nome.toLowerCase()===n.toLowerCase())){toast('Já tem esse nome nesta sala.','er');return}
+ const {data,error}=await sb.from('camp_alunos').insert({sala_id:sid,nome:n.split(' ')[0].replace(/^./,c=>c.toUpperCase()),plano:'Jiu-Jitsu',aulas_mes:8,meta_presenca:8}).select().single();
+ if(error){toast('Não salvou.','er');return}toast('✓ '+data.nome+' cadastrado');telaSala(sid)}
 async function telaJJ(id,ab){if(ab)aba=ab;else if(!['hoje','notas','recado','obs','dados'].includes(aba))aba='hoje';reabrir=()=>telaJJ(id);await carregar();
  const a=ALUNOS.find(x=>x.id===id),s=SALAS.find(x=>x.id===a.sala_id),C=s.conteudo;
  const abas=[['hoje','Presença'],['notas','Notas'],['recado','Recado'],['obs','Observações'],['dados','Cadastro']];

@@ -34,6 +34,7 @@ button,input,textarea{font:inherit;color:inherit}
 #login p{color:#bbb;margin:10px 0 28px;font-size:16px}
 .field{width:100%;background:rgba(0,0,0,.55);border:1.5px solid #3a3a3e;border-radius:16px;padding:16px 18px;font-size:18px;outline:none}
 .field:focus{border-color:var(--r)}
+select.field{color:#f2f2f2;background-color:#0d0d10}select.field option{background:#141416;color:#f2f2f2}
 .pin{display:flex;gap:12px;justify-content:center;margin-top:14px}
 .pin input{width:62px;height:70px;text-align:center;font-family:Anton;font-size:32px;padding:0}
 .btn{display:block;width:100%;border:0;border-radius:16px;padding:17px;font-weight:700;font-size:18px;letter-spacing:1px;background:linear-gradient(180deg,#f0202b,#b30e18);box-shadow:0 10px 30px rgba(224,20,31,.35);margin-top:20px;cursor:pointer}
@@ -65,7 +66,7 @@ button,input,textarea{font:inherit;color:inherit}
 .ring{width:66px;height:66px;flex:none;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 0 24px rgba(232,176,74,.3)}
 .ring div{width:52px;height:52px;border-radius:50%;background:#141416;display:flex;align-items:center;justify-content:center}
 .bar{display:flex;gap:5px;margin-top:12px}
-.bar i{flex:1;height:22px;border-radius:6px;background:#2a2a2e}.bar .p{background:#f2f2f2}.bar .f{background:var(--r)}
+.bar i{flex:1;height:22px;border-radius:6px;background:#2a2a2e}.bar .p{background:#f2f2f2}.bar .f{background:var(--r)}.bar .r{background:var(--g)}
 .leg{display:flex;gap:16px;margin-top:10px;font-size:12.5px;color:#999}
 .leg span:before{content:"";display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;background:var(--c)}
 .ph{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
@@ -160,7 +161,7 @@ let D=null,ID=null,tab='hoje';
 const SB='https://nvwmxcgxmevvnlhvzvza.supabase.co/rest/v1/rpc/',SBK='sb_publishable_lxgptApQpbleuj7jexhATA_Dzos_aYv';
 async function rpc(fn,body){const r=await fetch(SB+fn,{method:'POST',headers:{apikey:SBK,'Content-Type':'application/json'},body:JSON.stringify(body)});if(!r.ok)throw new Error('rede');return r.json()}
 let TOK=store.get('camp-tok');
-function setD(d){D=d;ID=d.salaId||(d.tipo==='admin'?'professor':'x');if(d.tipo==='jj'&&!d.ficha&&!ADMIN){d.nomeCompleto=''}}
+function setD(d){ID=d.salaId||(d.tipo==='admin'?'professor':'x');if(d.tipo==='mt'&&d.ficha){d=Object.assign({},d.ficha,{tipo:'personal',salaId:d.salaId,mt:true,sala:d.sala})}D=d;if(d.tipo==='jj'&&!d.ficha&&!ADMIN){d.nomeCompleto=''}}
 
 // ---- login
 const pins=[...document.querySelectorAll('#pin input')];
@@ -189,7 +190,7 @@ async function atualizar(){
   const ae=document.activeElement;if(ae&&(ae.tagName==='TEXTAREA'||ae.tagName==='INPUT')&&ae.value)return;
   if($('#aud')&&!$('#aud').paused)return;
   try{const r=await rpc('camp_dados',{p_token:TOK});if(!r.dados)return;const j=JSON.stringify(r.dados);if(j===ULT)return;
-    const antes=ULT;ULT=j;if(!antes)return;setD(r.dados);render();
+    const antes=ULT;ULT=j;if(!antes)return;if(document.activeElement&&document.activeElement.id&&document.activeElement.id.startsWith('fpin'))return;setD(r.dados);render();
     const novas=conqs().filter(c=>!vistas().includes(c.id));if(novas.length)conquista(novas[0],true)}catch(e){}
 }
 setInterval(atualizar,15000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)atualizar()});
@@ -212,10 +213,12 @@ function abrir(){
 document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>{tab=b.dataset.t;document.querySelectorAll('.nav button').forEach(x=>x.classList.toggle('on',x===b));render();scrollTo(0,0)});
 
 // ---- helpers
-const presentes=()=>D.presencas.filter(x=>x==='p').length;
-function sequencia(){let n=0;for(let i=D.presencas.length-1;i>=0;i--){if(D.presencas[i]==='p')n++;else break}return n}
+const presentes=()=>Math.min(D.presencas.filter(x=>x==='p'||x==='r').length,D.aulasMes);
+const extras=()=>Math.max(0,D.presencas.slice(D.aulasMes).filter(x=>x==='p').length);
+function sequencia(){let n=0;for(let i=D.presencas.length-1;i>=0;i--){if(D.presencas[i]!=='f')n++;else break}return n}
 const kg=v=>v.toFixed(1).replace('.',',');
-const vistas=()=>store.get('camp-vistas-'+ID+(D&&D.ficha?D.ficha.alunoId:''))||[];
+const AID=()=>D&&D.ficha?D.ficha.alunoId:(D&&D.alunoId)||'';
+const vistas=()=>store.get('camp-vistas-'+ID+AID())||[];
 const conqs=()=>(D.ficha?D.ficha.conquistas:D.conquistas)||[];
 function topo(){return (ADMIN?`<div onclick="painel()" style="font-size:13px;font-weight:700;letter-spacing:1px;color:var(--g);margin-bottom:10px;cursor:pointer">← TODAS AS SALAS</div>`:'')+`<div class="top"><div class="brand"><img src="logo.png" alt=""><b>CAMP <span>FIGHT LIRA</span></b></div>
 <div class="ic" onclick="sair()" title="Sair"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ddd" stroke-width="2"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4M10 17l5-5-5-5M15 12H3"/></svg></div></div>`}
@@ -223,12 +226,14 @@ function perfil(){return `<div class="prof"><div class="av"><img src="${D.foto}"
 <div class="nm">${esc(D.nomeCompleto)}</div><div class="inf">${esc(D.plano)}${D.dias?' · '+esc(D.dias):''}</div>
 </div>`}
 function barra(){let h='';for(let i=0;i<D.aulasMes;i++){const v=D.presencas[i];h+=`<i class="${v||''}"></i>`}
-return `<div class="card"><div class="lab">Barra do mês</div><div class="bar">${h}</div>
-<div class="leg"><span style="--c:#f2f2f2">Presente</span><span style="--c:#e0141f">Falta</span><span style="--c:#2a2a2e">A treinar</span></div></div>`}
+ const cheia=presentes()>=D.aulasMes,ex=extras();
+ return `<div class="card ${cheia?'done':''}"><div class="lab ${cheia?'gold':''}">${cheia?'Mês 100% ★':'Barra do mês · '+presentes()+' de '+D.aulasMes}</div><div class="bar">${h}</div>
+ ${ex?`<div class="chip" style="margin-top:10px;border-color:var(--g);background:rgba(232,176,74,.15);color:var(--g)">+${ex} treino${ex>1?'s':''} extra</div>`:''}
+ <div class="leg"><span style="--c:#f2f2f2">Presente</span><span style="--c:#e8b04a">Reposta</span><span style="--c:#e0141f">Falta</span><span style="--c:#2a2a2e">A treinar</span></div></div>`}
 function cards2(){const s=sequencia(),pct=Math.min(s/Math.max(D.metaPresenca,1),1)*100;
 return `<div class="row"><div class="card streak"><div><div class="lab">Sequência</div><div class="big gold">${s}<small>treino${s===1?'':'s'}</small></div><div class="t">sem faltar</div></div>
 <div class="ring" style="background:conic-gradient(var(--g) 0 ${pct}%,#2a2a2e ${pct}%)"><div><svg width="28" height="28" viewBox="0 0 24 24" fill="#e8b04a"><path d="M12 2l2.9 6.3 6.9.7-5.2 4.6 1.5 6.8L12 17l-6.1 3.4 1.5-6.8L2.2 9l6.9-.7z"/></svg></div></div></div>
-<div class="card"><div class="lab">Presença</div><div class="big">${presentes()}<small>de ${D.aulasMes} aulas</small></div><div class="t">Meta do camp: ${D.metaPresenca}</div></div></div>`}
+<div class="card"><div class="lab">Presença</div><div class="big">${presentes()}<small>de ${D.aulasMes} aulas</small></div><div class="t">Combinado: ${D.aulasMes} no mês</div></div></div>`}
 function peso(alto){const P=D.peso;if(!P||!P.pesagens||!P.pesagens.length)return '';
  const pts=P.pesagens,ult=pts[pts.length-1][1],dif=P.inicio-ult;
  const vals=pts.map(p=>p[1]).concat([P.meta,P.inicio]),mx=Math.max(...vals)+.3,mn=Math.min(...vals)-.3;
@@ -292,6 +297,8 @@ function sec(a,b,c){return `<div class="sec"><h2>${a} <span>${b}</span></h2><em>
 function render(){
   const v=$('#view');
   if(D.tipo==='jj'){renderJJ(v);return}
+  if(D.tipo==='mt'){v.innerHTML=topo()+`<div class="prof" style="margin-top:40px"><img src="logo.png" style="width:110px;filter:drop-shadow(0 0 30px rgba(224,20,31,.5))"><div class="nm" style="margin-top:14px">${esc(D.sala||'Muay Thai')}</div><div class="inf">Escolha seu nome e entre com a sua senha</div></div>`+quemSou();document.querySelector('.nav').classList.add('hide');return}
+  document.querySelector('.nav').classList.remove('hide');
   const temNovo=(D.conquistas||[]).some(c=>!vistas().includes(c.id));
   document.querySelector('.nav [data-t="missao"]').innerHTML=document.querySelector('.nav [data-t="missao"]').innerHTML.replace(/<span class="dot"><\/span>/,'')+(temNovo?'<span class="dot"></span>':'');
   if(tab==='hoje') v.innerHTML=topo()+perfil()+contagem()+sec('SALA DE','GUERRA',`${esc(D.mes)} · semana ${D.semana}`)+cards2()+barra()+peso()+missao();
@@ -324,12 +331,23 @@ async function enviarObs(){const t=$('#obs').value.trim();if(!t)return;$('#bobs'
 const COR={branca:'#f2f2f2',azul:'#1f6fd6',roxa:'#7b2fbf',marrom:'#7a4a2a',preta:'#111',cinza:'#8a8a8a',amarela:'#e6c200',laranja:'#e8781a',verde:'#2e9e4a'};
 function faixaSVG(f){const c=COR[f]||'#888';return `<svg viewBox="0 0 300 34" width="100%" height="30"><rect x="0" y="4" width="300" height="26" rx="5" fill="${c}" stroke="#444"/><rect x="210" y="4" width="62" height="26" fill="${f==='preta'?'#e0141f':'#111'}"/></svg>`}
 function semanaCiclo(){const ini=new Date('2026-11-30T00:00:00-03:00');const w=Math.floor((Date.now()-ini)/6048e5);return w<0?0:w%8}
-async function abrirFicha(){const n=$('#fnome').value,p=$('#fpin').value.trim();if(!n||!/^\d{4}$/.test(p)){$('#ferr').textContent='Escolha seu nome e digite seus 4 números.';return}
+let CRIAR=false;
+function quemSou(){return `<div class="card" style="margin-top:28px"><div class="lab">${CRIAR?'Primeiro acesso':'Sua ficha individual'}</div><div class="mis">${CRIAR?'Crie sua senha pessoal':'Quem é você?'}</div>
+  ${(D.alunos||[]).length?`<select id="fnome" class="field" style="margin-top:12px;appearance:none" onchange="CRIAR=false;$('#ferr').textContent=''">${CRIAR?'':'<option value="">Escolha seu nome</option>'}${D.alunos.map(n=>`<option ${CRIAR&&n===CRIAR?'selected':''}>${esc(n)}</option>`).join('')}</select>
+  <input id="fpin" class="field" style="margin-top:10px;text-align:center;letter-spacing:10px;font-family:Anton;font-size:26px" inputmode="numeric" maxlength="4" placeholder="••••" aria-label="Senha pessoal">
+  ${CRIAR?`<input id="fpin2" class="field" style="margin-top:10px;text-align:center;letter-spacing:10px;font-family:Anton;font-size:26px" inputmode="numeric" maxlength="4" placeholder="repita" aria-label="Repita a senha">`:''}
+  <button class="btn" id="bfi" onclick="abrirFicha()">${CRIAR?'CRIAR E ENTRAR':'ENTRAR NA MINHA FICHA'}</button><div class="err" id="ferr"></div>
+  <div class="t">${CRIAR?'Escolha 4 números que só você sabe. Esqueceu? O professor zera e você cria de novo.':'Primeira vez? Escolha seu nome e toque em entrar: você cria sua senha.'}</div>`:`<div class="t" style="margin-top:8px">O professor ainda vai cadastrar você nesta sala.</div>`}</div>`}
+async function abrirFicha(){const n=$('#fnome').value,p=$('#fpin').value.trim();if(!n){$('#ferr').textContent='Escolha seu nome.';return}
+ if(CRIAR){if(!/^\d{4}$/.test(p)){$('#ferr').textContent='A senha precisa ter 4 números.';return}if(p!==$('#fpin2').value.trim()){$('#ferr').textContent='As duas senhas não são iguais.';return}}
+ else if(p&&!/^\d{4}$/.test(p)){$('#ferr').textContent='A senha tem 4 números.';return}
  $('#bfi').textContent='ABRINDO...';
- try{const r=await rpc('camp_ficha',{p_token:TOK,p_nome:n,p_pin:p});
-  if(r.erro){$('#ferr').textContent=r.erro==='bloqueado'?'Muitas tentativas. Espere 15 minutos.':'Senha pessoal não confere. Confira com o professor.';$('#bfi').textContent='ABRIR MINHA FICHA';return}
-  setD(r.dados);ULT=JSON.stringify(D);render();const novas=conqs().filter(c=>!vistas().includes(c.id));if(novas.length)setTimeout(()=>conquista(novas[0],true),400)}
- catch(e){$('#ferr').textContent='Sem conexão. Tente de novo.';$('#bfi').textContent='ABRIR MINHA FICHA'}}
+ try{const r=await rpc('camp_ficha',{p_token:TOK,p_nome:n,p_pin:p,p_criar:!!CRIAR});
+  if(r.erro==='criar'){CRIAR=n;render();return}
+  if(r.erro){$('#ferr').textContent=r.erro==='bloqueado'?'Muitas tentativas. Espere 15 minutos.':r.erro==='sessao'?'Sua entrada expirou. Saia e entre de novo.':'Senha não confere. Esqueceu? Peça ao professor para zerar.';$('#bfi').textContent=CRIAR?'CRIAR E ENTRAR':'ENTRAR NA MINHA FICHA';return}
+  CRIAR=false;setD(r.dados);ULT=JSON.stringify(r.dados);tab='hoje';document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('on',b.dataset.t==='hoje'));render();scrollTo(0,0);
+  const novas=conqs().filter(c=>!vistas().includes(c.id));if(novas.length)setTimeout(()=>conquista(novas[0],true),400)}
+ catch(e){$('#ferr').textContent='Sem conexão. Tente de novo.';$('#bfi').textContent='ENTRAR'}}
 const NOTA=['não sabe','com ajuda','faz sozinho','aplica no rola'];
 // ---- vídeos (YouTube não listado)
 function ytId(u){const m=String(u||'').match(/(?:youtu\.be\/|v=|shorts\/|embed\/|live\/)([\w-]{11})/);return m?m[1]:null}
@@ -342,11 +360,7 @@ function verVideo(k){const v=VID(k);if(!v)return;const id=ytId(v.url);if(!id){wi
  <button class="btn ghost" onclick="fechar()">FECHAR</button></div>`}
 function renderJJ(v){
   if(D.generico&&!D.ficha&&tab==='hoje'){v.innerHTML=topo()+`<div class="prof" style="margin-top:40px"><div style="max-width:260px;margin:0 auto">${faixaSVG(D.faixa)}</div><div class="nm" style="margin-top:18px">${esc(D.sala)}</div><div class="inf">${esc(D.rumo)}</div></div>
-  <div class="card" style="margin-top:28px"><div class="lab">Sua ficha individual</div><div class="mis">Quem é você?</div>
-  ${(D.alunos||[]).length?`<select id="fnome" class="field" style="margin-top:12px;appearance:none"><option value="">Escolha seu nome</option>${D.alunos.map(n=>`<option>${esc(n)}</option>`).join('')}</select>
-  <input id="fpin" class="field" style="margin-top:10px;text-align:center;letter-spacing:10px;font-family:Anton;font-size:26px" inputmode="numeric" maxlength="4" placeholder="••••" aria-label="Senha pessoal">
-  <button class="btn" id="bfi" onclick="abrirFicha()">ABRIR MINHA FICHA</button><div class="err" id="ferr"></div>
-  <div class="t">A senha pessoal de 4 números é entregue pelo professor. Só você vê as suas notas.</div>`:`<div class="t" style="margin-top:8px">O professor ainda vai cadastrar você nesta sala.</div>`}</div>`;return}
+  `+quemSou();return}
   const ini=(D.nomeCompleto||'?').trim()[0].toUpperCase();
   const topoJJ=topo()+`<div class="prof"><div class="av" style="background:linear-gradient(160deg,${COR[D.faixa]},#8a0710)"><div style="width:100%;height:100%;border-radius:50%;background:#141416;display:flex;align-items:center;justify-content:center;font-family:Anton;font-size:56px;border:3px solid var(--bg)">${esc(ini)}</div></div>
   <div class="nm">${esc(D.nomeCompleto)}</div><div class="inf">Jiu-Jitsu · Faixa ${esc(D.faixa)}</div><div style="max-width:260px;margin:12px auto 0">${faixaSVG(D.faixa)}</div></div>`;
@@ -421,7 +435,7 @@ async function conquista(c,nova){
   <button class="btn gold" onclick="compartilhar()">POSTAR NOS STORIES</button>
   <a class="btn ghost" href="${u}" download="camp-fight-lira-conquista.png" style="text-decoration:none">GUARDAR A IMAGEM</a>
   <button class="btn ghost" onclick="fechar()">FECHAR</button></div>`;
-  if(nova){const v=vistas();v.push(c.id);store.set('camp-vistas-'+ID+(D.ficha?D.ficha.alunoId:''),v)}
+  if(nova){const v=vistas();v.push(c.id);store.set('camp-vistas-'+ID+AID(),v)}
 }
 async function compartilhar(){const f=new File([blobAtual],'camp-fight-lira-conquista.png',{type:'image/png'});
  try{if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],text:'Camp Fight Lira 🥊 @lira_personal7'});return}}catch(e){if(e.name==='AbortError')return}
