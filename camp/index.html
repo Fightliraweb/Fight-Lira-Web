@@ -266,7 +266,7 @@ function enviarObs(){const t=$('#obs').value.trim();if(!t)return;
 
 
 // ---- jiu-jitsu: salas por faixa
-const COR={branca:'#f2f2f2',azul:'#1f6fd6',roxa:'#7b2fbf',marrom:'#7a4a2a',preta:'#111'};
+const COR={branca:'#f2f2f2',azul:'#1f6fd6',roxa:'#7b2fbf',marrom:'#7a4a2a',preta:'#111',cinza:'#8a8a8a',amarela:'#e6c200',laranja:'#e8781a',verde:'#2e9e4a'};
 function faixaSVG(f){const c=COR[f]||'#888';return `<svg viewBox="0 0 300 34" width="100%" height="30"><rect x="0" y="4" width="300" height="26" rx="5" fill="${c}" stroke="#444"/><rect x="210" y="4" width="62" height="26" fill="${f==='preta'?'#e0141f':'#111'}"/></svg>`}
 function semanaCiclo(){const ini=new Date('2026-11-30T00:00:00-03:00');const w=Math.floor((Date.now()-ini)/6048e5);return w<0?0:w%8}
 function salvarNome(){const n=$('#meunome').value.trim();if(!n)return;store.set('camp-nome-'+ID,n);render()}
@@ -294,7 +294,7 @@ function renderJJ(v){
     <div class="row" style="margin-top:8px"><div style="flex:1"><div class="big">${esc(R.tempo)}</div><div class="t">tempo mínimo</div></div><div style="flex:1"><div class="big">${esc(String(R.aulas))}</div><div class="t">aulas mínimas</div></div></div>
     <div class="t" style="margin-top:10px;font-size:15px;color:#ddd">+ prova aprovada: todas as técnicas com nota mínima 2 e pelo menos 80% dos pontos.</div></div>
     ${R.grauCada?`<div class="card"><div class="lab">Graus</div><div class="big">1 grau<small>a cada ${R.grauCada} aulas + matéria do grau</small></div></div>`:''}
-    <div class="card"><div class="lab">Como a nota funciona</div><div class="t" style="font-size:15px;color:#ddd;line-height:1.7">0 · não sabe<br>1 · faz com ajuda<br>2 · faz sozinho<br><b class="gold">3 · aplica no rola</b></div><div class="t" style="margin-top:8px">Você pode ser avaliado a qualquer momento pelo professor.</div></div>`;
+    <div class="card"><div class="lab">Como a nota funciona</div>${D.kids&&D.faixa==='cinza'?`<div class="t" style="font-size:15px;color:#ddd;line-height:1.7"><span class="gold">★</span> · já tentou<br><span class="gold">★★</span> · faz sozinho<br><b class="gold">★★★ · faz no treino com o colega</b></div>`:`<div class="t" style="font-size:15px;color:#ddd;line-height:1.7">0 · não sabe<br>1 · faz com ajuda<br>2 · faz sozinho<br><b class="gold">3 · aplica no rola</b></div>`}<div class="t" style="margin-top:8px">Você pode ser avaliado a qualquer momento pelo professor.</div></div>`;
   }
   if(tab==='recados') v.innerHTML=topo()+sec('RECADO DO','PROFESSOR',esc(D.recado.data||''))+recado()+obsCard();
 }
