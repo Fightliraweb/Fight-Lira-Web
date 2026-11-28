@@ -57,7 +57,6 @@ if (EH_DFL) {
     <a href="jiujitsu.html">Jiu-Jitsu</a>
     <a href="muaythai.html">Muay Thai</a>
     <a href="professores.html">Professores</a>
-    <a href="graduados.html">Graduados</a>
     <a href="camp/">Área do Aluno</a>
     <a class="nav-dfl" href="dfl.html">DFL →</a>
     <a class="nav-cta" href="${WA_AULA}" target="_blank" rel="noopener">Aula experimental</a>`;
@@ -67,7 +66,6 @@ if (EH_DFL) {
     <a href="jiujitsu.html">Jiu-Jitsu</a>
     <a href="muaythai.html">Muay Thai</a>
     <a href="professores.html">Professores</a>
-    <a href="graduados.html">Graduados</a>
     <a href="index.html#contato">Contato</a>
     <a href="camp/">Área do Aluno</a>
     <a class="m-dfl" href="dfl.html">DFL →</a>
