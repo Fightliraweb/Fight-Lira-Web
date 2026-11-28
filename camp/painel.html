@@ -80,6 +80,10 @@ input[type=range]{width:100%;accent-color:var(--r);margin-top:6px}
 .tabs button{flex:none;border:1.5px solid #333;background:#121214;border-radius:30px;padding:9px 14px;font-size:13.5px;font-weight:700;cursor:pointer}
 .tabs button.on{background:var(--r);border-color:var(--r)}
 .load{text-align:center;color:#888;margin-top:60px}
+.bol{width:34px;height:34px;border-radius:50%;display:inline-block;border:2px solid #4a4a50;background:#111;cursor:pointer;flex:none}
+.bol.b1{background:#e0141f;border-color:#ff5a62}.bol.b2{background:linear-gradient(90deg,#e0141f 50%,#22c55e 50%);border-color:#888}.bol.b3{background:#22c55e;border-color:#7ef0a6}
+.rx{display:grid;grid-template-columns:1fr 50px 50px 50px;align-items:center;gap:2px;padding:9px 0;border-bottom:1px solid #222}.rx .bol{justify-self:center}
+.rx.h{padding:0 0 6px;font-size:10.5px;letter-spacing:1px;color:#888;font-weight:700;text-align:center}.rx .g{font-size:15px}.rx .g small{display:block;font-size:11px;color:#888}
 </style></head>
 <body>
 <div class="wrap" id="v"><div class="load">Carregando...</div></div>
@@ -123,6 +127,7 @@ async function home(){V().innerHTML=topo()+'<div class="load">Carregando...</div
  <div class="lab" style="margin-top:22px">PERSONAL FIGHT</div>
  ${pers.map(s=>{const a=al(s.id)[0];return a?`<div class="card item" onclick="telaPersonal('${a.id}')">${avatar(a)}<div><b>${esc(a.nome_completo||a.nome)}</b><span>${a.camp_data?'Camp até '+br(a.camp_data):'Sem meta de camp ainda'}</span></div><div class="go">ABRIR ›</div></div>`:''}).join('')}
  <button class="btn ghost" onclick="novoPersonal()">+ NOVO ALUNO PERSONAL</button>
+ <button class="btn gold" onclick="telaVideosMT()">▶ VÍDEOS DO MUAY THAI</button>
  ${['JIU-JITSU ADULTO','JIU-JITSU KIDS'].map(g=>`<div class="lab" style="margin-top:22px">${g}</div>`+jj.filter(s=>s.grupo===g).map(s=>`<div class="card item" onclick="telaSala('${s.id}')"><div class="fx" style="background:${COR[s.conteudo.faixa]}"></div><div><b>${esc(s.titulo)}</b><span>${al(s.id).length} aluno${al(s.id).length===1?'':'s'}${al(s.id).length?' · '+al(s.id).map(a=>esc(a.nome)).join(', '):''}</span></div><div class="go">ABRIR ›</div></div>`).join('')).join('')}
  <button class="btn ghost" style="margin-top:30px" onclick="sairProf()">SAIR DO MODO PROFESSOR</button>`;scrollTo(0,0)}
 const foto=p=>!p?'':/^https?:/.test(p)?p:p;
@@ -183,11 +188,12 @@ async function telaObs(){reabrir=telaObs;await carregar();const {data}=await sb.
 // ===== PERSONAL =====
 let aba='hoje';
 async function telaPersonal(id,ab){if(ab)aba=ab;reabrir=()=>telaPersonal(id);await carregar();const a=ALUNOS.find(x=>x.id===id);if(!a)return home();
- const abas=[['hoje','Presença'],['peso','Peso'],['teste','Teste'],['missao','Missão'],['camp','Meu camp'],['recado','Recado'],['obs','Observações'],['dados','Cadastro']];
+ const abas=[['hoje','Presença'],['tecnica','Técnica'],['peso','Peso'],['teste','Teste'],['missao','Missão'],['camp','Meu camp'],['recado','Recado'],['obs','Observações'],['dados','Cadastro']];
  let h=topo('aba=\'hoje\';home()')+`<div class="card item" style="cursor:default"><div class="av" style="width:64px;height:64px;${a.foto?`background-image:url('${esc(a.foto)}')`:''}">${a.foto?'':esc(a.nome[0])}</div><div><b style="font-size:19px">${esc(a.nome_completo||a.nome)}</b><span>Personal Fight${a.dias?' · '+esc(a.dias):''}</span></div></div>
  <div class="tabs">${abas.map(([k,t])=>`<button class="${aba===k?'on':''}" onclick="telaPersonal('${a.id}','${k}')">${t}</button>`).join('')}</div>`;
  V().innerHTML=h+'<div class="load">...</div>';
  if(aba==='hoje')h+=await blocoPresenca(a);
+ if(aba==='tecnica')h+=await blocoTecnica(a);
  if(aba==='peso'){const {data}=await sb.from('camp_pesagens').select('*').eq('aluno_id',a.id).order('dia',{ascending:false}).limit(10);
   h+=`<div class="card"><div class="lab">Pesagem de hoje</div><div class="g2"><input id="kg" class="field" inputmode="decimal" placeholder="Peso (kg)"><input id="kgd" type="date" class="field" value="${hoje()}"></div><button class="btn" onclick="pesar('${a.id}')">SALVAR PESO</button>
   <div class="mini" style="margin-top:14px">Meta de peso</div><div class="g2"><input id="pi" class="field" inputmode="decimal" placeholder="Peso inicial" value="${a.peso_inicio??''}"><input id="pm" class="field" inputmode="decimal" placeholder="Meta (kg)" value="${a.peso_meta??''}"></div>
@@ -278,11 +284,13 @@ async function telaJJ(id,ab){if(ab)aba=ab;else if(!['hoje','notas','recado','obs
  V().innerHTML=h+'<div class="load">...</div>';
  if(aba==='hoje')h+=await blocoPresenca(a);
  if(aba==='notas'){const {data}=await sb.from('camp_notas').select('*').eq('aluno_id',a.id);const N={};(data||[]).forEach(n=>N[n.item]=n);
-  const total=C.materia.reduce((x,m)=>x+m.qtd,0),pts=(data||[]).reduce((x,n)=>x+n.nota,0);
-  h+=`<div class="card"><div class="lab">Prova · ${pts} de ${total*3} pontos (${Math.round(pts/(total*3)*100)}%)</div><div class="mini" style="margin:0">0 não sabe · 1 com ajuda · 2 faz sozinho · <b class="gold" style="color:var(--g)">3 aplica no rola</b>. Toque na nota: salva na hora.</div></div>
+  const total=C.materia.reduce((x,m)=>x+m.qtd,0);let pts=0;
+  const pv=(data||[]).filter(n=>!n.item.includes(':'));pts=pv.reduce((x,n)=>x+n.nota,0);
+  h+=`<div class="card"><div class="lab">Prova · ${pts} de ${total*3} pontos (${Math.round(pts/(total*3)*100)}%)</div><div class="mini" style="margin:0">0 não sabe · 1 com ajuda · 2 faz sozinho · <b class="gold" style="color:var(--g)">3 aplica no rola</b>. Toque na nota: salva na hora.</div><div class="mini" style="margin:8px 0 0">A bolinha <b>LUTA</b> é separada da prova: ele encaixa no rola? Vazia → <b style="color:#ff5a62">ruim</b> → regular → <b style="color:#22c55e">bom</b>.</div></div>
   <div class="card">${C.materia.map(m=>`<div class="tec"><div class="nm">${esc(m.cat)}</div>${Array.from({length:m.qtd},(_,i)=>{const k=m.cat+'#'+(i+1),n=N[k];
    return `<div class="slot"><input class="field" placeholder="Técnica ${i+1} (opcional)" value="${esc(n?n.rotulo||'':'')}" onchange="rotulo(${esc(JSON.stringify(a.id))},${esc(JSON.stringify(k))},this.value)">
-   <div class="nb">${[0,1,2,3].map(v=>`<button class="${n&&n.nota===v?'on'+v:''}" onclick="nota(${esc(JSON.stringify(a.id))},${esc(JSON.stringify(k))},${v},this)">${v}</button>`).join('')}</div></div>`}).join('')}</div>`).join('')}</div>`}
+   <div class="nb">${[0,1,2,3].map(v=>`<button class="${n&&n.nota===v?'on'+v:''}" onclick="nota(${esc(JSON.stringify(a.id))},${esc(JSON.stringify(k))},${v},this)">${v}</button>`).join('')}</div></div>
+   <div style="display:flex;align-items:center;justify-content:flex-end;gap:8px;margin-top:6px;font-size:11px;letter-spacing:1.5px;color:#888;font-weight:700">LUTA ${B(a.id,'luta:'+k,(n&&n.rotulo)||m.cat,(N['luta:'+k]||{}).nota)}</div>`}).join('')}</div>`).join('')}</div>`}
  if(aba==='recado')h+=blocoRecado({sala:a.sala_id,aluno:a.id,nome:a.nome})+await ultimoRecado(a.sala_id,a.id);
  if(aba==='obs')h+=await blocoObs(a);
  if(aba==='dados')h+=blocoCadastro(a,false);
@@ -292,6 +300,29 @@ async function nota(id,item,v,el){const inp=el.closest('.slot').querySelector('i
  el.parentNode.querySelectorAll('button').forEach((b,i)=>b.className=i===v?'on'+v:'')}
 async function rotulo(id,item,val){const {data}=await sb.from('camp_notas').select('nota').eq('aluno_id',id).eq('item',item).maybeSingle();
  if(!data){toast('Dê a nota para salvar o nome da técnica.');return}await ok(sb.from('camp_notas').update({rotulo:val.trim()||null}).eq('aluno_id',id).eq('item',item),'Nome da técnica salvo')}
+
+// ===== RAIO-X (bolinhas) =====
+const LEG=`<div class="mini" style="margin:0">Toque na bolinha para trocar: vazia → <b style="color:#ff5a62">ruim</b> → regular → <b style="color:#22c55e">bom</b> → vazia. Salva na hora.</div>`;
+const B=(alunoId,item,rot,n)=>`<span class="bol ${n?'b'+n:''}" data-n="${n||0}" onclick="girar(this,${esc(JSON.stringify(alunoId))},${esc(JSON.stringify(item))},${esc(JSON.stringify(rot))})"></span>`;
+async function girar(el,id,item,rot){const n=((+el.dataset.n||0)+1)%4;el.dataset.n=n;el.className='bol'+(n?' b'+n:'');
+ const r=n?await sb.from('camp_notas').upsert({aluno_id:id,item,nota:n,rotulo:rot,updated_at:new Date().toISOString()}):await sb.from('camp_notas').delete().eq('aluno_id',id).eq('item',item);
+ if(r.error){toast('Não salvou. Confira a internet.','er');return}toast(['✓ Apagado','✓ Ruim','✓ Regular','✓ Bom'][n])}
+let PROG=null;async function programa(){if(!PROG){const {data}=await sb.from('camp_programas').select('conteudo').eq('id','muaythai').single();PROG=data.conteudo}return PROG}
+async function blocoTecnica(a){const P=await programa();const {data}=await sb.from('camp_notas').select('item,nota').eq('aluno_id',a.id).like('item','mt:%');const N={};(data||[]).forEach(n=>N[n.item]=n.nota);
+ return `<div class="card">${LEG}</div>`+P.categorias.map(c=>`<div class="card"><div class="lab">${esc(c.nome)} · <span style="color:var(--g)">${esc(c.thai)}</span></div>
+ <div class="rx h"><span style="text-align:left">Golpe</span>${P.contextos.map(([,t])=>`<span>${esc(t)}</span>`).join('')}</div>
+ ${c.golpes.map(g=>`<div class="rx"><div class="g">${esc(g.nome)}${g.thai?`<small>${esc(g.thai)} · nível ${g.nivel}</small>`:`<small>nível ${g.nivel}</small>`}</div>${P.contextos.map(([x])=>B(a.id,`mt:${g.id}:${x}`,g.nome,N[`mt:${g.id}:${x}`])).join('')}</div>`).join('')}</div>`).join('')+
+ `<div class="lab" style="margin-top:20px">Desempenho de luta</div><div class="card">${P.desempenho.map(d=>`<div class="lab" style="margin-top:8px">${esc(d.grupo)}</div>${d.itens.map(i=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #222"><span style="font-size:15px">${esc(i.nome)}</span>${B(a.id,`mt:${i.id}:d`,i.nome,N[`mt:${i.id}:d`])}</div>`).join('')}`).join('')}</div>`}
+async function telaVideosMT(){reabrir=telaVideosMT;PROG=null;const P=await programa(),VD=P.videos||{};
+ V().innerHTML=topo('home()')+`<h2>VÍDEOS DO <span>MUAY THAI</span></h2><div class="sub">YouTube: grave, marque <b>Não listado</b>, toque em Compartilhar → Copiar link e cole no golpe. Vale para todos os alunos de Personal.</div>`+
+ P.categorias.map(c=>`<div class="lab" style="margin-top:20px">${esc(c.nome)} · ${esc(c.thai)}</div><div class="card">${c.golpes.map(g=>`<div class="tec"><div class="nm">${VD[g.id]?'<span style="color:var(--g)">▶</span> ':''}${esc(g.nome)}</div>
+ <input class="field" style="margin-top:8px;font-size:14px;padding:10px 12px" placeholder="Cole aqui o link do YouTube" inputmode="url" value="${esc((VD[g.id]||{}).url||'')}" id="mv_${g.id}">
+ <button class="btn ghost" style="margin-top:8px;padding:11px" onclick="salvarVideoMT('${g.id}',${esc(JSON.stringify(g.nome))},this)">SALVAR VÍDEO</button></div>`).join('')}</div>`).join('');scrollTo(0,0)}
+async function salvarVideoMT(id,nome,btn){const url=$('#mv_'+id).value.trim();if(url&&!/^https?:\/\//.test(url)){toast('Isso não parece um link.','er');return}
+ const {data,error}=await sb.from('camp_programas').select('conteudo').eq('id','muaythai').single();if(error){toast('Não salvou.','er');return}
+ const C=data.conteudo;C.videos=C.videos||{};if(url)C.videos[id]={url,titulo:nome};else delete C.videos[id];
+ await ok(sb.from('camp_programas').update({conteudo:C,updated_at:new Date().toISOString()}).eq('id','muaythai'),url?'Vídeo salvo':'Vídeo removido');PROG=C;
+ btn.closest('.tec').querySelector('.nm').innerHTML=(url?'<span style="color:var(--g)">▶</span> ':'')+esc(nome)}
 
 // ===== VÍDEOS DA FAIXA =====
 const ytOk=u=>/(?:youtu\.be\/|v=|shorts\/|embed\/|live\/)[\w-]{11}/.test(u);

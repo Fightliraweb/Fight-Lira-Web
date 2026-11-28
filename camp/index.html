@@ -107,6 +107,13 @@ textarea.field{min-height:90px;resize:none;font-size:16px;margin-top:10px}
 .burst{animation:pop .6s cubic-bezier(.2,1.4,.4,1)}
 @keyframes pop{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
 .toast{position:fixed;left:50%;bottom:100px;transform:translateX(-50%);background:#1c1c20;border:1px solid #333;padding:12px 18px;border-radius:14px;font-size:14px;z-index:30}
+.bol{width:20px;height:20px;border-radius:50%;display:inline-block;flex:none;border:2px solid #4a4a50;background:transparent}
+.bol.b1{background:#e0141f;border-color:#ff5a62}.bol.b2{background:linear-gradient(90deg,#e0141f 50%,#22c55e 50%);border-color:#777}.bol.b3{background:#22c55e;border-color:#7ef0a6;box-shadow:0 0 10px rgba(34,197,94,.45)}
+.rx{display:grid;grid-template-columns:1fr 46px 46px 46px;align-items:center;gap:4px;padding:10px 0;border-bottom:1px solid #222}
+.rx:last-child{border-bottom:0}.rx .bol{justify-self:center}.rx.h{padding:0 0 6px;font-size:10.5px;letter-spacing:1.5px;color:#888;font-weight:700;text-align:center}
+.rx .g{font-size:15px;line-height:1.2}.rx .g small{display:block;font-size:11.5px;color:#888;margin-top:2px}.rx .g i{font-style:normal;color:var(--r);font-size:12px;margin-left:6px}
+.resumo{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}.resumo div{text-align:center;border-radius:16px;padding:12px 4px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08)}
+.resumo b{display:block;font-family:Anton;font-size:30px;font-weight:400;margin-top:6px}.resumo span{font-size:12px;color:#aaa}
 </style></head>
 <body>
 
@@ -134,7 +141,7 @@ textarea.field{min-height:90px;resize:none;font-size:16px;margin-top:10px}
   <nav class="nav">
     <button data-t="hoje" class="on"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8v10h-6v-6H9v6H3z"/></svg>Hoje</button>
     <button data-t="missao"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg>Missão</button>
-    <button data-t="evolucao"><svg viewBox="0 0 24 24"><path d="M3 20h18M6 16v-4M11 16V8M16 16v-6M21 16V5"/></svg>Evolução</button>
+    <button data-t="evolucao"><svg viewBox="0 0 24 24"><path d="M3 20h18M6 16v-4M11 16V8M16 16v-6M21 16V5"/></svg>Raio-X</button>
     <button data-t="recados"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4z"/></svg>Recados</button>
   </nav>
 </section>
@@ -193,7 +200,7 @@ function painel(){D=ADMIN;tab='hoje';const v=$('#view');document.querySelector('
   ADMIN.grupos.map(g=>`<div class="lab" style="margin-top:22px">${esc(g.nome)}</div>`+g.salas.map(x=>`<div class="card conq" onclick="entrarSala('${x.id}')"><div style="width:44px;height:16px;border-radius:4px;flex:none;background:${COR[x.dados.faixa]||'#e0141f'};border:1px solid #444"></div><div><b>${esc(x.titulo)}</b><span>${esc(x.sub)}</span></div><div class="go">ENTRAR ›</div></div>`).join('')).join('');}
 function entrarSala(id){let x=null;ADMIN.grupos.forEach(g=>g.salas.forEach(s=>{if(s.id===id)x=s}));D=JSON.parse(JSON.stringify(x.dados));if(D.generico){D.generico=false;D.nomeCompleto='Professor'}ID=x.id;
   document.querySelector('.nav').classList.remove('hide');tab='hoje';document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('on',b.dataset.t==='hoje'));
-  const L=D.tipo==='jj'?{hoje:'Sala',missao:'Ciclo',evolucao:'Regras',recados:'Recados'}:{hoje:'Hoje',missao:'Missão',evolucao:'Evolução',recados:'Recados'};document.querySelectorAll('.nav button').forEach(b=>{b.lastChild.textContent=L[b.dataset.t]});render();scrollTo(0,0)}
+  const L=D.tipo==='jj'?{hoje:'Sala',missao:'Ciclo',evolucao:'Regras',recados:'Recados'}:{hoje:'Hoje',missao:'Missão',evolucao:'Raio-X',recados:'Recados'};document.querySelectorAll('.nav button').forEach(b=>{b.lastChild.textContent=L[b.dataset.t]});render();scrollTo(0,0)}
 function abrir(){
   $('#login').classList.add('hide');$('#app').classList.remove('hide');
   if(D.tipo==='admin'){ADMIN=D;painel();return}
@@ -245,6 +252,21 @@ function vbtnM(M){D.videos=D.videos||{};D.videos['missao']={url:M.video,titulo:'
 function teste(){const T=D.teste;return `<div class="card"><div class="lab">Teste do mês · ${esc(T.nome)}</div>
 <div class="cmp"><div>Início do mês<b ${T.inicio?'':'style="color:#555"'}>${T.inicio?esc(T.inicio):'—'}</b></div><div style="color:var(--r);font-size:22px">→</div><div class="${T.fim?'':'q'}" style="text-align:right">Fim do mês<b ${T.fim?'class="gold"':''}>${T.fim?esc(T.fim):'?'}</b></div></div>
 <div class="t">${!T.inicio?'Primeira medição no próximo treino.':T.fim?'Comparação fechada pelo professor.':'O professor aplica de novo no fim do mês.'}</div></div>`}
+const bol=n=>`<span class="bol ${n?'b'+n:''}"></span>`;
+function resumoBol(ns){const c=[0,0,0,0];ns.forEach(n=>n&&c[n]++);
+ return `<div class="resumo"><div>${bol(3)}<b style="color:#22c55e">${c[3]}</b><span>Bons</span></div><div>${bol(2)}<b>${c[2]}</b><span>Regulares</span></div><div>${bol(1)}<b style="color:#ff5a62">${c[1]}</b><span>Ruins</span></div></div>`}
+function raioX(){const P=D.programa;if(!P)return '';const N=D.notas||{},nt=k=>N[k]?N[k].nota:0;
+ D.videos=Object.assign(D.videos||{},Object.fromEntries(Object.entries(P.videos||{}).map(([k,v])=>['mt:'+k,v])));
+ const todas=[];P.categorias.forEach(c=>c.golpes.forEach(g=>P.contextos.forEach(([x])=>todas.push(nt(`mt:${g.id}:${x}`)))));
+ const av=todas.filter(Boolean).length;
+ let h=`<div class="card"><div class="lab">Como o professor vê seus golpes</div>${av?resumoBol(todas):'<div class="empty">Seu raio-x aparece aqui conforme o professor avaliar seus golpes na manopla, no saco e no sparring.</div>'}
+ <div class="leg" style="margin-top:12px">${bol(1)} Ruim &nbsp; ${bol(2)} Regular &nbsp; ${bol(3)} Bom</div>
+ <div class="t" style="margin-top:8px">Golpe vermelho? Toque nele e estude o vídeo. Depois pergunte ao professor o que falta.</div></div>`;
+ h+=P.categorias.map(c=>`<div class="card"><div class="lab">${esc(c.nome)} <span class="gold">· ${esc(c.thai)}</span></div>
+  <div class="rx h"><span style="text-align:left">Golpe</span>${P.contextos.map(([,t])=>`<span>${esc(t)}</span>`).join('')}</div>
+  ${c.golpes.map(g=>`<div class="rx" ${VID('mt:'+g.id)?`onclick="verVideo('mt:${g.id}')" style="cursor:pointer"`:''}><div class="g">${esc(g.nome)}${VID('mt:'+g.id)?'<i>▶</i>':''}${g.thai?`<small>${esc(g.thai)}</small>`:''}</div>${P.contextos.map(([x])=>bol(nt(`mt:${g.id}:${x}`))).join('')}</div>`).join('')}</div>`).join('');
+ h+=sec('DESEMPENHO','DE LUTA','')+`<div class="card">${P.desempenho.map(d=>`<div class="lab" style="margin-top:6px">${esc(d.grupo)}</div>${d.itens.map(i=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid #222"><span style="font-size:15px">${esc(i.nome)}</span>${bol(nt(`mt:${i.id}:d`))}</div>`).join('')}`).join('')}</div>`;
+ return h}
 function contagem(){const C=D.camp;if(!C||!C.data)return '';
  const dia=s=>new Date(s+'T12:00:00-03:00'),hoje=new Date(),fim=dia(C.data),ini=C.inicio?dia(C.inicio):null;
  const n=Math.ceil((fim-hoje)/864e5),pct=ini?Math.max(0,Math.min(1,(hoje-ini)/(fim-ini)))*100:0;
@@ -264,7 +286,7 @@ function render(){
   if(tab==='missao') v.innerHTML=topo()+sec('MINHA','MISSÃO',esc(D.mes))+missao(true)+teste()+sec('CONQUISTAS','',' ')+
     ((D.conquistas||[]).length?D.conquistas.map((c,i)=>`<div class="card conq" onclick="conquista(D.conquistas[${i}])"><div class="medal"><svg width="24" height="24" viewBox="0 0 24 24" fill="#3a2706"><path d="M12 2l2.9 6.3 6.9.7-5.2 4.6 1.5 6.8L12 17l-6.1 3.4 1.5-6.8L2.2 9l6.9-.7z"/></svg></div><div><b>${esc(c.titulo)}</b><span>${esc(c.sub)} · ${esc(c.data)}</span></div><div class="go">POSTAR ›</div></div>`).join('')
     :'<div class="card"><div class="empty">Sua primeira conquista aparece aqui quando você cumprir a missão ou bater um recorde.</div></div>');
-  if(tab==='evolucao') v.innerHTML=topo()+sec('MINHA','EVOLUÇÃO',esc(D.mes))+cards2()+barra()+peso(true)+teste();
+  if(tab==='evolucao') v.innerHTML=topo()+sec('RAIO-X DO','LUTADOR','')+raioX()+sec('MINHA','EVOLUÇÃO',esc(D.mes))+cards2()+barra()+peso(true)+teste();
   if(tab==='recados') v.innerHTML=topo()+sec('RECADO DO','PROFESSOR',esc(D.recado.data||''))+recado()+obsCard();
 }
 function recado(){const R=D.recado;
@@ -322,6 +344,7 @@ function renderJJ(v){
     ${fichaJJ(total)}
     <div class="card">${D.materia.map(m=>{const ns=Array.from({length:m.qtd},(_,i)=>N[m.cat+'#'+(i+1)]||null);
      return `<div style="padding:11px 0;border-bottom:1px solid #222"><div style="display:flex;align-items:center;justify-content:space-between;gap:10px"><span style="font-size:15.5px">${esc(m.cat)}</span><span style="display:flex;gap:5px;align-items:center">${ns.map(x=>`<i style="width:14px;height:14px;border-radius:50%;display:inline-block;${x?`background:${['#3a3a3e','#7a0a12','#e0141f','#e8b04a'][x.nota]};border:1.5px solid ${x.nota===3?'#e8b04a':'#555'}`:'border:1.5px solid #555'}"></i>`).join('')}<b style="font-family:Anton;font-weight:400;font-size:20px;margin-left:6px;color:var(--r)">${m.qtd}</b></span></div>
+     ${D.ficha?`<div style="display:flex;align-items:center;gap:8px;margin-top:6px;font-size:12px;color:#999;letter-spacing:1px">NA LUTA ${Array.from({length:m.qtd},(_,i)=>bol((N['luta:'+m.cat+'#'+(i+1)]||{}).nota||0)).join('')}</div>`:''}
      ${Array.from({length:m.qtd},(_,i)=>vbtn(m.cat+'#'+(i+1),m.cat+' '+(i+1))).join('')}
      ${ns.some(x=>x&&x.rotulo)?`<div class="t" style="margin-top:4px">${ns.map((x,i)=>x&&x.rotulo?`${i+1}. ${esc(x.rotulo)} · <span class="gold">${x.nota}</span>`:'').filter(Boolean).join(' &nbsp; ')}</div>`:''}</div>`}).join('')}</div>
     ${D.ficha&&conqs().length?sec('MINHAS','CONQUISTAS','')+conqs().map((c,i)=>`<div class="card conq" onclick="conquista(conqs()[${i}])"><div class="medal"><svg width="24" height="24" viewBox="0 0 24 24" fill="#3a2706"><path d="M12 2l2.9 6.3 6.9.7-5.2 4.6 1.5 6.8L12 17l-6.1 3.4 1.5-6.8L2.2 9l6.9-.7z"/></svg></div><div><b>${esc(c.titulo)}</b><span>${esc(c.sub)}${c.data?' · '+esc(c.data):''}</span></div><div class="go">POSTAR ›</div></div>`).join(''):''}`;
@@ -344,9 +367,10 @@ function renderJJ(v){
 
 function fichaJJ(total){const F=D.ficha;
  if(!F)return `<div class="card"><div class="lab">Matéria da prova</div><div class="big">${total}<small>técnicas para dominar</small></div><div class="t">Cada técnica vale de 0 a 3. A nota individual é lançada pelo professor na avaliação.</div></div>`;
- const vals=Object.values(F.notas||{}),pts=vals.reduce((a,x)=>a+x.nota,0),max=total*3,pct=max?Math.round(pts/max*100):0,aulas=D.regra&&+D.regra.aulas;
+ const vals=Object.entries(F.notas||{}).filter(([k])=>!k.includes(':')).map(([,v])=>v),luta=Object.entries(F.notas||{}).filter(([k])=>k.startsWith('luta:')).map(([,v])=>v.nota),pts=vals.reduce((a,x)=>a+x.nota,0),max=total*3,pct=max?Math.round(pts/max*100):0,aulas=D.regra&&+D.regra.aulas;
  return `<div class="row"><div class="card"><div class="lab">Pontos da prova</div><div class="big ${pct>=80?'gold':''}">${pct}%<small>${pts}/${max}</small></div><div class="t">Meta: 80% e nada abaixo de 2</div><div class="prog"><div style="width:${pct}%"></div></div></div>
- <div class="card"><div class="lab">Aulas na faixa</div><div class="big">${F.aulasTotal}<small>${aulas?'de '+aulas:''}</small></div><div class="t">${vals.length} de ${total} técnicas avaliadas</div>${aulas?`<div class="prog"><div style="width:${Math.min(100,F.aulasTotal/aulas*100)}%"></div></div>`:''}</div></div>`}
+ <div class="card"><div class="lab">Aulas na faixa</div><div class="big">${F.aulasTotal}<small>${aulas?'de '+aulas:''}</small></div><div class="t">${vals.length} de ${total} técnicas avaliadas</div>${aulas?`<div class="prog"><div style="width:${Math.min(100,F.aulasTotal/aulas*100)}%"></div></div>`:''}</div></div>
+ <div class="card"><div class="lab">Na luta · sabe aplicar no rola?</div>${luta.length?resumoBol(luta):'<div class="empty">O professor marca aqui se você encaixa a técnica no rola de verdade. É diferente da nota da prova.</div>'}</div>`}
 
 // ---- conquista: card para stories
 async function gerarCard(c){
